@@ -51,13 +51,13 @@ pip install pyflasc
 For a manual install of the latest code directly from GitHub:
 
 ```bash
-pip install --upgrade git+https://github.com/vda-lab/flasc.git#egg=pyflasc
+pip install --upgrade git+https://github.com/vda-lab/pyflasc.git#egg=pyflasc
 ```
 
 Alternatively download the package, install requirements, and manually run the installer:
 
 ```bash
-wget https://github.com/vda-lab/flasc/archive/main.zip
+wget https://github.com/vda-lab/pyflasc/archive/main.zip
 unzip main.zip
 rm main.zip
 cd flasc-main
