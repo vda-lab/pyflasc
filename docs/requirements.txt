@@ -1,0 +1,5 @@
+nbsphinx >= 0.8
+sphinxcontrib-napoleon >= 0.7
+sphinx_rtd_theme >= 0.3
+sphinx-last-updated-by-git >= 0.3
+matplotlib >= 3.4
