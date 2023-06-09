@@ -37,7 +37,7 @@ plt.show()
 ## Example Notebooks
 
 A notebook demonstrating how the algorithm works is available at
-[How FHDBSCAN Works](https://nbviewer.org/github/vda-lab/pyflasc/blob/master/notebooks/How%20FLASC%20Works.ipynb). The other notebooks demonstrate the 
+[How FLASC Works](https://nbviewer.org/github/vda-lab/pyflasc/blob/master/notebooks/How%20FLASC%20Works.ipynb). The other notebooks demonstrate the 
 algorithm on several data sets and contain the analyses presented in our paper.
 
 ## Installing
