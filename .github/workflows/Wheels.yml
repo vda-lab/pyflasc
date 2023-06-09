@@ -1,0 +1,168 @@
+name: Build Weels
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number }}-${{ github.event.ref }}
+  cancel-in-progress: true
+
+on: 
+  push:
+    tags:
+      - v*
+  workflow_dispatch:
+
+jobs:
+  build_sdist:
+    name: Build sdist
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      
+      - uses: actions/setup-python@v4
+        name: Install python
+        with: 
+          python-version: 3.9
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Build sdist
+        id: sdist
+        run: |
+          python -m build --sdist
+      
+      - name: Check README rendering for PyPI
+        run: twine check dist/*
+      
+      - name: Upload sdist result
+        uses: actions/upload-artifact@v3
+        with:
+          name: sdist
+          path: dist/*.tar.gz
+          if-no-files-found: error
+      
+  build_wheels:
+    name: Build wheel for cp${{ matrix.python }}-${{ matrix.platform_id }}-${{ matrix.manylinux_image }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Window 64 bit
+          # Note: windows-2019 is needed for older Python versions:
+          # https://github.com/scikit-learn/scikit-learn/issues/22530
+          - os: windows-2019
+            python: 38
+            platform_id: win_amd64
+          - os: windows-latest
+            python: 39
+            platform_id: win_amd64
+          - os: windows-latest
+            python: 310
+            platform_id: win_amd64
+          - os: windows-latest
+            python: 311
+            platform_id: win_amd64
+
+          # Linux 64 bit manylinux2014
+          - os: ubuntu-latest
+            python: 38
+            platform_id: manylinux_x86_64
+            manylinux_image: manylinux2014
+          - os: ubuntu-latest
+            python: 39
+            platform_id: manylinux_x86_64
+            manylinux_image: manylinux2014
+          - os: ubuntu-latest
+            python: 310
+            platform_id: manylinux_x86_64
+            manylinux_image: manylinux2014
+          - os: ubuntu-latest
+            python: 311
+            platform_id: manylinux_x86_64
+            manylinux_image: manylinux2014
+
+          # MacOS x86_64
+          - os: macos-latest
+            python: 38
+            platform_id: macosx_x86_64
+          - os: macos-latest
+            python: 39
+            platform_id: macosx_x86_64
+          - os: macos-latest
+            python: 310
+            platform_id: macosx_x86_64
+          - os: macos-latest
+            python: 311
+            platform_id: macosx_x86_64
+    steps:
+      - name: Checkout FLASC
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'  # update once build dependencies are available
+          cache: 'pip'
+
+      - name: Build and Test wheels
+        env:
+          CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform_id }}
+          CIBW_ARCHS: all
+          CIBW_MANYLINUX_X86_64_IMAGE: ${{ matrix.manylinux_image }}
+          CIBW_MANYLINUX_I686_IMAGE: ${{ matrix.manylinux_image }}
+          CIBW_TEST_REQUIRES: pytest matplotlib pandas networkx
+          CIBW_TEST_COMMAND: pytest
+          CIBW_BUILD_VERBOSITY: 1
+        run: |
+          python -m pip install cibuildwheel
+          python -m cibuildwheel --output-dir wheelhouse
+      
+      - name: Store artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: wheels
+          path: wheelhouse/*.whl
+          if-no-files-found: error
+
+  publish_pypi:
+    name: Publish to PyPi
+    needs: [build_sdist, build_wheels]
+    runs-on: ubuntu-20.04
+    permissions:
+      # IMPORTANT: this permission is mandatory for trusted publishing
+      id-token: write
+    environment:
+      name: testpypi
+      url: https://pypi.org/p/pyflasc
+    steps:
+    - name: Checkout FLASC
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+    
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+          cache: 'pip'
+    
+    - name: Install dependencies
+      run: |
+        pip install -U wheelhouse_uploader pyyaml
+    
+    - name: Downloading wheels and sdist
+      uses: actions/download-artifact@v3
+        with:
+          path: dist/
+        
+    - name: Publish package to (Test)PyPI
+      uses: pypa/gh-action-pypi-publish@v1.8.5
+      # Uncomment lines below to publish to PyPi instead of test PyPi
+      with:
+        repository_url: https://test.pypi.org/legacy/

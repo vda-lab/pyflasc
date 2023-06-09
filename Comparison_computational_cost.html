@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comparing Computational Performance &mdash;  version 255f331</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/nbsphinx-code-cells.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "tags": "ams", "useLabelIds": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Multiprocessing Behaviour" href="Comparison_multi_processing.html" />
+    <link rel="prev" title="Comparing Branch Stability" href="Comparison_branch_stability.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="How_FLASC_works.html">How FLASC works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_diabetes.html">Example: Detecting Diabetes Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_single_cell_trajectory.html">Example: Single Cell Gene Expression Trajectories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_Parkinson_data_challenge.html">Example: Detecting Parkinson using Smart Phone Sensors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_horse.html">Example: Branches in 3D Horse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Comparison_branch_stability.html">Comparing Branch Stability</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Comparing Computational Performance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Configuration">Configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Generate-Datasets">Generate Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Run-parameter-sweep">Run parameter sweep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Plotting">Plotting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Comparison_multi_processing.html">Multiprocessing Behaviour</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">FLASC</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="examples.html">Examples</a></li>
+      <li class="breadcrumb-item active">Comparing Computational Performance</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Comparing-Computational-Performance">
+<h1>Comparing Computational Performance<a class="headerlink" href="#Comparing-Computational-Performance" title="Permalink to this heading"></a></h1>
+<p>HDBSCAN*’s documentation has <a class="reference external" href="https://hdbscan.readthedocs.io/en/latest/comparing_clustering_algorithms.html">a comprehensive performance comparison for clustering algorithm in Python</a>. This notebook compares FLASC’s performance to HDBSCAN* in a similar manner.</p>
+<section id="Setup">
+<h2>Setup<a class="headerlink" href="#Setup" title="Permalink to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%load_ext autoreload
+%autoreload 2
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import time
+import sklearn
+import itertools
+
+import numpy as np
+import pandas as pd
+from tqdm import trange, tqdm
+from joblib.externals.loky import get_reusable_executor
+
+from flasc import FLASC
+from hdbscan import HDBSCAN
+from sklearn.cluster import DBSCAN
+import fastcluster
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+from _plotting import *
+%matplotlib inline
+palette = configure_matplotlib()
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Configuration">
+<h2>Configuration<a class="headerlink" href="#Configuration" title="Permalink to this heading"></a></h2>
+<section id="Generate-Datasets">
+<h3>Generate Datasets<a class="headerlink" href="#Generate-Datasets" title="Permalink to this heading"></a></h3>
+<p>For this comparison, we generate data sets with <code class="docutils literal notranslate"><span class="pre">num_dims</span></code> features using 5 random walks containing 50 data points each starting from <code class="docutils literal notranslate"><span class="pre">num_cluster</span></code> distinct points. The resulting clusters and random walks can overlap in such a way that more or fewer clusters will be deteced. In addition, they provide more interesting and varied density distributions and branching patterns than Gaussian blobs. The varying structures should provide a broader picture of FHDBSCAN’s performance.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def generate_cluster(n_dims=2, n_walks=5, walk_length=50, std_step=0.1):
+    &quot;&quot;&quot;Generates a cluster by repeating a random walk from (0,0).&quot;&quot;&quot;
+    # The possible directions
+    vectors = np.eye(n_dims)
+    # Output collection
+    points = []
+    # Sample random walks
+    for r in range(n_walks):
+        directions = np.random.choice(np.arange(n_dims), walk_length)
+        lengths = np.random.normal(0, std_step, (walk_length, 1))
+        steps = vectors[directions] * lengths
+        pts = np.cumsum(steps, axis=0)
+        points.append(pts)
+    # Add noise
+    points = np.concatenate(points)
+    return points
+</pre></div>
+</div>
+</div>
+<p>To simplify interpreting the run time results later on, we want to avoid that too many clusters overlap and merge. Therefore, we compute the 95 percentile distance-to-center for 10 generated clusters with 2, 8, and 16 dimensions. This value indicates how far clusters tend to spread away from their starting point, which we can use to specify a volume large enough to fit the specified number of clusters.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from sklearn.metrics import pairwise_distances
+
+repeats = 10
+n_dims = [2, 8, 16]
+dist_to_center = [[] for _ in range(len(n_dims))]
+
+for i, d in enumerate(n_dims):
+    for j in range(repeats):
+        X = generate_cluster(n_dims=d)
+        dist_to_center[i] += [pairwise_distances([[0] * d], X)[0]]
+
+cluster_spread = np.asarray([np.percentile(np.concatenate(d), 95) for d in dist_to_center])
+cluster_spread
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([0.94655369, 0.81679888, 0.79711493])
+</pre></div></div>
+</div>
+<p>Using these distances, we can generate datasets with multiple clusters by sampling uniform random starting points in a volume that fits 5 times the specified number of clusters.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from sklearn.utils import shuffle
+
+def generate_clusters(n_clusters=2, n_dims=2, min_dist=1):
+    # Uniform random samples within volume spaced to fit 5*n_clusters
+    extra_spacing_factor = 5
+    volume = n_clusters * (min_dist**n_dims)
+    length = np.power(extra_spacing_factor * volume, 1./n_dims)
+    coords = np.random.uniform(high=length, size=(n_clusters, n_dims))
+
+    # Perform random walks at each coord
+    points = np.concatenate([
+        generate_cluster(n_dims=n_dims) + coord
+        for coord in coords
+    ])
+    # Create labels and return
+    y = np.repeat(np.arange(n_clusters), 250)
+    return shuffle(points, y)
+</pre></div>
+</div>
+</div>
+<p>Now, to actually generate the datasets, we vary the number of clusters from 2 to 800 in 10 exponentially spaced steps.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>num_dims = np.asarray(n_dims)
+repeats = np.asarray(list(range(10)))
+num_clusters = np.round(np.exp(np.linspace(np.log(2), np.log(800), 10)))
+
+params = pd.DataFrame([
+        (x[0][0], x[0][1], x[1], x[2])
+        for x in itertools.product(
+            zip(num_dims, 2 * cluster_spread), num_clusters, repeats
+        )
+    ], columns = [&#39;num_dims&#39;, &#39;min_dist&#39;, &#39;num_clusters&#39;, &#39;repeat&#39;]
+)
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>params[&#39;X&#39;], params[&#39;y&#39;] = tuple(zip(*[
+    generate_clusters(
+        n_clusters=int(params.num_clusters[i]),
+        n_dims=int(params.num_dims[i]),
+        min_dist=float(params.min_dist[i])
+    )
+    for i in trange(params.shape[0])
+]))
+params.to_pickle(&#39;./data/generated/performance_comparison_datasets.pickle&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 300/300 [00:12&lt;00:00, 23.92it/s]
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="Run-parameter-sweep">
+<h2>Run parameter sweep<a class="headerlink" href="#Run-parameter-sweep" title="Permalink to this heading"></a></h2>
+<p>Each algorithm is evaluated on each generated data set once. A timeout limit of 80 seconds is used so data sets larger than the first one exceeding the time limit are not evaluated for each algorithm individually. We record the run time and number of detected clusters (except for <code class="docutils literal notranslate"><span class="pre">fastcluster</span></code>).</p>
+<p>The HDBSCAN* and FLASC parameters are tuned to detect clusters and branches with the expected sizes.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>max_time = 80 # seconds
+algorithms = [&#39;fastcluster&#39;, &#39;hdbscan&#39;, &#39;flasc (full)&#39;, &#39;flasc (core)&#39;]
+sweep =  pd.DataFrame([
+        (x[0], x[1], x[2])
+        for x in itertools.product(num_dims, num_clusters, algorithms)
+    ], columns = [&#39;num_dims&#39;, &#39;num_clusters&#39;, &#39;algorithm&#39;]
+)
+
+class FastclusterWrapper:
+    def fit(self, X):
+        return fastcluster.linkage_vector(X)
+
+clusterers = {
+    &#39;flasc (full)&#39;: FLASC(min_samples=10, min_cluster_size=100, min_branch_size=20, branch_detection_method=&#39;full&#39;, allow_single_cluster=True, num_jobs=1),
+    &#39;flasc (core)&#39;: FLASC(min_samples=10, min_cluster_size=100, min_branch_size=20, branch_detection_method=&#39;core&#39;, allow_single_cluster=True, num_jobs=1),
+    &#39;hdbscan&#39;: HDBSCAN(min_samples=10, min_cluster_size=100, allow_single_cluster=True, core_dist_n_jobs=1),
+    &#39;fastcluster&#39;: FastclusterWrapper()
+}
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>limits = {}
+
+def measure_setting(p):
+    &quot;&quot;&quot;Computes the run times of the given setting&quot;&quot;&quot;
+    # Allocate output
+    num_repeats = len(repeats)
+    times = np.nan * np.ones(num_repeats, dtype=np.double)
+    num_edges = np.nan * np.ones(num_repeats, dtype=np.double)
+    labels = [None] * num_repeats
+
+    # Skip this setting if a smaller size already went over time.
+    if p.algorithm in limits and p.num_clusters &gt; limits[p.algorithm]:
+        return times, labels, num_edges
+
+    # Extract the clusterer and arguments
+    clusterer = clusterers[p.algorithm]
+
+    # Evaluate num_repeat times
+    for i in range(num_repeats):
+        param_i = params[
+            (params.num_dims == p.num_dims) &amp;
+            (params.num_clusters == p.num_clusters) &amp;
+            (params.repeat == i)
+        ].index[0]
+
+        # # Shutdown pool
+        # get_reusable_executor().shutdown(wait=True)
+
+        # Time the evaluation
+        X = params.loc[param_i, &#39;X&#39;]
+        start = time.perf_counter()
+        clusterer.fit(X)
+        end = time.perf_counter()
+
+        # Store the time, labels, and num edges
+        times[i] = (end-start)
+        if p.algorithm != &#39;fastcluster&#39;:
+            labels[i] = clusterer.labels_.copy()
+        if &#39;flasc&#39; in p.algorithm:
+            num_edges[i] = clusterer.cluster_approximation_graph_._edges.shape[0]
+
+        # Early stop if algorithm goes over time
+        if (end-start) &gt; max_time:
+            limits[p.algorithm] = p.num_clusters
+
+    return times, labels, num_edges
+</pre></div>
+</div>
+</div>
+<p>The cell below actually evaluates all the settings and runs in about 4 hours!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sweep[&#39;results&#39;] = [ measure_setting(sweep.iloc[i]) for i in trange(sweep.shape[0]) ]
+sweep.to_pickle(&#39;./data/generated/performance_comparison.pickle&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 120/120 [3:28:28&lt;00:00, 104.23s/it]
+</pre></div></div>
+</div>
+<p>Also reformats the data frame so that each row represents a single dataset/algorithm combination:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>melt = sweep.copy()
+melt[&#39;run_times&#39;] = melt.results.apply(lambda x: x[0])
+melt[&#39;labels&#39;] = melt.results.apply(lambda x: x[1])
+melt[&#39;num_edges&#39;] = melt.results.apply(lambda x: x[2])
+melt[&#39;repeats&#39;] = [repeats for _ in range(melt.shape[0])]
+melt[&#39;num_points&#39;] = [
+    params.loc[(params.num_dims == sweep.num_dims[i]) &amp;
+               (params.num_clusters == sweep.num_clusters[i]) &amp;
+               (params.repeat == 0), &#39;X&#39;].iloc[0].shape[0]
+    for i in range(sweep.shape[0])
+]
+melt = melt.drop(columns=[&#39;results&#39;])
+melt = melt.explode([&#39;run_times&#39;, &#39;labels&#39;, &#39;num_edges&#39;, &#39;repeats&#39;], ignore_index=True)
+melt[&#39;num_noise_points&#39;] = melt.labels.apply(lambda l: None if l is None else np.sum(l == -1))
+melt[&#39;num_detected_clusters&#39;] = melt.labels.apply(lambda l: None if l is None else len(np.unique(l)) - int(-1 in l))
+melt.repeats = melt.repeats.astype(np.intp)
+melt.num_noise_points = melt.num_noise_points.astype(np.double)
+melt.num_detected_clusters = melt.num_detected_clusters.astype(np.double)
+melt.run_times = melt.run_times.astype(np.double)
+melt.num_edges = melt.num_edges.astype(np.double)
+melt.to_pickle(&#39;./data/generated/performance_comparison_melt.pickle&#39;)
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Plotting">
+<h2>Plotting<a class="headerlink" href="#Plotting" title="Permalink to this heading"></a></h2>
+<p>First, the datasets are read-in to enable re-plotting without running the sweeps. Variables are renamed to avoid “_” characters that break the latex formatting.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>params = pd.read_pickle(&#39;./data/generated/performance_comparison_datasets.pickle&#39;)
+sweep = pd.read_pickle(&#39;./data/generated/performance_comparison.pickle&#39;)
+melt = pd.read_pickle(&#39;./data/generated/performance_comparison_melt.pickle&#39;)
+melt.run_times.replace(0.0, np.nan, inplace=True)
+num_dims = sweep.num_dims.unique()
+
+sweep.algorithm = sweep.algorithm.replace({
+    &#39;hdbscan&#39;: &quot;HDBSCAN*&quot;,
+    &#39;flasc (full)&#39;: &quot;FLASC (full)&quot;,
+    &#39;flasc (core)&#39;: &quot;FLASC (core)&quot;,
+})
+
+melt.algorithm = melt.algorithm.replace({
+    &#39;hdbscan&#39;: &quot;HDBSCAN*&quot;,
+    &#39;flasc (full)&#39;: &quot;FLASC (full)&quot;,
+    &#39;flasc (core)&#39;: &quot;FLASC (core)&quot;,
+})
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>display_names = {
+    &#39;columns&#39;: {
+        &#39;num_dims&#39;: &#39;Num dimensions&#39;,
+        &#39;num_points&#39;: &#39;Num points&#39;,
+        &#39;num_clusters&#39;: &#39;Num clusters&#39;,
+        &#39;num_detected_clusters&#39;: &#39;Num detected clusters&#39;,
+        &#39;num_noise_points&#39;: &#39;Num noise points&#39;,
+        &#39;run_times&#39;: &#39;Run time (s)&#39;,
+        &#39;num_edges&#39;: &#39;Num edges&#39;,
+        &#39;speedup&#39;: &#39;Speedup&#39;,
+        &#39;algorithm&#39;: &#39;Algorithm&#39;
+    }
+}
+</pre></div>
+</div>
+</div>
+<p>The figures below show the run-times for 2, 8, and 16 dimensions:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nu_dims = len(num_dims)
+ylim = [15, 40, 80]
+ticks = [[0, 5, 10, 15], [0, 20, 40], [0, 40, 80]]
+for i, nd in enumerate(num_dims):
+    sized_fig(1/nu_dims, aspect=0.8)
+    sns.lineplot(melt.query(f&#39;num_dims == {nd}&#39;).rename(**display_names),
+                 x=&#39;Num points&#39;, y=&#39;Run time (s)&#39;, hue=&#39;Algorithm&#39;,
+                 legend=False if i &gt; 0 else &quot;auto&quot;,
+                 hue_order=[
+                    &quot;FLASC (full)&quot;, &quot;FLASC (core)&quot;,
+                    &quot;HDBSCAN*&quot;, &quot;fastcluster&quot;,
+                ],
+                palette=[&#39;C0&#39;, &#39;#a6cee3&#39;, &#39;C1&#39;, &#39;k&#39;]
+                )
+    plt.gca().set_xticks([0, 50000, 100000, 150000, 200000])
+    plt.gca().set_xticklabels([&#39;0&#39;, &#39;5&#39;, &#39;10&#39;, &#39;15&#39;, &#39;20&#39;])
+    if i == 0:
+        l = plt.legend(loc=&#39;upper left&#39;, title_fontsize=6, fontsize=6)
+        adjust_legend_subtitles(l)
+    plt.xlabel(f&#39;Num points $\\times 10^4$&#39;)
+    plt.ylim([0, ylim[i]])
+    plt.yticks(ticks[i])
+    plt.subplots_adjust(0.24, 0.26, 0.98, 0.95, 0, 0)
+    plt.savefig(f&#39;./images/run_times_{nd:d}_dims.png&#39;)
+    plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_computational_cost_23_0.png" src="_images/Comparison_computational_cost_23_0.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_computational_cost_23_1.png" src="_images/Comparison_computational_cost_23_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_computational_cost_23_2.png" src="_images/Comparison_computational_cost_23_2.png" />
+</div>
+</div>
+<p>In general, FLASC’s performance scales similarly to HDBSCAN*, especially when the data has more than 2 dimensions.</p>
+<p>As expected, the <em>core</em> detection method results in shorter run-times compared to the <em>full</em> detection method, especially with more dimensions.</p>
+<p>What follows are a couple of validation plots used to ensure that FLASC detects clusters with branches and does not classify too many points as noise. First the number of detected groups:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>melt.algorithm.unique()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([&#39;fastcluster&#39;, &#39;HDBSCAN\\*&#39;, &#39;FLASC (full)&#39;, &#39;FLASC (core)&#39;],
+      dtype=object)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nu_dims = len(num_dims)
+for i, nd in enumerate(num_dims):
+    sized_fig(1/nu_dims, aspect=0.8)
+    sns.lineplot(melt.query(f&#39;num_dims == {nd}&#39;).rename(**display_names),
+                 x=&#39;Num clusters&#39;, y=&#39;Num detected clusters&#39;, hue=&#39;Algorithm&#39;,
+                 legend=False if i &gt; 0 else &quot;auto&quot;,
+                 hue_order=[
+                    &quot;FLASC (full)&quot;, &quot;FLASC (core)&quot;, &quot;HDBSCAN*&quot;,
+                 ],
+                 palette=[&#39;C0&#39;, &#39;#a6cee3&#39;, &#39;C1&#39;])
+    plt.ylabel(&#39;Num detected groups&#39;)
+    if i == 0:
+        l = plt.legend(loc=&#39;upper left&#39;, title_fontsize=6, fontsize=6)
+        adjust_legend_subtitles(l)
+    plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_computational_cost_26_0.png" src="_images/Comparison_computational_cost_26_0.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_computational_cost_26_1.png" src="_images/Comparison_computational_cost_26_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_computational_cost_26_2.png" src="_images/Comparison_computational_cost_26_2.png" />
+</div>
+</div>
+<p>The curve for HDBSCAN* quite nicely matches the number of generated clusters. Both FLASC variants detect more labels than clusters, indicating that branches are found.</p>
+<p>Now for the number of noise points:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nu_dims = len(num_dims)
+ylim = [80, 80, 80]
+ticks = [[0, 40, 80], [0, 40, 80], [0, 40, 80]]
+for i, nd in enumerate(num_dims):
+    sized_fig(1/nu_dims, aspect=0.8)
+    sns.lineplot(melt.query(f&#39;num_dims == {nd}&#39;).rename(**display_names),
+                 x=&#39;Num points&#39;, y=&#39;Num noise points&#39;, hue=&#39;Algorithm&#39;,
+                 legend=False if i &gt; 0 else &quot;auto&quot;,
+                 hue_order=[
+                    &quot;FLASC (full)&quot;, &quot;FLASC (core)&quot;, &quot;HDBSCAN*&quot;,
+                 ],
+                 palette=[&#39;C0&#39;, &#39;#a6cee3&#39;, &#39;C1&#39;])
+    if i == 0:
+        l = plt.legend(loc=&#39;upper left&#39;, title_fontsize=6, fontsize=6)
+        adjust_legend_subtitles(l)
+    plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_computational_cost_28_0.png" src="_images/Comparison_computational_cost_28_0.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_computational_cost_28_1.png" src="_images/Comparison_computational_cost_28_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_computational_cost_28_2.png" src="_images/Comparison_computational_cost_28_2.png" />
+</div>
+</div>
+<p>Only in two dimensions are there quite a few noise points. Still they remain below 10% of the dataset, so that should be good enough for this comparison.</p>
+<p>Now, the number of edges in the cluster approximation graph:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nu_dims = len(num_dims)
+ylim = [80, 80, 80]
+ticks = [[0, 40, 80], [0, 40, 80], [0, 40, 80]]
+for i, nd in enumerate(num_dims):
+    sized_fig(1/nu_dims, aspect=0.8)
+    sub = melt.query(f&#39;num_dims == {nd}&#39;).rename(**display_names)
+    sns.lineplot(sub, x=&#39;Num points&#39;, y=&#39;Num edges&#39;, hue=&#39;Algorithm&#39;,
+                 legend=False if i &gt; 0 else &quot;auto&quot;,
+                 hue_order=[
+                    &quot;FLASC (full)&quot;, &quot;FLASC (core)&quot;
+                 ],
+                 palette=[&#39;C0&#39;, &#39;#a6cee3&#39;])
+    if i == 0:
+        l = plt.legend(loc=&#39;upper left&#39;, title_fontsize=6, fontsize=6)
+        adjust_legend_subtitles(l)
+    plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_computational_cost_30_0.png" src="_images/Comparison_computational_cost_30_0.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_computational_cost_30_1.png" src="_images/Comparison_computational_cost_30_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_computational_cost_30_2.png" src="_images/Comparison_computational_cost_30_2.png" />
+</div>
+</div>
+<p>As expected, the <em>core</em> detection method uses many fewer edges, explaining the run-time differences between the algorithms.</p>
+<p>Finaly, the speedup of both FLASC variants compared to HDBSCAN* is shown below:</p>
+<div class="math notranslate nohighlight">
+\[speedup = \frac{time_{x}}{time_{hdbscan}}\]</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>id_columns =  [&#39;repeats&#39;, &#39;num_dims&#39;, &#39;num_clusters&#39;, &#39;num_points&#39;]
+pivotted = melt.query(&quot;algorithm not in [&#39;fastcluster&#39;, &#39;DBSCAN&#39;]&quot;).pivot(
+    index=id_columns,
+    columns=&#39;algorithm&#39;,
+    values=&#39;run_times&#39;
+)
+
+speedup = (pivotted[&#39;HDBSCAN*&#39;].to_numpy()[None].T / pivotted.iloc[:, :-1])\
+    .reset_index()\
+    .melt(id_vars=id_columns, var_name=&#39;algorithm&#39;, value_name=&#39;speedup&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nu_dims = len(num_dims)
+for i, nd in enumerate(num_dims):
+    sized_fig(1/nu_dims, 0.8)
+    sns.lineplot(
+        speedup.query(f&#39;num_dims == {nd}&#39;).rename(**display_names),
+        x=&#39;Num points&#39;, y=&#39;Speedup&#39;, hue=&#39;Algorithm&#39;,
+        hue_order=[&#39;FLASC (full)&#39;, &#39;FLASC (core)&#39;],
+        palette=[&#39;C0&#39;, &#39;#a6cee3&#39;],
+        legend=False if i != 0 else &#39;auto&#39;
+    )
+    plt.ylim([0, 1])
+    plt.gca().set_xticks([0, 50000, 100000, 150000, 200000])
+    plt.gca().set_xticklabels([&#39;0&#39;, &#39;5&#39;, &#39;10&#39;, &#39;15&#39;, &#39;20&#39;])
+    if i == 0:
+        l = plt.legend(loc=&#39;lower right&#39;)
+        adjust_legend_subtitles(l)
+    plt.xlabel(&#39;Num points $\\times 10^4$&#39;)
+    plt.ylabel(&#39;Speedup&#39;)
+    plt.subplots_adjust(0.28, 0.32, 0.98, 0.95, 0, 0)
+    plt.savefig(f&#39;./images/relative_run_times_{nd}_dims.png&#39;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_computational_cost_33_0.png" src="_images/Comparison_computational_cost_33_0.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_computational_cost_33_1.png" src="_images/Comparison_computational_cost_33_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_computational_cost_33_2.png" src="_images/Comparison_computational_cost_33_2.png" />
+</div>
+</div>
+<p>These figures indicate that the extra cost of FLASC decreases with the number of dimensions, especially for the <em>core</em> detection method. At 2 dimensions FLASC takes less than 2 as long on larger datasets.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Comparison_branch_stability.html" class="btn btn-neutral float-left" title="Comparing Branch Stability" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Comparison_multi_processing.html" class="btn btn-neutral float-right" title="Multiprocessing Behaviour" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, D.M. Bot and J. Aerts.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

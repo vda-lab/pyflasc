@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example: Single Cell Gene Expression Trajectories &mdash;  version 255f331</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/nbsphinx-code-cells.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "tags": "ams", "useLabelIds": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Example: Detecting Parkinson using Smart Phone Sensors" href="Example_Parkinson_data_challenge.html" />
+    <link rel="prev" title="Example: Detecting Diabetes Types" href="Example_diabetes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="How_FLASC_works.html">How FLASC works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_diabetes.html">Example: Detecting Diabetes Types</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Example: Single Cell Gene Expression Trajectories</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#HDBSCAN*">HDBSCAN*</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#FLASC">FLASC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Example_Parkinson_data_challenge.html">Example: Detecting Parkinson using Smart Phone Sensors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_horse.html">Example: Branches in 3D Horse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Comparison_branch_stability.html">Comparing Branch Stability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Comparison_computational_cost.html">Comparing Computational Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Comparison_multi_processing.html">Multiprocessing Behaviour</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">FLASC</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="examples.html">Examples</a></li>
+      <li class="breadcrumb-item active">Example: Single Cell Gene Expression Trajectories</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Example:-Single-Cell-Gene-Expression-Trajectories">
+<h1>Example: Single Cell Gene Expression Trajectories<a class="headerlink" href="#Example:-Single-Cell-Gene-Expression-Trajectories" title="Permalink to this heading"></a></h1>
+<p><a class="reference external" href="https://www.science.org/doi/10.1126/science.aax1971">Packer et al.</a> demonstrated how single-cell RNA sequencing uncovers trajectories relating to the cell development in the <em>C. elegans</em>. These trajectories can be seen as a branching structure that we can detect with FLASC. In this notebook, we show how HDBSCAN* and FLASC can be applied on this data set.</p>
+<section id="Setup">
+<h2>Setup<a class="headerlink" href="#Setup" title="Permalink to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%load_ext autoreload
+%autoreload 2
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from hdbscan import HDBSCAN
+from flasc import FLASC
+from umap import UMAP
+import matplotlib.collections as mc
+from sklearn.preprocessing import normalize
+from _plotting import *
+
+%matplotlib inline
+palette = configure_matplotlib()
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Data">
+<h2>Data<a class="headerlink" href="#Data" title="Permalink to this heading"></a></h2>
+<p>The dataset and pre-processing is described in the <a class="reference external" href="https://cole-trapnell-lab.github.io/monocle3/docs/trajectories/">documentation of Monocle 3</a>. In essence, different measuring batches are aligned, so that measuring noise is reduced. Then, the first 50 PCA coordinates are taken to reduce noise and focus on the main patterns. We prepared a file with these 50 PCA coordinates:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df = pd.read_csv(&#39;./data/elegans_preprocessed.csv&#39;, index_col=0)
+df.shape
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(6188, 50)
+</pre></div></div>
+</div>
+<p>Like <a class="reference external" href="https://doi.org/10.1038/s41587-020-00801-7">Narayan et al.</a>, we visualize the data using densMap, a variant of UMAP that tries to preserve local densities in the projected coordinates. Because HDBSCAN* does not support the cosine distance without reverting to an inefficient quadratic implementation, we normalize the rows so that the Euclidean distance captures the angle between rows. Essentially computing the Angular distance rather than the Cosine distance.</p>
+<p>This projection is used for visualisation purposes only, all analyses are run on the 50-dimensional feature space.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>X = normalize(df, norm=&#39;l2&#39;)
+X2 = UMAP(n_neighbors=20, min_dist=0.2, densmap=True).fit_transform(X)
+
+sized_fig()
+plt.scatter(X2.T[0], X2.T[1], 0.2, alpha=0.3, marker=&#39;.&#39;)
+frame_off()
+plt.subplots_adjust(0, 0, 1, 1)
+plt.savefig(&#39;./images/elegans_densmap.png&#39;, dpi=300)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Example_single_cell_trajectory_7_0.png" src="_images/Example_single_cell_trajectory_7_0.png" />
+</div>
+</div>
+</section>
+<section id="HDBSCAN*">
+<h2>HDBSCAN*<a class="headerlink" href="#HDBSCAN*" title="Permalink to this heading"></a></h2>
+<p>Running HDBSCAN* finds 17 clusters containing 36.7% of the data points. The clusters appear to correspond to the branches, indicating that the developmental end-states contain a local density maximum. Many points, however, are classified as noise, indicating that this segmentation does not capture the structure very well.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>c = HDBSCAN(min_cluster_size=20).fit(X)
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mask = c.labels_ == -1
+
+sized_fig()
+plt.scatter(X2[mask, 0], X2[mask, 1], 0.2, color=(0.2, 0.2, 0.2), alpha=0.1, marker=&#39;.&#39;)
+plt.scatter(X2[~mask, 0], X2[~mask, 1], 0.2, c.labels_[~mask], alpha=0.3, vmax=20, cmap=&#39;tab20&#39;, marker=&#39;.&#39;)
+
+# Print cluster labels
+center = np.mean(X2, axis=0)
+centroids = [
+    np.mean(X2[c.labels_ == i], axis=0)
+    for i in range(c.labels_.max())
+]
+quadrant = [
+    (ctr[0] &lt;= center[0]) + 2 * (ctr[1] &lt;= center[1])
+    for ctr in centroids
+]
+coords = [
+    [ctr[0] + 1.2 * (1 if q % 2 == 0 else -1), ctr[1] + 1 * (1 if q &lt; 2 else -1)]
+    for q, ctr in zip(quadrant, centroids)
+]
+for l, ctr in enumerate(coords):
+    plt.text(ctr[0], ctr[1], f&#39;{l}&#39;)
+
+frame_off()
+plt.subplots_adjust(0, 0, 1, 1)
+plt.savefig(&#39;./images/elegans_clusters.png&#39;, dpi=300)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Example_single_cell_trajectory_10_0.png" src="_images/Example_single_cell_trajectory_10_0.png" />
+</div>
+</div>
+<p>We adapt the CondensedTree plotting logic to colour segments by the selected cluster, rather than the number of points they contain. (Cell hidden in docs)</p>
+<p>The resulting visualisation showhs that the branches are detected as distinct subgroups by HDBBSCAN*. However, the condensed tree does not describe the trajectories. In other words, the branching structure or developmental trajectories are not captured.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sized_fig()
+plot_icicles(
+    c, c.condensed_tree_,
+    leaf_separation=0.2,
+    selection_palette=plt.get_cmap(&quot;tab20&quot;).colors,
+)
+plt.subplots_adjust(0.12, 0.1, 0.99, 0.95)
+plt.savefig(&quot;./images/elegans_cluster_tree.png&quot;, dpi=300)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Example_single_cell_trajectory_14_0.png" src="_images/Example_single_cell_trajectory_14_0.png" />
+</div>
+</div>
+</section>
+<section id="FLASC">
+<h2>FLASC<a class="headerlink" href="#FLASC" title="Permalink to this heading"></a></h2>
+<p>Based on the HDBSCAN* clustering, we interpret this data to be a single cluster. To achieve this, we enable the <em>allow single cluster</em> flag and set the <em>cluster selection epsilon</em> to <span class="math notranslate nohighlight">\(1/1.4\)</span>. This epsilon value will also be the threshold for points to be considered as noise. Some points have to be classified as noise, otherwise they bridge the gaps between the trajectories, hindering their detection as branches.</p>
+<p>Because all data points are now detected as a single cluster, the number of edges in the <em>full</em> cluster approximation graph is expected to be quite large, as the cluster spans quite a large density range. Therefore, we use the <em>core</em> approximation graph to detect the branches.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>t = 1/1.4
+c = FLASC(
+    min_samples=5,
+    min_cluster_size=20,
+    cluster_selection_epsilon=t,
+    allow_single_cluster=True,
+    branch_detection_method=&#39;core&#39;,
+).fit(X)
+graph = c._cluster_approximation_graphs[0]
+mask = c.labels_ != -1
+parents = graph.T[0].astype(&#39;int&#39;)
+children = graph.T[1].astype(&#39;int&#39;)
+edges = list(zip(
+    zip(X2[children, 0], X2[children, 1]),
+    zip(X2[parents, 0], X2[parents, 1])
+))
+</pre></div>
+</div>
+</div>
+<p>As expected, FLASC finds the trajectories as branches. Interestingly, the 5-NN graph indicates connectivity that is not obvious from the densMap projection.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>palette = plt.get_cmap(&#39;tab20&#39;).colors
+node_colors = [palette[l%20] for l in c.labels_ if l != -1]
+
+sized_fig()
+plt.scatter(X2[~mask, 0], X2[~mask, 1], 0.2, color=(0.2, 0.2, 0.2), alpha=0.1, marker=&#39;.&#39;)
+plt.scatter(X2[mask, 0], X2[mask, 1], 0.2, node_colors, marker=&#39;.&#39;, alpha=0.3)
+lc = mc.LineCollection(edges, linewidths=0.2, color=(0.2, 0.2, 0.2), zorder=-1, alpha=0.1)
+plt.gca().add_collection(lc)
+
+# Print cluster labels
+center = np.mean(X2, axis=0)
+centroids = [
+    np.mean(X2[c.labels_ == i], axis=0)
+    for i in range(c.labels_.max())
+]
+quadrant = [
+    (ctr[0] &lt;= center[0]) + 2 * (ctr[1] &lt;= center[1])
+    for ctr in centroids
+]
+coords = [
+    [ctr[0] + 1.2 * (1 if q % 2 == 0 else -1), ctr[1] + 1 * (1 if q &lt; 2 else -1)]
+    for q, ctr in zip(quadrant, centroids)
+]
+for l, ctr in enumerate(coords):
+    if l == 4:
+        plt.text(ctr[0] + 1.5, ctr[1] + 3.5, f&#39;{l}&#39;)
+        plt.text(ctr[0] - 1, ctr[1] - 5, f&#39;{l}&#39;)
+    elif l == 11:
+        plt.text(ctr[0] + 2.5, ctr[1] + 8, f&#39;{l}&#39;)
+        plt.text(ctr[0] - 5, ctr[1] - 8, f&#39;{l}&#39;)
+    else:
+        plt.text(ctr[0], ctr[1], f&#39;{l}&#39;)
+
+frame_off()
+plt.subplots_adjust(0, 0, 1, 1)
+plt.savefig(&#39;./images/elegans_branches.png&#39;, dpi=300)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Example_single_cell_trajectory_18_0.png" src="_images/Example_single_cell_trajectory_18_0.png" />
+</div>
+</div>
+<p>Again, we adapt the CondensedTree code to draw a branch condensed tree coloured by the selected branches:</p>
+<p>The resulting branch condensed hierarchy better describes the cluster’s shape. However, it only contains the most-eccentric connections between the branches.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sized_fig()
+BranchCondensedTree(
+    c._cluster_condensed_trees[0],
+    c.labels_,
+    c.cluster_points_[0],
+    c.branch_selection_method,
+    c.allow_single_branch,
+    c.branch_selection_persistence
+).plot(
+    colorbar=False,
+    leaf_separation=0.2,
+    select_clusters=True,
+    label_clusters=True,
+    selection_palette=palette
+)
+plt.yscale(&#39;log&#39;)
+# plt.ylim(0.2, 0)
+# plt.yticks([0, .1, .2, .3])
+plt.ylabel(&#39;eccentricity&#39;, labelpad=-7, y=0.4)
+plt.subplots_adjust(0.13, 0.07, 1, 0.95)
+plt.savefig(&#39;./images/elegans_branch_tree.png&#39;, dpi=300)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Example_single_cell_trajectory_22_0.png" src="_images/Example_single_cell_trajectory_22_0.png" />
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Example_diabetes.html" class="btn btn-neutral float-left" title="Example: Detecting Diabetes Types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Example_Parkinson_data_challenge.html" class="btn btn-neutral float-right" title="Example: Detecting Parkinson using Smart Phone Sensors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, D.M. Bot and J. Aerts.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

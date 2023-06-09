@@ -1,0 +1,2083 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multiprocessing Behaviour &mdash;  version 255f331</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/nbsphinx-code-cells.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "tags": "ams", "useLabelIds": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="reference.html" />
+    <link rel="prev" title="Comparing Computational Performance" href="Comparison_computational_cost.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="How_FLASC_works.html">How FLASC works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_diabetes.html">Example: Detecting Diabetes Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_single_cell_trajectory.html">Example: Single Cell Gene Expression Trajectories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_Parkinson_data_challenge.html">Example: Detecting Parkinson using Smart Phone Sensors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_horse.html">Example: Branches in 3D Horse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Comparison_branch_stability.html">Comparing Branch Stability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Comparison_computational_cost.html">Comparing Computational Performance</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Multiprocessing Behaviour</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Setup">Setup</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Datasets">Datasets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Core-distances">Core distances</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#Results">Results</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#Branch-Detection">Branch Detection</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id1">Results</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#Full-implementation">Full implementation</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id2">Results</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">FLASC</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="examples.html">Examples</a></li>
+      <li class="breadcrumb-item active">Multiprocessing Behaviour</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Multiprocessing-Behaviour">
+<h1>Multiprocessing Behaviour<a class="headerlink" href="#Multiprocessing-Behaviour" title="Permalink to this heading"></a></h1>
+<p>FLASC’s branch detection step and HDBSCAN*’s core distance computation can run in parallel. Due to the memory bound nature of the implementation and the overhead + copy costs of <code class="docutils literal notranslate"><span class="pre">joblib</span></code>’s <code class="docutils literal notranslate"><span class="pre">loky</span></code> multiprocess backend, running multiple processes is only beneficial for larger datasets.</p>
+<p>This notebook investigates at which sizes multiprocessing becomes beneficial to find a good default behaviour. Some parts of FLASC are re-implemented here to investigate the branch-detection step and core-distance step on their own. Unlike HDBSCAN*, FLASC will respect the specified <code class="docutils literal notranslate"><span class="pre">num_jobs</span></code> parameter making it very easy to override the default behaviour.</p>
+<section id="Setup">
+<h2>Setup<a class="headerlink" href="#Setup" title="Permalink to this heading"></a></h2>
+<p>This cell loads the libraries required to run this notebook.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%load_ext autoreload
+%autoreload 2
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import time
+import itertools
+import numpy as np
+import pandas as pd
+from tqdm import trange
+from sklearn.utils import shuffle
+from joblib.externals.loky import get_reusable_executor
+
+from flasc import FLASC
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+from _plotting import *
+%matplotlib inline
+palette = configure_matplotlib()
+</pre></div>
+</div>
+</div>
+<section id="Datasets">
+<h3>Datasets<a class="headerlink" href="#Datasets" title="Permalink to this heading"></a></h3>
+<p>The same dataset generation procedure is used as for the Computational Cost comparison. Clusters are generated using a varying number of random walks starting from the same position. Multiple clusters are positioned at uniform random positions sampled from a space that fits 5 times the specified number of clusters. These datasets result in non-trivially structured data, which should provide a more useful description of FLASC’s multi-processing behaviour.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def generate_cluster(
+    n_dims=2, n_walks=5, walk_length=50, std_step=0.1
+):
+    &quot;&quot;&quot;Generates a cluster by repeating a random walk from (0,0).&quot;&quot;&quot;
+    # The possible directions
+    vectors = np.eye(n_dims)
+    # Output collection
+    points = []
+    # Sample random walks
+    for r in range(n_walks):
+        directions = np.random.choice(np.arange(n_dims), walk_length)
+        lengths = np.random.normal(0, std_step, (walk_length, 1))
+        steps = vectors[directions] * lengths
+        pts = np.cumsum(steps, axis=0)
+        points.append(pts)
+    # Add noise
+    points = np.concatenate(points)
+    return points
+
+def generate_clusters(n_clusters=2, n_dims=2, min_dist=1, n_walks=5):
+    # Uniform random samples within volume spaced to fit 2*n_clusters
+    extra_spacing_factor = 5
+    volume = n_clusters * (min_dist**n_dims)
+    length = np.power(extra_spacing_factor * volume, 1./n_dims)
+    coords = np.random.uniform(high=length, size=(n_clusters, n_dims))
+
+    # Perform random walks at each coord
+    points = np.concatenate([
+        generate_cluster(n_dims=n_dims, n_walks=n_walks) + coord
+        for coord in coords
+    ])
+    # Create labels and return
+    y = np.repeat(np.arange(n_clusters), 50*n_walks)
+    return shuffle(points, y)
+</pre></div>
+</div>
+</div>
+<p>We generated 5 data sets for each combination of: - Number of dimensions - Number of clusters - Number of walks per cluster</p>
+<p>The cluster radius values, which indicate the 95 percentile distance from a cluster’s centor to its points, are copied from the Computational Cost comparison notebook.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>repeats = list(range(5))
+num_dims = [2, 8, 16]
+cluster_radius = [0.95555435, 0.80832393, 0.7837516]
+num_clusters = np.round(np.exp(np.linspace(np.log(2), np.log(800), 10)))
+num_walks = np.asarray([5, 10, 20])
+
+params = pd.DataFrame([
+    (r, ds[0], ds[1], c, w, c * w * 50)
+    for r, ds, c, w in itertools.product(
+        repeats,
+        zip(num_dims, cluster_radius),
+        num_clusters,
+        num_walks
+    ) if c * w * 50 &lt;= 200000
+], columns=[&#39;repeat&#39;,&#39;num_dims&#39;, &#39;min_dist&#39;, &#39;num_clusters&#39;, &#39;num_walks&#39;, &#39;num_points&#39;])
+params[&#39;X&#39;], params[&#39;y&#39;] = zip(*[
+    generate_clusters(
+        n_dims=int(params.num_dims[i]),
+        min_dist=float(params.min_dist[i]),
+        n_clusters=int(params.num_clusters[i]),
+        n_walks=int(params.num_walks[i])
+    )
+    for i in trange(params.shape[0])
+])
+params.to_pickle(&#39;./data/generated/threading_comparison_datasets.pickle&#39;)
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Core-distances">
+<h3>Core distances<a class="headerlink" href="#Core-distances" title="Permalink to this heading"></a></h3>
+<p>The first step that can benefit from multiprocessing is finding the point’s core distances and neighbours. In the cell below, we extracted this steps implementation from the main FLASC function to analyze its run time separately from the other steps. (cell hidden in docs)</p>
+<p>In addition to the dataset parameters, we vary whether clusters are overridden in this parameter sweep, because with overriden clusters only part of the HDBSCAN* algorithm is evaluated.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Parameter values to compare
+num_jobs = [1, 4]
+override_clusters = [True, False]
+
+# Create single data frame with combinations
+sweep = pd.DataFrame([
+        (d, c, w, c * w * 50, j, o)
+        for d, c, w, j, o in itertools.product(
+            num_dims,
+            num_clusters,
+            num_walks,
+            num_jobs,
+            override_clusters
+        ) if c * w * 50 &lt;= 200000
+    ],
+    columns=[
+        &#39;num_dims&#39;, &#39;num_clusters&#39;, &#39;num_walks&#39;, &#39;num_points&#39;,
+        &#39;num_jobs&#39;, &#39;override_clusters&#39;
+    ]
+)
+id_vars = sweep.columns.to_list()
+</pre></div>
+</div>
+</div>
+<p>To make sure the multi-processing pools are not reused, we force a shutdown before calling the timed function. Essentially, this assumes a cold-run where the threading pool is not initialized yet.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def measure_setting(p):
+    &quot;&quot;&quot;Computes the run times of the given setting&quot;&quot;&quot;
+    num_repeats = len(repeats)
+    times = np.nan * np.ones(num_repeats, dtype=np.double)
+
+    # Evaluate num_repeat times
+    for i in range(num_repeats):
+        # Extract the dataset
+        param_i = params[
+            (params.num_dims == p.num_dims) &amp;
+            (params.num_clusters == p.num_clusters) &amp;
+            (params.num_walks == p.num_walks) &amp;
+            (params.repeat == i)
+        ].index[0]
+        X = params.loc[param_i, &#39;X&#39;]
+
+        # Clean up processing backend
+        get_reusable_executor().shutdown(wait=True)
+
+        # Run the fit
+        start = time.perf_counter()
+        _hdbscan_linkage(X, num_jobs=p.num_jobs, run_override=p.override_clusters)
+        end = time.perf_counter()
+
+        # Store run time and  num clusters
+        times[i] = end - start
+    return times
+</pre></div>
+</div>
+</div>
+<p>The cell below actually runs the parameter sweep in about 2 hours and 40 minutes.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sweep[&#39;run_times&#39;] = [ measure_setting(sweep.iloc[i]) for i in trange(sweep.shape[0]) ]
+sweep.to_pickle(&#39;./data/generated/thread_scaling_core_dists.pickle&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████████████████████████████████████████████████████████████████████████| 300/300 [2:40:05&lt;00:00, 32.02s/it]
+</pre></div></div>
+</div>
+<section id="Results">
+<h4>Results<a class="headerlink" href="#Results" title="Permalink to this heading"></a></h4>
+<p>In the cells below, we try to find out at which data-set sizes multi-processing becomes beneficial. First, we load the data files, so it is possible to recreate the figures without running the entire parameter sweep.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>params = pd.read_pickle(&#39;./data/generated/threading_comparison_datasets.pickle&#39;)
+sweep = pd.read_pickle(&#39;./data/generated/thread_scaling_core_dists.pickle&#39;)
+repeats = np.arange(len(sweep.run_times[0]))
+sweep[&#39;repeats&#39;] = [repeats for _ in range(sweep.shape[0])]
+sweep = sweep.explode([&#39;run_times&#39;, &#39;repeats&#39;])
+</pre></div>
+</div>
+</div>
+<p>Then, we compute the speedup between 1 job and 4 jobs for all datasets.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pivotted = pd.pivot(sweep,
+         index=[
+            &#39;num_dims&#39;,&#39;num_clusters&#39;, &#39;num_walks&#39;,&#39;num_points&#39;,
+            &#39;override_clusters&#39;, &#39;repeats&#39;
+        ],
+         columns=&#39;num_jobs&#39;,
+         values=&#39;run_times&#39;
+)
+one_job = pivotted[1].to_numpy()[None].T
+multi_jobs = pivotted.iloc[:, 1:]
+speedup = (one_job / multi_jobs).reset_index()
+speedup = speedup.rename(columns={
+    &#39;repeat&#39;: &#39;Repeat&#39;,
+    &#39;num_dims&#39;: &#39;Num dimensions&#39;,
+    &#39;num_clusters&#39;: &#39;Num clusters&#39;,
+    &#39;num_walks&#39;: &#39;Num walks&#39;,
+    &#39;num_points&#39;: &#39;Num points&#39;,
+    &#39;override_clusters&#39;: &#39;Override clusters&#39;,
+    &#39;num_detected_clusters&#39;: &#39;Num detected clusters&#39;,
+    &#39;num_jobs&#39;: &#39;Num jobs&#39;,
+    4: &#39;Speedup&#39;
+})
+</pre></div>
+</div>
+</div>
+<p>Now, we can plot the average speedup for the different data-set and cluster sizes:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>g = sns.FacetGrid(
+    speedup,
+    col=&#39;Override clusters&#39;,
+    col_order=[False, True],
+)
+g.map_dataframe(
+    sns.lineplot,
+    x=&#39;Num points&#39;,
+    y=&#39;Speedup&#39;,
+    hue=&#39;Num dimensions&#39;,
+    palette=&#39;tab10&#39;
+)
+for a in plt.gcf().axes:
+    a.plot([0, 200000], [1, 1], &#39;k:&#39;, linewidth=0.5)
+    a.set_xlim([0, 200000])
+plt.sca(a)
+l = plt.legend(title=&#39;Num dimensions&#39;)
+adjust_legend_subtitles(l)
+g.set_titles(&#39;Override {col_name}&#39;)
+size_fig(1, aspect=0.618*2/3)
+# plt.xscale(&#39;log&#39;)
+plt.subplots_adjust(hspace=0.2, wspace=0.2)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_multi_processing_22_0.png" src="_images/Comparison_multi_processing_22_0.png" />
+</div>
+</div>
+<p>For these datasets, HDBSCAN*’s threading limit of +/- 16.000 points is too low. Benefits only start to happend from 50.000 points. For our implementation, we use 125.000 points as conservative threshold, ensuring no slow-downs occur on 2-dimensional datasets.</p>
+<p>The raw numbers:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>speedup.groupby(by=[
+    &#39;Num clusters&#39;, &#39;Override clusters&#39;, &#39;Num dimensions&#39;
+]).Speedup.mean().reset_index().pivot(
+    index=[&#39;Override clusters&#39;, &#39;Num dimensions&#39;],
+    values=&#39;Speedup&#39;,
+    columns=&#39;Num clusters&#39;
+)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Num clusters</th>
+      <th>2.0</th>
+      <th>4.0</th>
+      <th>8.0</th>
+      <th>15.0</th>
+      <th>29.0</th>
+      <th>56.0</th>
+      <th>109.0</th>
+      <th>211.0</th>
+      <th>411.0</th>
+      <th>800.0</th>
+    </tr>
+    <tr>
+      <th>Override clusters</th>
+      <th>Num dimensions</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="3" valign="top">False</th>
+      <th>2</th>
+      <td>0.005177</td>
+      <td>0.010299</td>
+      <td>0.022059</td>
+      <td>0.043019</td>
+      <td>0.088026</td>
+      <td>0.187841</td>
+      <td>0.412534</td>
+      <td>0.548403</td>
+      <td>0.761539</td>
+      <td>1.715687</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.015312</td>
+      <td>0.033583</td>
+      <td>0.098570</td>
+      <td>0.195107</td>
+      <td>0.367741</td>
+      <td>0.603581</td>
+      <td>0.830696</td>
+      <td>0.964007</td>
+      <td>1.051215</td>
+      <td>1.281790</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.024017</td>
+      <td>0.055282</td>
+      <td>0.136907</td>
+      <td>0.281519</td>
+      <td>0.503949</td>
+      <td>0.733526</td>
+      <td>0.915181</td>
+      <td>0.980591</td>
+      <td>1.007645</td>
+      <td>1.050434</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">True</th>
+      <th>2</th>
+      <td>0.002616</td>
+      <td>0.005449</td>
+      <td>0.011458</td>
+      <td>0.023468</td>
+      <td>0.051625</td>
+      <td>0.133886</td>
+      <td>0.346752</td>
+      <td>0.478879</td>
+      <td>0.703685</td>
+      <td>1.986652</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.007089</td>
+      <td>0.016132</td>
+      <td>0.046569</td>
+      <td>0.097261</td>
+      <td>0.208068</td>
+      <td>0.410467</td>
+      <td>0.748709</td>
+      <td>0.910315</td>
+      <td>1.203641</td>
+      <td>2.349060</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.010657</td>
+      <td>0.025276</td>
+      <td>0.063608</td>
+      <td>0.139045</td>
+      <td>0.300975</td>
+      <td>0.529191</td>
+      <td>0.817763</td>
+      <td>0.928171</td>
+      <td>1.040766</td>
+      <td>1.312453</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+</section>
+<section id="Branch-Detection">
+<h3>Branch Detection<a class="headerlink" href="#Branch-Detection" title="Permalink to this heading"></a></h3>
+<p>The branch detection step can be performed in parallel for each cluster separately. Here we analyze whether that has a benefit separately from the other steps. The functions below implements all FLASC steps that occur before the branch detection step and the branch detection step on its own. Joblib’s Memory caching is used to speed up the parts that are not measured. This requires roughly 20Gb free disk space, which is cleaned up when the sweep completes. (code cell hiddin in docs)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import tempfile
+from joblib.parallel import Parallel
+from joblib.memory import Memory
+
+tempdir = tempfile.TemporaryDirectory()
+memory = Memory(tempdir.name, verbose=0)
+</pre></div>
+</div>
+</div>
+<p>FLASC’s main parameters are varied so we can find a good threshold for each variant of the algorithm: - branch detection method, - cluster override</p>
+<p>FLASC’s generic algorithm variant, which computes the full distance matrix is not tested here, as no speedups were observed with that variant previously.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Parameter values to compare
+branch_detection_method = [&#39;core&#39;, &#39;full&#39;]
+override_clusters = [True, False]
+num_jobs = [1, 4]
+
+# Create single data frame with combinations
+sweep = pd.DataFrame([
+        (d, c, w, c * w * 50, j, b, o)
+        for d, c, w, j, b, o in itertools.product(
+            num_dims,
+            num_clusters,
+            num_walks,
+            num_jobs,
+            branch_detection_method,
+            override_clusters
+        ) if c * w * 50 &lt;= 200000
+    ],
+    columns=[
+        &#39;num_dims&#39;, &#39;num_clusters&#39;, &#39;num_walks&#39;, &#39;num_points&#39;,
+        &#39;num_jobs&#39;, &#39;branch_detection_method&#39;, &#39;override_clusters&#39;
+    ]
+)
+id_vars = sweep.columns.to_list()
+</pre></div>
+</div>
+</div>
+<p>As before, the <code class="docutils literal notranslate"><span class="pre">loky</span></code> backend is shutdown between runs to make sure no caching benefits influence the comparison.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def measure_setting(p):
+    &quot;&quot;&quot;Computes the run times of the given setting&quot;&quot;&quot;
+    num_repeats = len(repeats)
+    times = np.nan * np.ones(num_repeats, dtype=np.double)
+
+    # Evaluate num_repeat times
+    for i in range(num_repeats):
+        # Find data-set index
+        param_i = params[
+            (params.num_dims == p.num_dims) &amp;
+            (params.num_clusters == p.num_clusters) &amp;
+            (params.num_walks == p.num_walks) &amp;
+            (params.repeat == i)
+        ].index[0]
+
+        # Compute clusters and points
+        run_generic = False
+        run_override = p.override_clusters
+        run_core = p.branch_detection_method == &#39;core&#39;
+        preparation = memory.cache(_flasc_clusters)(
+            param_i, run_generic=run_generic, run_override=run_override
+        )
+
+        # Clean up processing backend
+        get_reusable_executor().shutdown(wait=True)
+
+        # Run the branch detection step
+        start = time.perf_counter()
+        _flasc_branches(
+            *preparation,
+            run_generic=run_generic,
+            run_override=run_override,
+            run_core=run_core,
+            num_jobs=p.num_jobs
+        )
+        end = time.perf_counter()
+
+        # Store run time and  num clusters
+        times[i] = end - start
+    return times
+</pre></div>
+</div>
+</div>
+<p>The cell below runs the actual sweep, which takes about 4 hours.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sweep[&#39;run_times&#39;] = [ measure_setting(sweep.iloc[i]) for i in trange(sweep.shape[0]) ]
+sweep.to_pickle(&#39;./data/generated/thread_scaling_branches.pickle&#39;)
+tempdir.cleanup()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████████████████████████████████████████████████████████████████████████| 600/600 [4:01:28&lt;00:00, 24.15s/it]
+</pre></div></div>
+</div>
+<section id="id1">
+<h4>Results<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
+<p>In this section we plot the results from the branch-detection sweep. The data-files are read in again so that the figures can be re-created without running the sweep.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>params = pd.read_pickle(&#39;./data/generated/threading_comparison_datasets.pickle&#39;)
+sweep = pd.read_pickle(&#39;./data/generated/thread_scaling_branches.pickle&#39;)
+repeats = np.arange(len(sweep.run_times[0]))
+sweep[&#39;repeats&#39;] = [repeats for _ in range(sweep.shape[0])]
+sweep = sweep.explode([&#39;run_times&#39;, &#39;repeats&#39;])
+</pre></div>
+</div>
+</div>
+<p>The speedup from 1 to 4 jobs is computed:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pivotted = pd.pivot(sweep,
+         index=[
+            &#39;num_dims&#39;, &#39;num_clusters&#39;, &#39;num_walks&#39;, &#39;num_points&#39;,
+            &#39;branch_detection_method&#39;, &#39;override_clusters&#39;, &#39;repeats&#39;
+        ],
+         columns=&#39;num_jobs&#39;,
+         values=&#39;run_times&#39;
+)
+one_job = pivotted[1].to_numpy()[None].T
+multi_jobs = pivotted.iloc[:, 1:]
+speedup = (one_job / multi_jobs).reset_index()
+speedup = speedup.rename(columns={
+    &#39;repeat&#39;: &#39;Repeat&#39;,
+    &#39;num_dims&#39;: &#39;Num dimensions&#39;,
+    &#39;num_clusters&#39;: &#39;Num clusters&#39;,
+    &#39;num_walks&#39;: &#39;Num walks&#39;,
+    &#39;num_points&#39;: &#39;Num points&#39;,
+    &#39;branch_detection_method&#39;: &#39;Branch detection&#39;,
+    &#39;override_clusters&#39;: &#39;Override clusters&#39;,
+    &#39;num_jobs&#39;: &#39;Num jobs&#39;,
+    4: &#39;Speedup&#39;
+})
+</pre></div>
+</div>
+</div>
+<p>The figure below shows the speedups for the different FLASC parameter combinations and dataset dimensions. Again, 2D datasets benefit the least from multiprocessing.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>g = sns.FacetGrid(
+    speedup,
+    row=&#39;Branch detection&#39;,
+    col=&quot;Override clusters&quot;,
+    row_order=[&#39;core&#39;, &#39;full&#39;],
+    col_order=[False, True]
+)
+g.map_dataframe(
+    sns.lineplot,
+    x=&#39;Num points&#39;,
+    y=&#39;Speedup&#39;,
+    hue=&#39;Num walks&#39;,
+    style=&#39;Num dimensions&#39;,
+    palette=&#39;tab10&#39;
+)
+for a in plt.gcf().axes:
+    a.plot([0, 200000], [1, 1], &#39;k:&#39;, linewidth=0.5)
+    a.set_xlim([0, 200000])
+g.set_titles(&#39;{row_name} | Override {col_name}&#39;)
+# g.set(ylim=(0, 250))
+# plt.xscale(&#39;log&#39;)
+size_fig(1, 1)
+plt.subplots_adjust(hspace=0.2, wspace=0.2)
+# plt.savefig(&#39;./images/threading_best_size.png&#39;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_multi_processing_39_0.png" src="_images/Comparison_multi_processing_39_0.png" />
+</div>
+</div>
+<p>For the core branch detection approach, spinning up multiple processes is not worth it (at this <code class="docutils literal notranslate"><span class="pre">min_samples</span></code> value), regardless of dataset size. Only when the pool is re-used from the core distances step, could there be a benefit, but even that appears unlikely. For the full branch detection method, multiprocessing becomes beneficial from around 150.000 data points. However, because a threadpool is created for the core distance step at 125.000 points, re-using that pool is likely beneficial
+already. So, in the final implementation, we disable the thread pool for the branch detection step when the core detection method or generic variant of the algorithm is used. Otherwise, the pool from the core distances step is re-used.</p>
+<p>It can be worth enabling multiprocessing manually for datasets with tens of thousands of points if they have more than 2 dimensions.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>speedup.groupby(by=[
+    &#39;Num clusters&#39;, &#39;Num walks&#39;, &#39;Override clusters&#39;, &#39;Branch detection&#39;, &#39;Num dimensions&#39;
+]).Speedup.mean().reset_index().pivot(
+    index=[&#39;Branch detection&#39;, &#39;Override clusters&#39;, &#39;Num walks&#39;, &#39;Num dimensions&#39;],
+    values=&#39;Speedup&#39;,
+    columns=&#39;Num clusters&#39;
+)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>Num clusters</th>
+      <th>2.0</th>
+      <th>4.0</th>
+      <th>8.0</th>
+      <th>15.0</th>
+      <th>29.0</th>
+      <th>56.0</th>
+      <th>109.0</th>
+      <th>211.0</th>
+      <th>411.0</th>
+      <th>800.0</th>
+    </tr>
+    <tr>
+      <th>Branch detection</th>
+      <th>Override clusters</th>
+      <th>Num walks</th>
+      <th>Num dimensions</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="18" valign="top">core</th>
+      <th rowspan="9" valign="top">False</th>
+      <th rowspan="3" valign="top">5</th>
+      <th>2</th>
+      <td>0.003159</td>
+      <td>0.005944</td>
+      <td>0.014465</td>
+      <td>0.025352</td>
+      <td>0.049430</td>
+      <td>0.090837</td>
+      <td>0.173306</td>
+      <td>0.303712</td>
+      <td>0.483539</td>
+      <td>0.755368</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.002931</td>
+      <td>0.007304</td>
+      <td>0.014776</td>
+      <td>0.027717</td>
+      <td>0.051618</td>
+      <td>0.096351</td>
+      <td>0.173453</td>
+      <td>0.267089</td>
+      <td>0.394351</td>
+      <td>0.291465</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.002928</td>
+      <td>0.007461</td>
+      <td>0.015128</td>
+      <td>0.027281</td>
+      <td>0.051547</td>
+      <td>0.094157</td>
+      <td>0.167719</td>
+      <td>0.277289</td>
+      <td>0.124852</td>
+      <td>0.090819</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">10</th>
+      <th>2</th>
+      <td>0.005429</td>
+      <td>0.011559</td>
+      <td>0.027093</td>
+      <td>0.049754</td>
+      <td>0.091805</td>
+      <td>0.172753</td>
+      <td>0.255159</td>
+      <td>0.494996</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.005681</td>
+      <td>0.013227</td>
+      <td>0.027950</td>
+      <td>0.054397</td>
+      <td>0.097699</td>
+      <td>0.172399</td>
+      <td>0.284143</td>
+      <td>0.384808</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.005520</td>
+      <td>0.015637</td>
+      <td>0.027964</td>
+      <td>0.051809</td>
+      <td>0.095650</td>
+      <td>0.163954</td>
+      <td>0.251415</td>
+      <td>0.199158</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">20</th>
+      <th>2</th>
+      <td>0.010943</td>
+      <td>0.021226</td>
+      <td>0.051036</td>
+      <td>0.097723</td>
+      <td>0.177076</td>
+      <td>0.307708</td>
+      <td>0.529663</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.011226</td>
+      <td>0.026767</td>
+      <td>0.052873</td>
+      <td>0.094384</td>
+      <td>0.173779</td>
+      <td>0.294398</td>
+      <td>0.416041</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.010768</td>
+      <td>0.028713</td>
+      <td>0.055042</td>
+      <td>0.099928</td>
+      <td>0.179951</td>
+      <td>0.278628</td>
+      <td>0.297049</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th rowspan="9" valign="top">True</th>
+      <th rowspan="3" valign="top">5</th>
+      <th>2</th>
+      <td>0.003137</td>
+      <td>0.008425</td>
+      <td>0.016174</td>
+      <td>0.030059</td>
+      <td>0.057410</td>
+      <td>0.106009</td>
+      <td>0.196040</td>
+      <td>0.339635</td>
+      <td>0.551901</td>
+      <td>0.872365</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.003665</td>
+      <td>0.008627</td>
+      <td>0.017128</td>
+      <td>0.032247</td>
+      <td>0.059790</td>
+      <td>0.112970</td>
+      <td>0.202119</td>
+      <td>0.332817</td>
+      <td>0.487964</td>
+      <td>0.430270</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.003711</td>
+      <td>0.009020</td>
+      <td>0.018092</td>
+      <td>0.033078</td>
+      <td>0.061428</td>
+      <td>0.113519</td>
+      <td>0.196277</td>
+      <td>0.312589</td>
+      <td>0.343147</td>
+      <td>0.177158</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">10</th>
+      <th>2</th>
+      <td>0.006769</td>
+      <td>0.017592</td>
+      <td>0.034283</td>
+      <td>0.064142</td>
+      <td>0.119286</td>
+      <td>0.220623</td>
+      <td>0.340419</td>
+      <td>0.624888</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.007501</td>
+      <td>0.019264</td>
+      <td>0.038454</td>
+      <td>0.070137</td>
+      <td>0.129781</td>
+      <td>0.236366</td>
+      <td>0.395940</td>
+      <td>0.593900</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.008003</td>
+      <td>0.020320</td>
+      <td>0.040147</td>
+      <td>0.073285</td>
+      <td>0.135198</td>
+      <td>0.244074</td>
+      <td>0.392161</td>
+      <td>0.415146</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">20</th>
+      <th>2</th>
+      <td>0.016858</td>
+      <td>0.043566</td>
+      <td>0.084196</td>
+      <td>0.151690</td>
+      <td>0.281300</td>
+      <td>0.487886</td>
+      <td>0.781616</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.018425</td>
+      <td>0.047230</td>
+      <td>0.093067</td>
+      <td>0.170709</td>
+      <td>0.306283</td>
+      <td>0.517214</td>
+      <td>0.759545</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.020348</td>
+      <td>0.051696</td>
+      <td>0.100968</td>
+      <td>0.181717</td>
+      <td>0.325953</td>
+      <td>0.537935</td>
+      <td>0.648758</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th rowspan="18" valign="top">full</th>
+      <th rowspan="9" valign="top">False</th>
+      <th rowspan="3" valign="top">5</th>
+      <th>2</th>
+      <td>0.005859</td>
+      <td>0.009929</td>
+      <td>0.027037</td>
+      <td>0.045271</td>
+      <td>0.096476</td>
+      <td>0.169733</td>
+      <td>0.330739</td>
+      <td>0.524932</td>
+      <td>0.811864</td>
+      <td>1.149715</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.005682</td>
+      <td>0.015299</td>
+      <td>0.036559</td>
+      <td>0.077567</td>
+      <td>0.170626</td>
+      <td>0.354356</td>
+      <td>0.637906</td>
+      <td>1.042073</td>
+      <td>1.434513</td>
+      <td>1.214936</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.006155</td>
+      <td>0.017117</td>
+      <td>0.049194</td>
+      <td>0.111786</td>
+      <td>0.266430</td>
+      <td>0.561697</td>
+      <td>1.085606</td>
+      <td>1.842024</td>
+      <td>1.719904</td>
+      <td>1.371313</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">10</th>
+      <th>2</th>
+      <td>0.018080</td>
+      <td>0.040749</td>
+      <td>0.066864</td>
+      <td>0.121523</td>
+      <td>0.198410</td>
+      <td>0.385023</td>
+      <td>0.674564</td>
+      <td>0.894895</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.014676</td>
+      <td>0.040010</td>
+      <td>0.094555</td>
+      <td>0.207498</td>
+      <td>0.399099</td>
+      <td>0.728690</td>
+      <td>1.175111</td>
+      <td>1.582926</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.017140</td>
+      <td>0.055636</td>
+      <td>0.136961</td>
+      <td>0.332426</td>
+      <td>0.742876</td>
+      <td>1.285111</td>
+      <td>2.011022</td>
+      <td>2.329959</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">20</th>
+      <th>2</th>
+      <td>0.039610</td>
+      <td>0.066367</td>
+      <td>0.128860</td>
+      <td>0.314227</td>
+      <td>0.463832</td>
+      <td>0.693282</td>
+      <td>1.017464</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.054310</td>
+      <td>0.133418</td>
+      <td>0.262903</td>
+      <td>0.479026</td>
+      <td>0.819095</td>
+      <td>1.236615</td>
+      <td>1.644502</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.059054</td>
+      <td>0.176911</td>
+      <td>0.427189</td>
+      <td>0.828805</td>
+      <td>1.560656</td>
+      <td>2.101381</td>
+      <td>2.590795</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th rowspan="9" valign="top">True</th>
+      <th rowspan="3" valign="top">5</th>
+      <th>2</th>
+      <td>0.005828</td>
+      <td>0.013195</td>
+      <td>0.028016</td>
+      <td>0.052473</td>
+      <td>0.106243</td>
+      <td>0.193333</td>
+      <td>0.353224</td>
+      <td>0.594588</td>
+      <td>0.909688</td>
+      <td>1.302847</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.005980</td>
+      <td>0.017393</td>
+      <td>0.039808</td>
+      <td>0.083182</td>
+      <td>0.180777</td>
+      <td>0.384853</td>
+      <td>0.693834</td>
+      <td>1.176123</td>
+      <td>1.648200</td>
+      <td>1.545613</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.006963</td>
+      <td>0.018492</td>
+      <td>0.051550</td>
+      <td>0.116409</td>
+      <td>0.274195</td>
+      <td>0.569178</td>
+      <td>1.115421</td>
+      <td>1.842648</td>
+      <td>2.146585</td>
+      <td>1.990661</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">10</th>
+      <th>2</th>
+      <td>0.015712</td>
+      <td>0.037300</td>
+      <td>0.072851</td>
+      <td>0.136760</td>
+      <td>0.255589</td>
+      <td>0.454890</td>
+      <td>0.751886</td>
+      <td>1.092214</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.016179</td>
+      <td>0.048635</td>
+      <td>0.114401</td>
+      <td>0.248468</td>
+      <td>0.500768</td>
+      <td>0.884831</td>
+      <td>1.434070</td>
+      <td>1.877409</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.019345</td>
+      <td>0.061627</td>
+      <td>0.150492</td>
+      <td>0.338740</td>
+      <td>0.759894</td>
+      <td>1.317657</td>
+      <td>2.101171</td>
+      <td>2.474793</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">20</th>
+      <th>2</th>
+      <td>0.045825</td>
+      <td>0.116512</td>
+      <td>0.218807</td>
+      <td>0.379507</td>
+      <td>0.642007</td>
+      <td>0.972706</td>
+      <td>1.363354</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.054985</td>
+      <td>0.168832</td>
+      <td>0.351439</td>
+      <td>0.673266</td>
+      <td>1.121121</td>
+      <td>1.699989</td>
+      <td>2.107128</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.068774</td>
+      <td>0.196071</td>
+      <td>0.460291</td>
+      <td>0.881114</td>
+      <td>1.608466</td>
+      <td>2.141666</td>
+      <td>2.603280</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+</section>
+<section id="Full-implementation">
+<h3>Full implementation<a class="headerlink" href="#Full-implementation" title="Permalink to this heading"></a></h3>
+<p>Finally, lets check the full FLASC implementation to validate that the default behaviour does not introduce slow-downs.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Parameter values to compare
+branch_detection_method = [&#39;core&#39;, &#39;full&#39;]
+override_clusters = [True, False]
+enable_threading = [True, False]
+
+# Create single data frame with combinations
+sweep = pd.DataFrame([
+        (d, c, w, c * w * 50, j, b, o)
+        for d, c, w, j, b, o in itertools.product(
+            num_dims,
+            num_clusters,
+            num_walks,
+            enable_threading,
+            branch_detection_method,
+            override_clusters
+        ) if c * w * 50 &lt;= 200000
+    ],
+    columns=[
+        &#39;num_dims&#39;, &#39;num_clusters&#39;, &#39;num_walks&#39;, &#39;num_points&#39;,
+        &#39;enable_threading&#39;, &#39;branch_detection_method&#39;, &#39;override_clusters&#39;
+    ]
+)
+id_vars = sweep.columns.to_list()
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def measure_setting(p):
+    &quot;&quot;&quot;Computes the run times of the given setting&quot;&quot;&quot;
+    num_repeats = len(repeats)
+    times = np.nan * np.ones(num_repeats, dtype=np.double)
+
+    # Evaluate num_repeat times
+    for i in range(num_repeats):
+        # Find data-set index
+        param_i = params[
+            (params.num_dims == p.num_dims) &amp;
+            (params.num_clusters == p.num_clusters) &amp;
+            (params.num_walks == p.num_walks) &amp;
+            (params.repeat == i)
+        ].index[0]
+        X = params.X[param_i]
+        y = params.y[param_i]
+
+        # Compute clusters and points
+        clusterer = FLASC(
+            min_samples=10,
+            min_cluster_size=100,
+            min_branch_size=20,
+            allow_single_cluster=True,
+            override_cluster_labels=y if p.override_clusters else None,
+            branch_detection_method=p.branch_detection_method,
+            num_jobs = None if p.enable_threading else 1,
+        )
+
+        # Clean up processing backend
+        get_reusable_executor().shutdown(wait=True)
+
+        # Run the branch detection step
+        start = time.perf_counter()
+        clusterer.fit(X)
+        end = time.perf_counter()
+
+        # Store run time and  num clusters
+        times[i] = end - start
+    return times
+</pre></div>
+</div>
+</div>
+<p>The sweep below takes roughly 7 hours.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sweep[&#39;run_times&#39;] = [ measure_setting(sweep.iloc[i]) for i in trange(sweep.shape[0]) ]
+sweep.to_pickle(&#39;./data/generated/thread_scaling.pickle&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████████████████████████████████████████████████████████████████████████| 600/600 [6:50:00&lt;00:00, 41.00s/it]
+</pre></div></div>
+</div>
+<section id="id2">
+<h4>Results<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h4>
+<p>In this section we plot the results from the branch-detection sweep. The data-files are read in again so that the figures can be re-created without running the sweep.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>params = pd.read_pickle(&#39;./data/generated/threading_comparison_datasets.pickle&#39;)
+sweep = pd.read_pickle(&#39;./data/generated/thread_scaling.pickle&#39;)
+repeats = np.arange(len(sweep.run_times[0]))
+sweep[&#39;repeats&#39;] = [repeats for _ in range(sweep.shape[0])]
+sweep = sweep.explode([&#39;run_times&#39;, &#39;repeats&#39;])
+</pre></div>
+</div>
+</div>
+<p>The speed up is computed:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pivotted = pd.pivot(sweep,
+         index=[
+            &#39;num_dims&#39;, &#39;num_clusters&#39;, &#39;num_walks&#39;, &#39;num_points&#39;,
+            &#39;branch_detection_method&#39;, &#39;override_clusters&#39;, &#39;repeats&#39;
+        ],
+         columns=&#39;enable_threading&#39;,
+         values=&#39;run_times&#39;
+)
+one_job = pivotted[False].to_numpy()
+multi_jobs = pivotted[True]
+speedup = (one_job / multi_jobs).reset_index()
+speedup = speedup.rename(columns={
+    &#39;repeat&#39;: &#39;Repeat&#39;,
+    &#39;num_dims&#39;: &#39;Num dimensions&#39;,
+    &#39;num_clusters&#39;: &#39;Num clusters&#39;,
+    &#39;num_walks&#39;: &#39;Num walks&#39;,
+    &#39;num_points&#39;: &#39;Num points&#39;,
+    &#39;branch_detection_method&#39;: &#39;Branch detection&#39;,
+    &#39;override_clusters&#39;: &#39;Override clusters&#39;,
+    True: &#39;Speedup&#39;
+})
+</pre></div>
+</div>
+</div>
+<p>The figures below show the speedup for the different parameter combinations:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>g = sns.FacetGrid(
+    speedup,
+    row=&#39;Branch detection&#39;,
+    col=&quot;Override clusters&quot;,
+    row_order=[&#39;core&#39;, &#39;full&#39;],
+    col_order=[False, True]
+)
+g.map_dataframe(
+    sns.lineplot,
+    x=&#39;Num points&#39;,
+    y=&#39;Speedup&#39;,
+    hue=&#39;Num walks&#39;,
+    style=&#39;Num dimensions&#39;,
+    palette=&#39;tab10&#39;
+)
+g.set_titles(&#39;{row_name} | Override {col_name}&#39;)
+g.set(ylim=(0, 3))
+# plt.xscale(&#39;log&#39;)
+size_fig(1, 1)
+plt.subplots_adjust(hspace=0.2, wspace=0.2)
+# plt.savefig(&#39;./images/threading_best_size.png&#39;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_multi_processing_52_0.png" src="_images/Comparison_multi_processing_52_0.png" />
+</div>
+</div>
+<p>This is a reasonable result. There is a noticable speedup for large datasets. For smaller datasets with more dimensions, there is no slowdown. Manually enabling multi-processing would result in more speedups. There is some variation in speedup at smaller datasets, for with no multi-processing occurs. This is likely due to background tasks or other interference.</p>
+<p>The raw values are shown below:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>speedup.groupby(by=[
+    &#39;Num clusters&#39;, &#39;Num walks&#39;, &#39;Override clusters&#39;, &#39;Branch detection&#39;, &#39;Num dimensions&#39;
+]).Speedup.mean().reset_index().pivot(
+    index=[&#39;Branch detection&#39;, &#39;Override clusters&#39;, &#39;Num walks&#39;, &#39;Num dimensions&#39;],
+    values=&#39;Speedup&#39;,
+    columns=&#39;Num clusters&#39;
+)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>Num clusters</th>
+      <th>2.0</th>
+      <th>4.0</th>
+      <th>8.0</th>
+      <th>15.0</th>
+      <th>29.0</th>
+      <th>56.0</th>
+      <th>109.0</th>
+      <th>211.0</th>
+      <th>411.0</th>
+      <th>800.0</th>
+    </tr>
+    <tr>
+      <th>Branch detection</th>
+      <th>Override clusters</th>
+      <th>Num walks</th>
+      <th>Num dimensions</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="18" valign="top">core</th>
+      <th rowspan="9" valign="top">False</th>
+      <th rowspan="3" valign="top">5</th>
+      <th>2</th>
+      <td>1.048687</td>
+      <td>0.998321</td>
+      <td>0.991910</td>
+      <td>1.004897</td>
+      <td>0.990731</td>
+      <td>1.027229</td>
+      <td>0.994402</td>
+      <td>0.991903</td>
+      <td>1.000755</td>
+      <td>1.343989</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>1.002823</td>
+      <td>0.898074</td>
+      <td>0.988875</td>
+      <td>1.011377</td>
+      <td>1.008605</td>
+      <td>0.998200</td>
+      <td>0.998690</td>
+      <td>1.000843</td>
+      <td>1.002410</td>
+      <td>1.247001</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>1.001668</td>
+      <td>0.998073</td>
+      <td>0.998362</td>
+      <td>1.021311</td>
+      <td>1.000981</td>
+      <td>1.000242</td>
+      <td>1.001140</td>
+      <td>1.000171</td>
+      <td>0.998409</td>
+      <td>1.056936</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">10</th>
+      <th>2</th>
+      <td>0.994004</td>
+      <td>0.775257</td>
+      <td>0.986888</td>
+      <td>1.000605</td>
+      <td>1.053610</td>
+      <td>1.005856</td>
+      <td>1.009160</td>
+      <td>1.000453</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.984689</td>
+      <td>1.014262</td>
+      <td>0.997846</td>
+      <td>0.997620</td>
+      <td>0.998605</td>
+      <td>1.001291</td>
+      <td>1.004902</td>
+      <td>0.997786</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>1.002216</td>
+      <td>1.000690</td>
+      <td>0.998147</td>
+      <td>0.883028</td>
+      <td>0.998437</td>
+      <td>0.998638</td>
+      <td>1.002251</td>
+      <td>1.000784</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">20</th>
+      <th>2</th>
+      <td>0.999919</td>
+      <td>0.996704</td>
+      <td>1.036251</td>
+      <td>0.995041</td>
+      <td>0.998312</td>
+      <td>0.993591</td>
+      <td>1.000946</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>1.015203</td>
+      <td>1.015858</td>
+      <td>1.000028</td>
+      <td>0.997828</td>
+      <td>1.003294</td>
+      <td>1.000881</td>
+      <td>1.005032</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>1.001609</td>
+      <td>1.000310</td>
+      <td>1.130976</td>
+      <td>0.891607</td>
+      <td>1.000934</td>
+      <td>0.998499</td>
+      <td>1.000345</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th rowspan="9" valign="top">True</th>
+      <th rowspan="3" valign="top">5</th>
+      <th>2</th>
+      <td>0.858018</td>
+      <td>1.025632</td>
+      <td>1.000907</td>
+      <td>0.993969</td>
+      <td>1.003129</td>
+      <td>1.006935</td>
+      <td>0.993899</td>
+      <td>0.979987</td>
+      <td>0.986470</td>
+      <td>1.449443</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.969761</td>
+      <td>1.016629</td>
+      <td>0.998081</td>
+      <td>0.988468</td>
+      <td>1.008540</td>
+      <td>0.999815</td>
+      <td>0.995208</td>
+      <td>1.001120</td>
+      <td>0.998286</td>
+      <td>1.993373</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.982635</td>
+      <td>1.006680</td>
+      <td>1.000523</td>
+      <td>1.015217</td>
+      <td>0.997253</td>
+      <td>1.000820</td>
+      <td>0.999782</td>
+      <td>1.001271</td>
+      <td>0.999376</td>
+      <td>1.272039</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">10</th>
+      <th>2</th>
+      <td>0.981934</td>
+      <td>0.622268</td>
+      <td>1.002810</td>
+      <td>1.017507</td>
+      <td>0.998458</td>
+      <td>0.993172</td>
+      <td>0.999530</td>
+      <td>0.998511</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>1.008657</td>
+      <td>0.994673</td>
+      <td>0.996742</td>
+      <td>0.988056</td>
+      <td>1.001082</td>
+      <td>1.001694</td>
+      <td>0.999746</td>
+      <td>1.005091</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.998010</td>
+      <td>1.004363</td>
+      <td>1.024920</td>
+      <td>0.935080</td>
+      <td>0.999444</td>
+      <td>0.998022</td>
+      <td>1.004893</td>
+      <td>0.995623</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">20</th>
+      <th>2</th>
+      <td>0.971642</td>
+      <td>0.984365</td>
+      <td>1.008843</td>
+      <td>1.011050</td>
+      <td>1.001648</td>
+      <td>1.000334</td>
+      <td>0.998262</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.965328</td>
+      <td>1.002476</td>
+      <td>0.999736</td>
+      <td>0.998644</td>
+      <td>1.003580</td>
+      <td>1.002242</td>
+      <td>0.999195</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.994387</td>
+      <td>1.018864</td>
+      <td>1.067334</td>
+      <td>0.810977</td>
+      <td>0.996211</td>
+      <td>1.005306</td>
+      <td>1.001005</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th rowspan="18" valign="top">full</th>
+      <th rowspan="9" valign="top">False</th>
+      <th rowspan="3" valign="top">5</th>
+      <th>2</th>
+      <td>0.902959</td>
+      <td>0.936036</td>
+      <td>1.026920</td>
+      <td>1.024985</td>
+      <td>0.988197</td>
+      <td>0.993021</td>
+      <td>0.999647</td>
+      <td>0.999481</td>
+      <td>0.999064</td>
+      <td>1.675548</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.987607</td>
+      <td>0.998359</td>
+      <td>0.995219</td>
+      <td>1.000916</td>
+      <td>1.001613</td>
+      <td>1.000171</td>
+      <td>0.998957</td>
+      <td>1.000638</td>
+      <td>0.999232</td>
+      <td>1.377506</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>1.007962</td>
+      <td>0.998622</td>
+      <td>0.999076</td>
+      <td>0.980647</td>
+      <td>1.000885</td>
+      <td>0.998939</td>
+      <td>1.000502</td>
+      <td>0.999154</td>
+      <td>1.000504</td>
+      <td>1.175418</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">10</th>
+      <th>2</th>
+      <td>1.003720</td>
+      <td>0.995133</td>
+      <td>1.026779</td>
+      <td>0.999799</td>
+      <td>1.003259</td>
+      <td>1.011203</td>
+      <td>0.997672</td>
+      <td>1.002850</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.995194</td>
+      <td>0.997441</td>
+      <td>0.978555</td>
+      <td>1.003955</td>
+      <td>0.997489</td>
+      <td>0.999588</td>
+      <td>1.000746</td>
+      <td>0.997281</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.992229</td>
+      <td>0.999902</td>
+      <td>1.025964</td>
+      <td>1.148526</td>
+      <td>1.002297</td>
+      <td>0.998628</td>
+      <td>0.998925</td>
+      <td>0.998720</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">20</th>
+      <th>2</th>
+      <td>1.040651</td>
+      <td>0.994715</td>
+      <td>0.998396</td>
+      <td>0.954799</td>
+      <td>1.000177</td>
+      <td>1.000735</td>
+      <td>1.072320</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>1.002801</td>
+      <td>0.996368</td>
+      <td>1.000081</td>
+      <td>1.017886</td>
+      <td>0.993969</td>
+      <td>0.999157</td>
+      <td>1.001497</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.984919</td>
+      <td>0.997827</td>
+      <td>1.074300</td>
+      <td>0.997348</td>
+      <td>1.001499</td>
+      <td>1.000763</td>
+      <td>0.999747</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th rowspan="9" valign="top">True</th>
+      <th rowspan="3" valign="top">5</th>
+      <th>2</th>
+      <td>0.991949</td>
+      <td>0.979542</td>
+      <td>0.999035</td>
+      <td>0.955455</td>
+      <td>1.006953</td>
+      <td>0.982647</td>
+      <td>1.003248</td>
+      <td>0.994500</td>
+      <td>0.999074</td>
+      <td>1.995182</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.996766</td>
+      <td>1.003658</td>
+      <td>1.003242</td>
+      <td>0.998856</td>
+      <td>1.005461</td>
+      <td>1.003568</td>
+      <td>0.998295</td>
+      <td>0.999856</td>
+      <td>0.999647</td>
+      <td>2.218780</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.962467</td>
+      <td>0.998671</td>
+      <td>1.004725</td>
+      <td>0.998648</td>
+      <td>1.002510</td>
+      <td>1.000000</td>
+      <td>1.002248</td>
+      <td>1.001481</td>
+      <td>0.981688</td>
+      <td>1.672515</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">10</th>
+      <th>2</th>
+      <td>1.062156</td>
+      <td>0.913745</td>
+      <td>0.985154</td>
+      <td>1.007887</td>
+      <td>0.996800</td>
+      <td>1.011242</td>
+      <td>1.000094</td>
+      <td>0.995252</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>1.004948</td>
+      <td>0.995675</td>
+      <td>0.999816</td>
+      <td>0.988373</td>
+      <td>1.002524</td>
+      <td>0.998651</td>
+      <td>1.003883</td>
+      <td>0.998305</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.983020</td>
+      <td>0.969100</td>
+      <td>1.002134</td>
+      <td>1.106752</td>
+      <td>1.005494</td>
+      <td>0.997581</td>
+      <td>0.999471</td>
+      <td>0.998845</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">20</th>
+      <th>2</th>
+      <td>1.027089</td>
+      <td>1.013243</td>
+      <td>1.002259</td>
+      <td>0.984969</td>
+      <td>1.003379</td>
+      <td>0.997785</td>
+      <td>0.998740</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>1.009391</td>
+      <td>0.996882</td>
+      <td>1.004752</td>
+      <td>1.000431</td>
+      <td>0.994762</td>
+      <td>1.001176</td>
+      <td>0.997090</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.991513</td>
+      <td>0.998886</td>
+      <td>1.098382</td>
+      <td>0.989049</td>
+      <td>0.997396</td>
+      <td>0.997037</td>
+      <td>1.002327</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Comparison_computational_cost.html" class="btn btn-neutral float-left" title="Comparing Computational Performance" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="reference.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, D.M. Bot and J. Aerts.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

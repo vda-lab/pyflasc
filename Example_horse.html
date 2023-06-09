@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example: Branches in 3D Horse &mdash;  version 255f331</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/nbsphinx-code-cells.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "tags": "ams", "useLabelIds": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Comparing Branch Stability" href="Comparison_branch_stability.html" />
+    <link rel="prev" title="Example: Detecting Parkinson using Smart Phone Sensors" href="Example_Parkinson_data_challenge.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="How_FLASC_works.html">How FLASC works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_diabetes.html">Example: Detecting Diabetes Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_single_cell_trajectory.html">Example: Single Cell Gene Expression Trajectories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_Parkinson_data_challenge.html">Example: Detecting Parkinson using Smart Phone Sensors</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Example: Branches in 3D Horse</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Single-cluster">Single cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Multiple-clusters">Multiple clusters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Comparison_branch_stability.html">Comparing Branch Stability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Comparison_computational_cost.html">Comparing Computational Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Comparison_multi_processing.html">Multiprocessing Behaviour</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">FLASC</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="examples.html">Examples</a></li>
+      <li class="breadcrumb-item active">Example: Branches in 3D Horse</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Example:-Branches-in-3D-Horse">
+<h1>Example: Branches in 3D Horse<a class="headerlink" href="#Example:-Branches-in-3D-Horse" title="Permalink to this heading"></a></h1>
+<p>This notebook demonstrates how FLASC behaves on a 3D point cloud of a horse. This point cloud consists of 3D points sampled from the surface of a horse. The sampling density varies with the level of detail on the surface. For example, there are a lot more points on the head than on the stomach. In addition, the data-set has several hollow regions, which FLASC’s centrality metric has to deal with accurately.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
+from flasc import FLASC
+
+from _plotting import *
+palette = configure_matplotlib()
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df = pd.read_csv(&#39;./data/horse.csv&#39;)
+X = df.to_numpy()
+
+sized_fig(1, aspect=0.618/3)
+plt.subplot(1, 3, 1)
+plt.scatter(X.T[2], X.T[1], 1, alpha=0.1)
+frame_off()
+plt.subplot(1, 3, 2)
+plt.scatter(X.T[2], X.T[0], 1, alpha=0.1)
+frame_off()
+plt.subplot(1, 3, 3)
+plt.scatter(X.T[0], X.T[1], 1, alpha=0.1)
+frame_off()
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Example_horse_2_0.png" src="_images/Example_horse_2_0.png" />
+</div>
+</div>
+<section id="Single-cluster">
+<h2>Single cluster<a class="headerlink" href="#Single-cluster" title="Permalink to this heading"></a></h2>
+<p>First, lets analyze this dataset as if it is a single cluster. For that purpose, we set <code class="docutils literal notranslate"><span class="pre">override_cluster_labels</span></code> to assign every point to the <code class="docutils literal notranslate"><span class="pre">0</span></code> cluster. This is different from <code class="docutils literal notranslate"><span class="pre">allow_single_cluster</span></code>, as it gives each point the same cluster membership probability. All branches in this point cloud (legs, head, and tail) are quite large, so we set <code class="docutils literal notranslate"><span class="pre">min_branch_size=20</span></code>. Because there are no noise points and to speed up the result, we keep <code class="docutils literal notranslate"><span class="pre">min_samples=5</span></code>. Note that this value is
+unlikely to cross the hollow regions in the legs and torso. The resulting condensed hierarchy has two very un-persistent branches, which we filter out by setting <code class="docutils literal notranslate"><span class="pre">branch_selection_persistence=0.1</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>c = FLASC(
+    override_cluster_labels=np.zeros(X.shape[0], dtype=np.intp),
+    min_samples=5,
+    min_branch_size=20,
+    branch_selection_persistence=0.1,
+).fit(X)
+g = c.cluster_approximation_graph_
+</pre></div>
+</div>
+</div>
+<p>With these settings, we find 2 main sides of the cluster, with 3 branches each.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sized_fig()
+c.cluster_condensed_trees_[0].plot(colorbar=False, leaf_separation=0.2)
+plt.yscale(&#39;log&#39;)
+plt.ylabel(&#39;Eccentricity&#39;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Example_horse_6_0.png" src="_images/Example_horse_6_0.png" />
+</div>
+</div>
+<p>The resulting branches neatly correspond to the legs, head and tail. The torso gets its own label, indicating the most central points.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sized_fig(1, aspect=0.618/3)
+plt.subplot(1, 3, 1)
+plt.scatter(X.T[2], X.T[1], 1, c.labels_,
+            alpha=0.1, cmap=&#39;tab10&#39;, vmax=10)
+frame_off()
+plt.subplot(1, 3, 2)
+plt.scatter(X.T[2], X.T[0], 1, c.labels_,
+            alpha=0.1, cmap=&#39;tab10&#39;, vmax=10)
+frame_off()
+plt.subplot(1, 3, 3)
+plt.scatter(X.T[0], X.T[1], 1, c.labels_,
+            alpha=0.1, cmap=&#39;tab10&#39;, vmax=10)
+frame_off()
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Example_horse_8_0.png" src="_images/Example_horse_8_0.png" />
+</div>
+</div>
+<p>Computing the branch membership vectors to re-assign each point to the closest branch centroid in the cluster approximation graph lets each branch grow into the torso for a potentially more useful segmentation.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from flasc.prediction import branch_centrality_vectors, update_labels_with_branch_centrality
+
+v = branch_centrality_vectors(c)
+l, _ = update_labels_with_branch_centrality(c, v)
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sized_fig(1, aspect=0.618/3)
+plt.subplot(1, 3, 1)
+plt.scatter(X.T[2], X.T[1], 1, l,
+            alpha=0.1, cmap=&#39;tab10&#39;, vmax=10)
+frame_off()
+plt.subplot(1, 3, 2)
+plt.scatter(X.T[2], X.T[0], 1, l,
+            alpha=0.1, cmap=&#39;tab10&#39;, vmax=10)
+frame_off()
+plt.subplot(1, 3, 3)
+plt.scatter(X.T[0], X.T[1], 1, l,
+            alpha=0.1, cmap=&#39;tab10&#39;, vmax=10)
+frame_off()
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Example_horse_11_0.png" src="_images/Example_horse_11_0.png" />
+</div>
+</div>
+</section>
+<section id="Multiple-clusters">
+<h2>Multiple clusters<a class="headerlink" href="#Multiple-clusters" title="Permalink to this heading"></a></h2>
+<p>This data set can also be viewed as multiple density-based clusters. To cluster this dataset we specify <code class="docutils literal notranslate"><span class="pre">min_samples=20</span></code> and <code class="docutils literal notranslate"><span class="pre">min_cluster_size=1000</span></code>. This results in four clusters: the tail, the head, the back legs, and the front legs. Parts of the torse are classified as noise. To detect branches within these clusters, we set <code class="docutils literal notranslate"><span class="pre">min_branch_size=20</span></code> and <code class="docutils literal notranslate"><span class="pre">branch_selection_persistence=0.1</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>c = FLASC(
+    min_samples=20,
+    min_cluster_size=1000,
+    min_branch_size=20,
+    branch_selection_persistence=0.1
+).fit(X)
+g = c.cluster_approximation_graph_
+</pre></div>
+</div>
+</div>
+<p>The clustering found 2 sides the each contain 2 clusters.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sized_fig()
+c.condensed_tree_.plot(select_clusters=True, colorbar=False)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Example_horse_15_0.png" src="_images/Example_horse_15_0.png" />
+</div>
+</div>
+<p>The resulting clusters neatly capture the tail, back legs, front legs and head.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sized_fig(1, aspect=0.618/3)
+plt.subplot(1, 3, 1)
+colors = [palette[l]  if l &gt;= 0 else (0.8, 0.8, 0.8) for l in c.cluster_labels_]
+plt.scatter(X.T[2], X.T[1], 1, colors,
+            alpha=0.1)
+frame_off()
+plt.subplot(1, 3, 2)
+plt.scatter(X.T[2], X.T[0], 1, colors,
+            alpha=0.1)
+frame_off()
+plt.subplot(1, 3, 3)
+plt.scatter(X.T[0], X.T[1], 1, colors,
+            alpha=0.1)
+frame_off()
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Example_horse_17_0.png" src="_images/Example_horse_17_0.png" />
+</div>
+</div>
+<p>The branches detect the individual lower-legs, hips and shoulder-region as distinct branches.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sized_fig(1, aspect=0.618/3)
+palette = plt.get_cmap(&#39;tab20&#39;).colors
+plt.subplot(1, 3, 1)
+colors = [
+    palette[l]  if l &gt;= 0 else (0.8, 0.8, 0.8)
+    for l in c.labels_
+]
+plt.scatter(X.T[2], X.T[1], 1, colors,
+            alpha=0.1)
+frame_off()
+plt.subplot(1, 3, 2)
+plt.scatter(X.T[2], X.T[0], 1, colors,
+            alpha=0.1)
+frame_off()
+plt.subplot(1, 3, 3)
+plt.scatter(X.T[0], X.T[1], 1, colors,
+            alpha=0.1)
+frame_off()
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Example_horse_19_0.png" src="_images/Example_horse_19_0.png" />
+</div>
+</div>
+<p>The branch grouping is easier to see when drawn over the cluster approximation graphs. A potential issue with this segmentation is that the label for the most central points in the front-legs consists of two distinct connected component. This happens for U-shaped clusters in general, where the centroid lies between the branches, and both branches have a local centrality maximum.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sized_fig(1, aspect=1)
+g.plot(edge_alpha=0.1, node_color=[
+    palette[l % 20] for l in c.labels_[g.point_mask]
+])
+frame_off()
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Example_horse_21_0.png" src="_images/Example_horse_21_0.png" />
+</div>
+</div>
+<p>These graphs also show how the centrality metric behaves.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sized_fig(1, aspect=1)
+g.plot(node_alpha=0, edge_color=&#39;centrality&#39;, edge_alpha=0.1)
+frame_off()
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Example_horse_23_0.png" src="_images/Example_horse_23_0.png" />
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Example_Parkinson_data_challenge.html" class="btn btn-neutral float-left" title="Example: Detecting Parkinson using Smart Phone Sensors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Comparison_branch_stability.html" class="btn btn-neutral float-right" title="Comparing Branch Stability" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, D.M. Bot and J. Aerts.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

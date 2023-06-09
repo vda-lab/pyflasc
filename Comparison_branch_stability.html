@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comparing Branch Stability &mdash;  version 255f331</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/nbsphinx-code-cells.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "tags": "ams", "useLabelIds": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Comparing Computational Performance" href="Comparison_computational_cost.html" />
+    <link rel="prev" title="Example: Branches in 3D Horse" href="Example_horse.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="How_FLASC_works.html">How FLASC works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_diabetes.html">Example: Detecting Diabetes Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_single_cell_trajectory.html">Example: Single Cell Gene Expression Trajectories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_Parkinson_data_challenge.html">Example: Detecting Parkinson using Smart Phone Sensors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_horse.html">Example: Branches in 3D Horse</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Comparing Branch Stability</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Datasets">Datasets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#FLASC">FLASC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#HDBSCAN*">HDBSCAN*</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Plotting">Plotting</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Parameter-tuning-and-sensitivity">Parameter tuning and sensitivity</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id1">FLASC</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id2">HDBSCAN*</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#Visualize-labeling">Visualize labeling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ARI-heatmaps">ARI heatmaps</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Branch-stability">Branch stability</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Comparison_computational_cost.html">Comparing Computational Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Comparison_multi_processing.html">Multiprocessing Behaviour</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">FLASC</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="examples.html">Examples</a></li>
+      <li class="breadcrumb-item active">Comparing Branch Stability</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Comparing-Branch-Stability">
+<h1>Comparing Branch Stability<a class="headerlink" href="#Comparing-Branch-Stability" title="Permalink to this heading"></a></h1>
+<p>This notebook has two purposes. (1) It demonstrates the benefit of detecting branch-based subgroups and (2) it explores how stable FLASC’s branch detection is under noise and hyper-parameters.</p>
+<section id="Setup">
+<h2>Setup<a class="headerlink" href="#Setup" title="Permalink to this heading"></a></h2>
+<p>Load libraries used:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%load_ext autoreload
+%autoreload 2
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import itertools
+import numpy as np
+import pandas as pd
+import seaborn as sns
+from tqdm import trange
+import matplotlib.pyplot as plt
+from matplotlib import ticker
+from matplotlib.colors import LinearSegmentedColormap, BoundaryNorm
+from _plotting import *
+
+%matplotlib inline
+palette = configure_matplotlib()
+
+from scipy import linalg
+from sklearn.utils import shuffle
+from sklearn.metrics.cluster import adjusted_rand_score
+from sklearn.metrics import pairwise_distances
+
+from flasc import FLASC
+from hdbscan import HDBSCAN
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Datasets">
+<h2>Datasets<a class="headerlink" href="#Datasets" title="Permalink to this heading"></a></h2>
+<p>For this notebook, we use 2D datasets with a single cluster containing three branches arranged in a three-point star. Data points are placed along the branches logarithmically, with the densest regions at the center of the cluster. This construction avoids placing a local density maximum in the branches, intentionally making it difficult for HDBSCAN* to detect them.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def make_dataset(num_samples=100, length=2, scale=0.02):
+    &quot;&quot;&quot;Creates a dataset with three branches.
+
+    Datapoints are spaced logarithmically along the branch length,
+    with the high-density part at the ends of the branches.
+    &quot;&quot;&quot;
+    def rotation(axis = [0, 0, 1], theta = 0):
+        return linalg.expm(np.cross(np.eye(3), axis/linalg.norm(axis)*theta))
+
+    def rotate(X, axis = [0, 0, 1], theta = 0):
+        M = rotation(axis=axis, theta=theta)
+        data = np.hstack((X, np.zeros((X.shape[0], 1), dtype=X.dtype)))
+        return (M @ data.T).T[:,:2]
+
+    max_exp = np.log(length)
+    x = np.exp(np.linspace(0, max_exp, num_samples)) - 1
+    branch = np.hstack((x[None].T, np.zeros((x.shape[0], 1), dtype=x.dtype)))
+    X = np.vstack((
+        rotate(branch, theta=np.pi/2),
+        rotate(branch, theta=2 * np.pi / 3 + np.pi / 2),
+        rotate(branch, theta=4 * np.pi / 3 + np.pi / 2)
+    ))
+    X += np.random.normal(scale=scale, size=X.shape)
+    y = np.repeat([0, 1, 2], num_samples)
+    X, y = shuffle(X, y)
+    return X, y
+
+def _centroid(X, y):
+    &quot;&quot;&quot;Computes ground-truth average positions.&quot;&quot;&quot;
+    return np.vstack(
+        [ np.average(X[y == i, :], axis=0) for i in range(3) ] + [np.average(X, axis=0)]
+    )
+</pre></div>
+</div>
+</div>
+<p>The datasets are parameterized by two values: the branch length and noise ratio. Here, the branch length (<span class="math notranslate nohighlight">\(b_l\)</span>) controls the difference in density between the cluster’s center and the branches’ ends. The noise ratio <span class="math notranslate nohighlight">\(n_r\)</span> controls the standard deviation <span class="math notranslate nohighlight">\(\sigma\)</span> of Gaussian noise applied to the data points:</p>
+<div class="math notranslate nohighlight">
+\[n_r = \frac{4 \sigma}{\sqrt{\frac{1}{2}} b_l},\]</div>
+<p>Practically, <span class="math notranslate nohighlight">\(\pm 90\%\)</span> of points move less than <span class="math notranslate nohighlight">\(n_r b_l\)</span> away from their original point after noise is applied.</p>
+<p>Both parameters are varied to explore a wide range of datasets with this branching pattern.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Dataset parameters
+lengths = np.unique(np.round(np.exp(np.linspace(np.log(2), np.log(100), 10))))
+ratios = (np.exp(np.linspace(0, np.log(2), 10)) - 1)
+repeats = np.arange(10)
+
+datasets = pd.DataFrame([
+        x for x in itertools.product(
+            repeats,
+            ratios,
+            lengths,
+        )
+    ], columns=[
+        &#39;repeat&#39;, &#39;noise_ratio&#39;, &#39;branch_length&#39;
+    ]
+)
+samples = tuple(zip(*[
+    make_dataset(
+        length=datasets.branch_length[i],
+        scale=(datasets.branch_length[i] * datasets.noise_ratio[i]) / 4 * np.sqrt(1/2)
+    )
+    for i in range(datasets.shape[0])
+]))
+datasets[&#39;X&#39;] = list(samples[0])
+datasets[&#39;y&#39;] = list(samples[1])
+datasets[&#39;centroids&#39;] = [
+    _centroid(datasets.X[i], datasets.y[i]) for i in range(datasets.shape[0])
+]
+datasets.branch_length = datasets.branch_length.apply(int)
+datasets.to_pickle(&#39;./data/generated/branch_stability_data.pickle&#39;)
+</pre></div>
+</div>
+</div>
+<p>One dataset for each <em>noise</em>-<em>length</em> combination is shown below, with data points coloured by their ground-truth branch label. Notice that the clusters’ centers are indeed the densest parts, and that the ground truth labels are mixed in that region. This will be relevant later on, when we try to evaluate how well FLASC detects the branches.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cnt = 1
+n_ratios = len(ratios)
+n_lengths = len(lengths)
+sized_fig(1)
+for j, r in enumerate(ratios):
+    for i, l in enumerate(lengths):
+        plt.subplot(n_ratios, n_lengths, cnt)
+        cnt += 1
+
+        s =  datasets\
+            .query(f&#39;repeat == 4&#39;)\
+            .query(f&#39;noise_ratio == {r}&#39;)\
+            .query(f&#39;branch_length == {l}&#39;)
+
+        X = s.X.iloc[0]
+        y = s.y.iloc[0]
+        colors = [palette[l] for l in y]
+        plt.scatter(X.T[0], X.T[1], 0.1, colors, alpha=0.5)
+        frame_off()
+        if i == 0:
+            plt.ylabel(f&#39;{r:.2f}&#39;, fontsize=8)
+        if j == 0:
+            plt.title(f&#39;{int(l):d}&#39;, fontsize=8)
+fig = plt.gcf()
+plt.text(0.511, 0.984, &#39;Branch length&#39;,
+         fontsize=8,
+         horizontalalignment=&#39;center&#39;,
+         verticalalignment=&#39;center&#39;,
+         transform=fig.transFigure)
+plt.text(0.003, 0.465, &#39;Noise ratio&#39;,
+         fontsize=8,
+         horizontalalignment=&#39;center&#39;,
+         verticalalignment=&#39;center&#39;,
+         rotation=90, transform=fig.transFigure)
+plt.subplots_adjust(0.03, 0.01, .99, .92)
+plt.savefig(&#39;./images/branch_stability_ground_truth.png&#39;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_branch_stability_8_0.png" src="_images/Comparison_branch_stability_8_0.png" />
+</div>
+</div>
+</section>
+<section id="FLASC">
+<h2>FLASC<a class="headerlink" href="#FLASC" title="Permalink to this heading"></a></h2>
+<p>First, we analyze FLASC’s performance on the datasets. We set several parameters to fixed values to ensure a single cluster is detected. Unlike HDBSCAN*, FLASC will give all points the 0-label when a single cluster is detected.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Fixed parameters
+kwargs = {
+    &#39;min_samples&#39;: 5,
+    &#39;min_cluster_size&#39;: 25,
+    &#39;allow_single_cluster&#39;: True,
+}
+</pre></div>
+</div>
+</div>
+<p>Other parameters are varied, to analyze FLASC’s stability and parameter sensitivity. We store flasc’s final labelling for each combination of parameter values.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Algorithm parameters
+min_branch_size = np.arange(2, 25, 2)
+branch_selection_method = [&#39;eom&#39;, &#39;leaf&#39;]
+branch_detection_method = [&#39;full&#39;, &#39;core&#39;]
+params = pd.DataFrame([
+    x for x in itertools.product(
+        repeats, ratios, lengths, min_branch_size,
+        branch_detection_method, branch_selection_method
+    )
+], columns=[
+    &#39;repeat&#39;, &#39;noise_ratio&#39;, &#39;branch_length&#39;,
+    &#39;min_branch_size&#39;, &#39;branch_detection_method&#39;,
+    &#39;branch_selection_method&#39;
+]
+)
+params[&#39;algorithm&#39;] = [&#39;FLASC&#39; for _ in range(params.shape[0])]
+params.branch_length = params.branch_length.apply(int)
+</pre></div>
+</div>
+</div>
+<p>The cell below actually runs FLASC on the dataset and prepares for two metrics on the resulting labelling: (1) the adjusted rand index, a metric indicating how well FLASC’s labelling reflects the ground truth, and (2) the centroid spread, a metric indicating how varied FLASC’s labelling is across the different samples with the same parameters. Both metrics will be explained in more detail below.</p>
+<p>Running this cell takes about 20 minutes.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def run_setting(p):
+    &quot;&quot;&quot;Runs flasc on a dataset.&quot;&quot;&quot;
+    # Extract Dataset properties
+    subset = datasets[
+        (datasets.repeat == p[&#39;repeat&#39;]) &amp;
+        (datasets.noise_ratio == p.noise_ratio) &amp;
+        (datasets.branch_length == p.branch_length)
+    ].iloc[0]
+    X = subset.X
+    truth = subset.centroids
+    y = subset.y
+
+    # Run flasc
+    c = FLASC(
+        min_branch_size=p.min_branch_size,
+        branch_detection_method=p.branch_detection_method,
+        branch_selection_method=p.branch_selection_method,
+        **kwargs
+    ).fit(X)
+
+    # Compute ARI
+    ari = adjusted_rand_score(c.labels_, y)
+
+    # Compute centroids
+    centroids = []
+    num_labels = len(np.unique(c.labels_)) - int(-1 in c.labels_)
+    for l in range(num_labels):
+        mask = c.labels_ == l
+        centroids.append(np.average(X[mask,:], weights=c.probabilities_[mask], axis=0))
+
+    # Assign centroids to ground-truth centroids
+    dists = pairwise_distances(centroids, truth)
+    order = np.argmin(dists, axis=1)
+
+    # Return everything
+    return (
+        c.labels_, c.probabilities_, centroids, order, ari, num_labels
+    )
+
+(
+    params[&#39;labels&#39;],
+    params[&#39;probabilities&#39;],
+    params[&#39;centroids&#39;],
+    params[&#39;true_labels&#39;],
+    params[&#39;ari&#39;],
+    params[&#39;num_labels&#39;]
+) = zip(*[
+    run_setting(params.iloc[i]) for i in trange(params.shape[0])
+])
+params.to_pickle(&#39;./data/generated/branch_stability_labelling_flasc.pickle&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 48000/48000 [09:59&lt;00:00, 80.10it/s]
+</pre></div></div>
+</div>
+</section>
+<section id="HDBSCAN*">
+<h2>HDBSCAN*<a class="headerlink" href="#HDBSCAN*" title="Permalink to this heading"></a></h2>
+<p>Second, we analyze HDBSCAN* performance on the dataset. The <em>min_samples</em> parameter is fixed to the same value as used by FLASC</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Fixed parameters
+kwargs = {
+    &#39;min_samples&#39;: int(5),
+}
+</pre></div>
+</div>
+</div>
+<p>Other parameters are varied to find the best-performing setting, giving HDBSCAN* a fair chance to find the branch-subgroups.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Algorithm parameters
+min_cluster_size = np.arange(2, 25, 2)
+cluster_selection_method = [&#39;eom&#39;, &#39;leaf&#39;]
+params = pd.DataFrame([
+    x for x in itertools.product(
+        repeats, ratios, lengths, min_cluster_size,
+        cluster_selection_method,
+    )
+], columns=[
+    &#39;repeat&#39;, &#39;noise_ratio&#39;, &#39;branch_length&#39;,
+    &#39;min_cluster_size&#39;, &#39;cluster_selection_method&#39;
+])
+params[&#39;algorithm&#39;] = [&#39;HDBSCAN\*&#39; for _ in range(params.shape[0])]
+params.branch_length = params.branch_length.apply(int)
+</pre></div>
+</div>
+</div>
+<p>The cell below actually evaluates HDBSCAN* and computes the adjusted rand index metric in about 10 minutes!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def run_setting(p):
+    # Extract dataset
+    subset = datasets\
+        .query(f&#39;repeat == {p[&quot;repeat&quot;]}&#39;)\
+        .query(f&#39;noise_ratio == {p.noise_ratio}&#39;)\
+        .query(f&#39;branch_length == {p.branch_length}&#39;).iloc[0]
+    X = subset.X
+    y = subset.y
+
+    # Run HDBSCAN
+    c = HDBSCAN(
+        min_cluster_size=int(p.min_cluster_size),
+        cluster_selection_method=p.cluster_selection_method,
+        **kwargs
+    ).fit(X)
+
+    # Compute ARI
+    ari = adjusted_rand_score(c.labels_, y)
+    num_labels = len(np.unique(c.labels_)) - int(-1 in c.labels_)
+    return (
+        c.labels_, c.probabilities_, ari, num_labels
+    )
+
+(
+    params[&#39;labels&#39;],
+    params[&#39;probabilities&#39;],
+    params[&#39;ari&#39;],
+    params[&#39;num_labels&#39;]
+) = zip(*[
+    run_setting(params.iloc[i]) for i in trange(params.shape[0])
+])
+params.to_pickle(&#39;./data/generated/branch_stability_labelling_hdbscan.pickle&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 24000/24000 [03:17&lt;00:00, 121.38it/s]
+</pre></div></div>
+</div>
+</section>
+<section id="Plotting">
+<h2>Plotting<a class="headerlink" href="#Plotting" title="Permalink to this heading"></a></h2>
+<p>First, we read in the data files so previous runs can be re-plotted and specify human readable names for the columns. Names with an underscore result in an error because Latex is used to render text in the images. To disable this, edit <code class="docutils literal notranslate"><span class="pre">./notebooks/_plotting.py</span></code>!</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>datasets = pd.read_pickle(&#39;./data/generated/branch_stability_data.pickle&#39;)
+fparams = pd.read_pickle(&#39;./data/generated/branch_stability_labelling_flasc.pickle&#39;)
+hparams = pd.read_pickle(&#39;./data/generated/branch_stability_labelling_hdbscan.pickle&#39;)
+ratios = datasets.noise_ratio.unique()
+lengths = datasets.branch_length.unique()
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>display_names = {
+    &#39;columns&#39;: {
+        &#39;branch_length&#39;: &#39;Branch length&#39;,
+        &#39;num_clusters&#39;: &#39;Num clusters&#39;,
+        &#39;num_labels&#39;: &#39;Num labels&#39;,
+        &#39;num_branches&#39;: &#39;Num branches&#39;,
+        &#39;noise_ratio&#39;: &#39;Noise ratio&#39;,
+        &#39;min_branch_size&#39;: &#39;Min branch size&#39;,
+        &#39;min_cluster_size&#39;: &#39;Min cluster size&#39;,
+        &#39;branch_detection_method&#39;: &#39;Graph&#39;,
+        &#39;branch_selection_method&#39;: &#39;Selection&#39;,
+        &#39;cluster_selection_method&#39;: &#39;Selection&#39;,
+        &#39;ari&#39;: &#39;ARI&#39;,
+        &#39;algorithm&#39;: &#39;Algorithm&#39;,
+        &#39;centroid_spread&#39;: &#39;Centroid spread&#39;
+    }
+}
+</pre></div>
+</div>
+</div>
+<section id="Parameter-tuning-and-sensitivity">
+<h3>Parameter tuning and sensitivity<a class="headerlink" href="#Parameter-tuning-and-sensitivity" title="Permalink to this heading"></a></h3>
+<p>First, we try to find out for which parameter settings the algorithms perform best on this dataset before we compare the algorithms to each other. For this purpose we use two metrics, the <em>adjusted rand index</em> and <em>centroid spread</em>.</p>
+<p>The <em>adjusted rand index</em> (ARI) is a quality measure for clustering algorithms. I interpret it as using the clustering as classifier and computing how well data points of the same class are put into the same cluster. We use this metric to determine which parameter settings work best.</p>
+<p>The <em>centroid spread</em> is only used for FLASC. It measures how much the subgroups’ weighted average vary between datasets generated with the same parameters. As such, it measures how stable FLASC’s output is. The spread is expressed in terms of branch length <span class="math notranslate nohighlight">\(b_l\)</span> to be able to compare the different datasets. Specifically. it is calculated by: - Computing the ground-truth branch and cluster average (unweighted) - Computing the FLASC label average (weighted) (= centroid) - Assigning each
+FLASC centroid to the closest ground-truth centroid on that dataset. - Computing the average centroid coordinates (unweighted) for all centroids assigned to the same ground-truth centroid of datasets with the same branch length and noise ratio. (= root) - Computing the distance of each centroid to their root in terms of branch length <span class="math notranslate nohighlight">\(b_l\)</span>. The 50 and 95 percentile distance are used to quantify and visualize the centroid spread.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def _centroid_spread(p):
+    # Compute root
+    root = [
+        np.average(p.centroids[p.true_labels == k, :], axis=0)
+        if np.sum(p.true_labels == k) &gt; 0 else None
+        for k in range(4)
+    ]
+    # Subtract roots from centroids and scale by branch length
+    offsets = np.asarray([root[k] for k in p.true_labels])
+    centralized = (p.centroids - offsets) / p.branch_length
+    # Compute spread
+    spread = pairwise_distances(np.asarray([[0, 0]]), centralized)[0,:]
+    return centralized, np.asarray(root), spread
+
+# Merge repeats into single column
+grouped = fparams.groupby(by=[
+    &#39;branch_length&#39;, &#39;noise_ratio&#39;, &#39;min_branch_size&#39;,
+    &#39;branch_detection_method&#39;,&#39;branch_selection_method&#39;
+]).agg(
+    centroids=pd.NamedAgg(column=&quot;centroids&quot;, aggfunc=lambda x: np.concatenate(list(x))),
+    true_labels=pd.NamedAgg(column=&quot;true_labels&quot;, aggfunc=lambda x: np.concatenate(list(x))),
+).reset_index()
+
+# Compute roots and spread
+(grouped[&#39;centralized_centroids&#39;], grouped[&#39;roots&#39;], grouped[&#39;centroid_spread&#39;]) = zip(*[
+    _centroid_spread(grouped.iloc[i]) for i in trange(grouped.shape[0])
+])
+</pre></div>
+</div>
+</div>
+<p>The figure below shows one dataset (background points in grey) with its ground truth centroids (coloured cross) and all FLASC centroids detected on datasets with the same noise ratio and branch length (black points). For each ground-truth centroid, the root is indicated as a coloured pentagon.</p>
+<p>The distance between the roots and the centroids is used as <em>centroid spread</em>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Pick a dataset setting
+r = ratios[-2]
+l = lengths[-2]
+
+# Extract dataset properties
+s = datasets\
+    .query(f&#39;repeat == 4&#39;)\
+    .query(f&#39;noise_ratio == {r}&#39;)\
+    .query(f&#39;branch_length == {l}&#39;).iloc[0]
+X = s.X
+y = s.y
+truths = s.centroids
+
+# Extract FLASC properties
+s = grouped.query(
+    f&#39;noise_ratio == {r} &amp; &#39;
+    f&#39;branch_length == {l} &amp; &#39;
+    &#39;min_branch_size == 12 &amp;  &#39;
+    &#39;branch_detection_method == &quot;core&quot; &amp; &#39;
+    &#39;branch_selection_method==&quot;eom&quot;&#39;
+).iloc[0]
+centroids = s.centroids
+labels = s.true_labels
+roots = s.roots
+
+# Create figure
+sized_fig(1/3, aspect=1)
+plt.scatter(X.T[0], X.T[1], 0.1, y, cmap=&#39;tab10&#39;, vmax=10, label=&#39;point&#39;)
+plt.scatter(truths.T[0], truths.T[1], 20, color=&#39;k&#39;, marker=&#39;x&#39;, label=&#39;true centriod&#39;)
+frame_off()
+lims = plt.xlim()
+plt.subplots_adjust(0, 0, 1, 1)
+plt.savefig(&#39;./images/branch_stability_true_centroids_1.png&#39;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_branch_stability_27_0.png" src="_images/Comparison_branch_stability_27_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Create figure
+sized_fig(1/3, aspect=1)
+plt.scatter(centroids.T[0], centroids.T[1], 2, labels, cmap=&#39;tab10&#39;, vmax=10, label=&#39;found centroid&#39;)
+plt.scatter(truths.T[0], truths.T[1], 20, color=&#39;k&#39;, marker=&#39;x&#39;, label=&#39;true centriod&#39;)
+frame_off()
+plt.xlim(lims)
+plt.ylim(lims)
+plt.subplots_adjust(0, 0, 1, 1)
+plt.savefig(&#39;./images/branch_stability_found_centroids_all.png&#39;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_branch_stability_28_0.png" src="_images/Comparison_branch_stability_28_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Create figure
+sized_fig(1/3, aspect=1)
+plt.scatter(centroids.T[0], centroids.T[1], 2, labels, cmap=&#39;tab10&#39;, vmax=10, label=&#39;found centroid&#39;)
+plt.scatter(truths.T[0], truths.T[1], 20, color=&#39;k&#39;, alpha=0.2, marker=&#39;x&#39;, label=&#39;true centriod&#39;)
+plt.scatter(roots.T[0], roots.T[1], 20, color=&#39;k&#39;, marker=&#39;p&#39;, label=&#39;root&#39;)
+# for c, l in zip(centroids, labels):
+#     plt.plot([c[0], roots[l, 0]], [c[1], roots[l, 1]], &#39;k-&#39;, linewidth=0.3, zorder=-2)
+frame_off()
+plt.xlim(lims)
+plt.ylim(lims)
+plt.subplots_adjust(0, 0, 1, 1)
+plt.savefig(&#39;./images/branch_stability_found_centroids_root.png&#39;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_branch_stability_29_0.png" src="_images/Comparison_branch_stability_29_0.png" />
+</div>
+</div>
+<section id="id1">
+<h4>FLASC<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
+<p>In this section, we try to find out for which parameters FLASC performs best. In addition, we show how sensitive FLASC is to the <em>min branch size</em> parameter.</p>
+<p>First, in the figure below, the branch detection and branch selection combinations are compared by their ARI value over the <em>min branch size</em> parameter. The selection method does not appear to make much difference. The <em>core</em> detection method performs best on this dataset. This is expected, because the center-subgroup, detected by FLASC, is smaller in the <em>core</em> detection method than in the <em>full</em> detection method. This subgroup is not represented in the ground-truth labels, even though
+semantically it is a useful group, so the smaller that group the higher the ARI. At lower <em>min branch size</em> values, the ARI value decreases, probably because too many branches are detected with those settings.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sized_fig(1/3, aspect=1)
+sns.lineplot(
+    fparams.rename(**display_names),
+    x=&#39;Min branch size&#39;, y=&#39;ARI&#39;, hue=&#39;Graph&#39;,
+    style=&#39;Selection&#39;, palette=&#39;tab10&#39;, hue_order=[&quot;full&quot;, &quot;core&quot;]
+)
+l = plt.legend(loc=&#39;best&#39;, ncol=2)
+adjust_legend_subtitles(l)
+plt.ylim([0, 0.72])
+plt.xticks([4, 8, 12, 16, 20, 24])
+plt.yticks([0, 0.2, 0.4, 0.6])
+plt.ylabel(&#39;ARI&#39;)
+plt.subplots_adjust(0.23, 0.2, 0.99, .99)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_branch_stability_31_0.png" src="_images/Comparison_branch_stability_31_0.png" />
+</div>
+</div>
+<p>Second, in the figure below, the branch detection and branch selection combinations are compared by their cluster spread value over the <em>min branch size</em> parameter. Here, a lower value is better. Clearly the <em>full</em> detection method performs better, it has a lower cluster spread and is less sensitive to low <em>min branch size</em> values.</p>
+<p>For comparing FLASC to HDBSCAN* we will use the following settings: - <em>min branch length</em> = 12 - <em>branch detection method</em> = <em>core</em> - <em>branch selection method</em> = <em>eom</em></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sized_fig(1/3, aspect=1)
+sns.lineplot(
+    grouped.explode(&#39;centroid_spread&#39;).rename(**display_names),
+    x=&#39;Min branch size&#39;, y=&#39;Centroid spread&#39;, hue=&#39;Graph&#39;,
+    style=&#39;Selection&#39;, palette=&#39;tab10&#39;, hue_order=[&quot;full&quot;, &quot;core&quot;]
+)
+l = plt.legend(loc=&#39;best&#39;, ncol=2)
+adjust_legend_subtitles(l)
+plt.ylim([0, 0.22])
+plt.xticks([4, 8, 12, 16, 20, 24])
+plt.ylabel(&#39;Centroid spread ($b_l$)&#39;)
+plt.subplots_adjust(0.27, 0.2, 0.99, .99)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_branch_stability_33_0.png" src="_images/Comparison_branch_stability_33_0.png" />
+</div>
+</div>
+</section>
+<section id="id2">
+<h4>HDBSCAN*<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h4>
+<p>In this section, we try to find out for which parameters HDBSCAN* performs best.</p>
+<p>In the figure below, HDBSCAN*’s average ARI value is shown for the different <em>cluster selection methods</em> over the <em>min cluster size</em> parameter. Although the ARI values are low, there is a distinct peak at <em>min cluster size</em> = 8 with <em>cluster selection method</em> = <em>eom</em></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sized_fig(1/3, aspect=1)
+sns.lineplot(
+    hparams.rename(**display_names),
+    x=&#39;Min cluster size&#39;, y=&#39;ARI&#39;, style=&#39;Selection&#39;,
+)
+l = plt.legend(title=&#39;Selection&#39;, loc=&#39;best&#39;)
+adjust_legend_subtitles(l)
+plt.ylim([0, 0.032])
+plt.xticks([4, 8, 12, 16, 20, 24])
+# plt.yticks([0, 0.2, 0.4, 0.6])
+plt.ylabel(&#39;ARI&#39;)
+plt.subplots_adjust(0.27, 0.2, 0.99, .99)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_branch_stability_35_0.png" src="_images/Comparison_branch_stability_35_0.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="Visualize-labeling">
+<h3>Visualize labeling<a class="headerlink" href="#Visualize-labeling" title="Permalink to this heading"></a></h3>
+<p>In this section we visualize the subgroups found by HDBSCAN* and FLASC on one repeat of each <em>length</em>-<em>noise</em> combination.</p>
+<p>First for HDBSCAN*, because the <em>leaf</em> cluster selection method is used, many small clusters are found and many points are classified as noise. In particular for data sets with a lower branch length, clusters are found in the branches, providing at least a hint of their existence.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cnt = 1
+n_ratios = len(ratios)
+n_lengths = len(lengths)
+sized_fig(1)
+for j, r in enumerate(ratios):
+    for i, l in enumerate(lengths):
+        plt.subplot(n_ratios, n_lengths, cnt)
+        cnt += 1
+
+        s =  datasets\
+            .query(f&#39;repeat == 4&#39;)\
+            .query(f&#39;noise_ratio == {r}&#39;)\
+            .query(f&#39;branch_length == {l}&#39;)
+        X = s.X.iloc[0]
+        y = s.y.iloc[0]
+
+        s = hparams\
+            .query(f&#39;repeat == 4&#39;)\
+            .query(f&#39;noise_ratio == {r}&#39;)\
+            .query(f&#39;branch_length == {l}&#39;)\
+            .query(&#39;cluster_selection_method==&quot;leaf&quot;&#39;)\
+            .query(&#39;min_cluster_size==8&#39;)
+        labels = s.labels.iloc[0]
+        probabilities = s.probabilities.iloc[0]
+        colors = [
+            (0.8, 0.8, 0.8) if l &lt; 0 else sns.desaturate(palette[l], p)
+            for l, p in zip(labels, probabilities)
+        ]
+        plt.scatter(X.T[0], X.T[1], 0.1, colors, alpha=0.5)
+        frame_off()
+        if i == 0:
+            plt.ylabel(f&#39;{r:.2f}&#39;, fontsize=8)
+        if j == 0:
+            plt.title(f&#39;{int(l):d}&#39;, fontsize=8)
+fig = plt.gcf()
+plt.text(0.511, 0.984, &#39;Branch length&#39;,
+         fontsize=8,
+         horizontalalignment=&#39;center&#39;,
+         verticalalignment=&#39;center&#39;,
+         transform=fig.transFigure)
+plt.text(0.008, 0.465, &#39;Noise ratio&#39;,
+         fontsize=8,
+         horizontalalignment=&#39;center&#39;,
+         verticalalignment=&#39;center&#39;,
+         rotation=90, transform=fig.transFigure)
+plt.subplots_adjust(0.03, 0.01, .99, .92)
+plt.savefig(&#39;./images/branch_stability_hdbscan_labels.png&#39;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_branch_stability_37_0.png" src="_images/Comparison_branch_stability_37_0.png" />
+</div>
+</div>
+<p>Now for FLASC; branches are clearly detected as separate entities in addition to a subgroup the center. We would argue that this segmentation is semantically most appropriate, even if it is not reflected as strongly in the ground truth labels and ARI values.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cnt = 1
+n_ratios = len(ratios)
+n_lengths = len(lengths)
+sized_fig(1)
+for j, r in enumerate(ratios):
+    for i, l in enumerate(lengths):
+        plt.subplot(n_ratios, n_lengths, cnt)
+        cnt += 1
+
+        s =  datasets\
+            .query(f&#39;repeat == 4&#39;)\
+            .query(f&#39;noise_ratio == {r}&#39;)\
+            .query(f&#39;branch_length == {l}&#39;)
+        X = s.X.iloc[0]
+        y = s.y.iloc[0]
+
+        s = fparams\
+            .query(f&#39;repeat == 4&#39;)\
+            .query(f&#39;noise_ratio == {r}&#39;)\
+            .query(f&#39;branch_length == {l}&#39;)\
+            .query(&#39;branch_detection_method==&quot;core&quot;&#39;)\
+            .query(&#39;branch_selection_method==&quot;eom&quot;&#39;)\
+            .query(&#39;min_branch_size==12&#39;)
+        labels = s.labels.iloc[0]
+        probabilities = s.probabilities.iloc[0]
+        colors = [
+            (0.8, 0.8, 0.8) if l &lt; 0 else sns.desaturate(palette[l], p)
+            for l, p in zip(labels, probabilities)
+        ]
+        plt.scatter(X.T[0], X.T[1], 0.1, colors, alpha=0.5)
+        frame_off()
+        if i == 0:
+            plt.ylabel(f&#39;{r:.2f}&#39;, fontsize=8)
+        if j == 0:
+            plt.title(f&#39;{int(l):d}&#39;, fontsize=8)
+fig = plt.gcf()
+plt.text(0.511, 0.984, &#39;Branch length&#39;,
+         fontsize=8,
+         horizontalalignment=&#39;center&#39;,
+         verticalalignment=&#39;center&#39;,
+         transform=fig.transFigure)
+plt.text(0.008, 0.465, &#39;Noise ratio&#39;,
+         fontsize=8,
+         horizontalalignment=&#39;center&#39;,
+         verticalalignment=&#39;center&#39;,
+         rotation=90, transform=fig.transFigure)
+plt.subplots_adjust(0.03, 0.01, .99, .92)
+plt.savefig(&#39;./images/branch_stability_flasc_labels.png&#39;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_branch_stability_39_0.png" src="_images/Comparison_branch_stability_39_0.png" />
+</div>
+</div>
+</section>
+<section id="ARI-heatmaps">
+<h3>ARI heatmaps<a class="headerlink" href="#ARI-heatmaps" title="Permalink to this heading"></a></h3>
+<p>The figures in the previous section can be extended to show the average ARI values over all repeats of the same <em>noise-length</em> combinations.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def draw_avg_heatmap(data, *args, **kwargs):
+    d = data\
+        .groupby([args[1], args[0]])[args[2]]\
+        .mean()\
+        .reset_index()\
+        .pivot(index=args[1], columns=args[0], values=args[2])
+    return sns.heatmap(d, **kwargs)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Specify Colormap and ticks
+bounds = np.linspace(0, 1, 11)
+cmap = mpl.cm.get_cmap(&#39;Blues&#39;)
+norm = BoundaryNorm(bounds, cmap.N)
+yticks = [0.5, 3.5, 6.5, 9.5]
+ytick_labels = [ f&quot;{ratios[int(r)]:.2f}&quot; for r in yticks ]
+xticks = [0.5, 3.5, 6.5, 9.5]
+xtick_labels = [ f&quot;{int(lengths[int(r)]):d}&quot; for r in xticks ]
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sized_fig(1/2)
+
+fset = fparams\
+    .query(&#39;min_branch_size == 12 &amp; branch_selection_method==&quot;eom&quot; &amp; branch_detection_method==&quot;core&quot;&#39;)\
+    [[&#39;repeat&#39;,&#39;noise_ratio&#39;, &#39;branch_length&#39;, &#39;algorithm&#39;, &#39;ari&#39;]]
+draw_avg_heatmap(
+    fset.rename(**display_names),
+    &#39;Branch length&#39;, &#39;Noise ratio&#39;, &#39;ARI&#39;,
+    cmap=cmap, norm=norm, cbar_kws={&#39;label&#39;: &#39;avg ARI&#39;}
+)
+
+# Update ticks
+plt.yticks(yticks)
+plt.xticks(xticks)
+plt.gca().set_yticklabels(ytick_labels)
+plt.gca().set_xticklabels(xtick_labels)
+
+# Adjust spacing and save
+plt.subplots_adjust(0.17, 0.22, 0.93, 0.95, wspace=0)
+plt.savefig(&#39;./images/branch_stability_flasc_heatmap_avg_ari.png&#39;, dpi=300)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_branch_stability_43_0.png" src="_images/Comparison_branch_stability_43_0.png" />
+</div>
+</div>
+<p>The heatmap indicates how well FLASC behaves over different noise and branch lengths. As expected, the more noise the lower the ARI value. This pattern appears to be stronger for larger <em>branch lengths</em>, perhaps because FLASC is more likely to find false-positive branches in those scenarios.</p>
+</section>
+<section id="Branch-stability">
+<h3>Branch stability<a class="headerlink" href="#Branch-stability" title="Permalink to this heading"></a></h3>
+<p>An important aspect of a clustering algorithm is the stability. It should not only accurately describe the underlying data’s structure, it should also give similar outputs on similar data set. In this section, we try to compare and visualize this stability using the centroid spread.</p>
+<p>The first figure shows the centroids of all detected subgroups relative to their root point. The crosshairs indicate <span class="math notranslate nohighlight">\(1/4\)</span> branch-length in each direction:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cnt = 1
+n_ratios = len(ratios)
+n_lengths = len(lengths)
+cmap = mpl.cm.get_cmap(&#39;Blues&#39;)
+norm = BoundaryNorm([0, 25, 50, 75, 95, 100], cmap.N)
+sized_fig(1)
+for j, r in enumerate(ratios):
+    for i, l in enumerate(lengths):
+        plt.subplot(n_ratios, n_lengths, cnt)
+        cnt += 1
+
+        s = grouped.query(
+            f&#39;noise_ratio == {r} &amp; branch_length == {l} &amp; &#39;
+            &#39;min_branch_size == 12 &amp; branch_detection_method==&quot;core&quot; &amp; &#39;
+            &#39;branch_selection_method==&quot;eom&quot;&#39;)
+        centralized = s.centralized_centroids.iloc[0]
+        if (s.shape[0]):
+            plt.plot([-0.25, 0.25], [0, 0], color=(0.5, 0.5, 0.5), linewidth=0.5, zorder=-1)
+            plt.plot([0, 0], [-0.25, 0.25], color=(0.5, 0.5, 0.5), linewidth=0.5, zorder=-1)
+            plt.scatter(centralized.T[0], centralized.T[1], 2, color=palette[0], zorder=2)
+            plt.xlim([-0.25, 0.25])
+            plt.ylim([-0.25, 0.25])
+
+        frame_off()
+        plt.gca().set_aspect(1)
+        if i == 0:
+            plt.ylabel(f&#39;{r:.2f}&#39;, fontsize=8)
+        if j == 0:
+            plt.title(f&#39;{int(l):d}&#39;, fontsize=8)
+
+fig = plt.gcf()
+plt.text(0.511, 0.984, &#39;Branch length&#39;,
+         fontsize=8,
+         horizontalalignment=&#39;center&#39;,
+         verticalalignment=&#39;center&#39;,
+         transform=fig.transFigure)
+plt.text(0.004, 0.465, &#39;Noise ratio&#39;,
+         fontsize=8,
+         horizontalalignment=&#39;center&#39;,
+         verticalalignment=&#39;center&#39;,
+         rotation=90, transform=fig.transFigure)
+plt.subplots_adjust(0.03, 0.01, .99, .92)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_branch_stability_47_0.png" src="_images/Comparison_branch_stability_47_0.png" />
+</div>
+</div>
+<p>It is slightly easier to interpret the result when the spreads are quantified by the <span class="math notranslate nohighlight">\(50\)</span> and <span class="math notranslate nohighlight">\(95\)</span> percentile distances to <span class="math notranslate nohighlight">\((0, 0)\)</span>, which can be visualized as circles:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cnt = 1
+n_ratios = len(ratios)
+n_lengths = len(lengths)
+cmap = mpl.cm.get_cmap(&#39;Blues&#39;)
+norm = BoundaryNorm([0, 25, 50, 75, 95, 100], cmap.N)
+sized_fig(1)
+for j, r in enumerate(ratios):
+    for i, l in enumerate(lengths):
+        plt.subplot(n_ratios, n_lengths, cnt)
+        cnt += 1
+
+        s = grouped.query(
+            f&#39;noise_ratio == {r} &amp; &#39;
+            f&#39;branch_length == {l} &amp; &#39;
+            &#39;min_branch_size == 12 &amp; &#39;
+            &#39;branch_detection_method==&quot;core&quot; &amp; &#39;
+            &#39;branch_selection_method==&quot;eom&quot;&#39;
+        )
+        if (s.shape[0]):
+            distances = s.centroid_spread.iloc[0]
+            plt.plot([-0.25, 0.25], [0, 0], color=(0.5, 0.5, 0.5), linewidth=0.5, zorder=-1)
+            plt.plot([0, 0], [-0.25, 0.25], color=(0.5, 0.5, 0.5), linewidth=0.5, zorder=-1)
+            for p in [95, 50]:
+                circle = plt.Circle((0, 0),
+                                    radius=np.percentile(distances, p),
+                                    fill=False, color=cmap(norm(p)), linewidth=1)
+                plt.gca().add_patch(circle)
+            plt.xlim([-0.25, 0.25])
+            plt.ylim([-0.25, 0.25])
+
+        frame_off()
+        plt.gca().set_aspect(1)
+        if i == 0:
+            plt.ylabel(f&#39;{r:.2f}&#39;, fontsize=8)
+        if j == 0:
+            plt.title(f&#39;{int(l):d}&#39;, fontsize=8)
+
+fig = plt.gcf()
+plt.text(0.511, 0.984, &#39;Branch length&#39;,
+         fontsize=8,
+         horizontalalignment=&#39;center&#39;,
+         verticalalignment=&#39;center&#39;,
+         transform=fig.transFigure)
+plt.text(0.004, 0.465, &#39;Noise ratio&#39;,
+         fontsize=8,
+         horizontalalignment=&#39;center&#39;,
+         verticalalignment=&#39;center&#39;,
+         rotation=90, transform=fig.transFigure)
+plt.subplots_adjust(0.03, 0.01, .99, .92)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_branch_stability_49_0.png" src="_images/Comparison_branch_stability_49_0.png" />
+</div>
+</div>
+<p>The overall pattern is similar to the ARI heatmaps. The spread increases with noise and that effect is stronger for larger branch lengths. This figure can also be shown as a heatmap like with the ARI values:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Specify Colormap and ticks
+bounds = np.linspace(0, 1/4, 11)
+cmap = mpl.cm.get_cmap(&#39;Blues&#39;)
+norm = BoundaryNorm(bounds, cmap.N)
+yticks = [0.5, 3.5, 6.5, 9.5]
+ytick_labels = [ f&quot;{ratios[int(r)]:.2f}&quot; for r in yticks ]
+xticks = [0.5, 3.5, 6.5, 9.5]
+xtick_labels = [ f&quot;{int(lengths[int(r)]):d}&quot; for r in xticks ]
+
+# Draw heatmaps side by side
+sns.heatmap(
+    grouped
+        .query(
+            &#39;min_branch_size == 12 &amp; &#39;
+            &#39;branch_detection_method==&quot;core&quot; &amp; &#39;
+            &#39;branch_selection_method==&quot;eom&quot;&#39;
+        )\
+        .groupby([&#39;branch_length&#39;, &#39;noise_ratio&#39;]) \
+        .agg(centroid_spread=pd.NamedAgg(
+            column=&quot;centroid_spread&quot;,
+            aggfunc=lambda x: np.percentile(x.iloc[0], 95)
+        )) \
+        .reset_index() \
+        .rename(**display_names)\
+        .pivot(index=&#39;Noise ratio&#39;, columns=&#39;Branch length&#39;, values=&#39;Centroid spread&#39;),
+    cmap=cmap,
+    norm=norm,
+    cbar_kws={&#39;label&#39;: &#39;$95\%$ spread ($b_l$)&#39;}
+)
+
+# Update size
+size_fig(1/2)
+
+# Update ticks and colorbars
+ax = plt.gca()
+ax.set_yticks(yticks)
+ax.set_yticklabels(ytick_labels)
+ax.set_xticks(xticks)
+ax.set_xticklabels(xtick_labels)
+
+# Adjust spacing and save
+plt.subplots_adjust(0.17, 0.22, 0.91, 0.95, wspace=0)
+plt.savefig(&#39;./images/branch_stability_flasc_heatmap_95_spread.png&#39;, dpi=300)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Comparison_branch_stability_51_0.png" src="_images/Comparison_branch_stability_51_0.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Example_horse.html" class="btn btn-neutral float-left" title="Example: Branches in 3D Horse" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Comparison_computational_cost.html" class="btn btn-neutral float-right" title="Comparing Computational Performance" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, D.M. Bot and J. Aerts.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

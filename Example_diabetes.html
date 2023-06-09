@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example: Detecting Diabetes Types &mdash;  version 255f331</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/nbsphinx-code-cells.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "tags": "ams", "useLabelIds": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Example: Single Cell Gene Expression Trajectories" href="Example_single_cell_trajectory.html" />
+    <link rel="prev" title="How FLASC works" href="How_FLASC_works.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="How_FLASC_works.html">How FLASC works</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Example: Detecting Diabetes Types</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#FLASC">FLASC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#HDBSCAN*">HDBSCAN*</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Discussion">Discussion</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Example_single_cell_trajectory.html">Example: Single Cell Gene Expression Trajectories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_Parkinson_data_challenge.html">Example: Detecting Parkinson using Smart Phone Sensors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_horse.html">Example: Branches in 3D Horse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Comparison_branch_stability.html">Comparing Branch Stability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Comparison_computational_cost.html">Comparing Computational Performance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Comparison_multi_processing.html">Multiprocessing Behaviour</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">FLASC</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="examples.html">Examples</a></li>
+      <li class="breadcrumb-item active">Example: Detecting Diabetes Types</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Example:-Detecting-Diabetes-Types">
+<h1>Example: Detecting Diabetes Types<a class="headerlink" href="#Example:-Detecting-Diabetes-Types" title="Permalink to this heading"></a></h1>
+<p>In 1979, <a class="reference external" href="https://link.springer.com/article/10.1007/BF00423145">Reaven, Miller &amp; Alto</a> analysed the difference between chemical and overt diabetes in 145 nonobese adults. Previously, they had found a “horse shoe” relation between plasma glucose and insulin response levels, confirmed by later studies. However, the interpretation of this relationship remained unclear. It could be interpreted as the natural progression of diabetes or as different underlying causes for the disease. In their 1979
+work, they attempted to quantify the relationship to gain insight into the pattern.</p>
+<section id="Setup">
+<h2>Setup<a class="headerlink" href="#Setup" title="Permalink to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%load_ext autoreload
+%autoreload 2
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from hdbscan import HDBSCAN
+from flasc import FLASC
+from sklearn.preprocessing import StandardScaler
+from _plotting import *
+
+%matplotlib inline
+palette = configure_matplotlib()
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Data">
+<h2>Data<a class="headerlink" href="#Data" title="Permalink to this heading"></a></h2>
+<p>To construct their dataset, they measure the insulin and glucose levels in participants after controlling their diet and glucose intake through the experimental protocol described in their paper. They analysed the participant’s relative weight, fasting plasma glucose levels, area under the plasma glucose curve for a 3 hour glucose tolerance test (which quantifies how much and for how long glucose remains in the blood), area under the plasma insulin curve (similarly quantifying the insulin
+response), and the steady state plasma glucose response (SSPG).</p>
+<p>The data loaded in the cell below is copied from the <a class="reference external" href="https://link.springer.com/chapter/10.1007/978-1-4612-5098-2_37">Chemical and Overt Diabetes</a> chapter in <a class="reference external" href="https://link.springer.com/book/10.1007/978-1-4612-5098-2">Data: A Collection of Problems from Many Fields for the Student and Research Worker</a>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df = pd.read_csv(&quot;./data/chemical_and_overt_diabetes.csv&quot;)
+df.head()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>patient number</th>
+      <th>relative weight</th>
+      <th>fasting plasma glucose</th>
+      <th>glucose area</th>
+      <th>insulin area</th>
+      <th>sspg</th>
+      <th>clinical classification</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>0.81</td>
+      <td>80</td>
+      <td>356</td>
+      <td>124</td>
+      <td>55</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>0.95</td>
+      <td>97</td>
+      <td>289</td>
+      <td>117</td>
+      <td>76</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>0.94</td>
+      <td>105</td>
+      <td>319</td>
+      <td>143</td>
+      <td>105</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>1.04</td>
+      <td>90</td>
+      <td>356</td>
+      <td>199</td>
+      <td>108</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>1.00</td>
+      <td>90</td>
+      <td>323</td>
+      <td>240</td>
+      <td>143</td>
+      <td>3</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>In their paper, they show an artist’s impression of a 3D insulin area, glucose area, and SSPG scatter plot created using an early data visualization program <a class="reference external" href="https://www.researchgate.net/figure/John-Tukey-in-front-of-the-PRIM-9-terminal_fig1_2489432">PRIM-9</a>. They describe this plot as a “boomerang with two wings and a fat middle”.</p>
+<p>The cell below recreates the 3D plot:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sized_fig(1 / 3, aspect=1.2)
+ax = plt.gcf().add_subplot(projection=&quot;3d&quot;)
+ax.scatter(df[&quot; glucose area&quot;], df[&quot; insulin area&quot;], df[&quot; sspg&quot;], s=1)
+ax.set_yticks(ax.get_yticks())
+ax.set_xticks(ax.get_xticks())
+ax.set_zticks(ax.get_zticks())
+ax.set_yticklabels([&quot;&quot; for t in ax.get_yticks()])
+ax.set_xticklabels([&quot;&quot; for t in ax.get_xticks()])
+ax.set_zticklabels([&quot;&quot; for t in ax.get_zticks()])
+ax.set_xlabel(&quot;$\leftarrow$ AUCG&quot;, labelpad=-17, rotation=25)
+ax.set_ylabel(&quot;AUIC $\\rightarrow$&quot;, labelpad=-17, rotation=-8)
+ax.zaxis.set_rotate_label(False)  # disable automatic rotation
+ax.set_zlabel(&quot;SSPG $\\rightarrow$&quot;, labelpad=-19, rotation=90)
+ax.view_init(elev=20, azim=30)
+plt.savefig(&quot;./images/diabetes_shape.png&quot;, dpi=300)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Example_diabetes_7_0.png" src="_images/Example_diabetes_7_0.png" />
+</div>
+</div>
+<p>In a later <a class="reference external" href="https://www.jstor.org/stable/2241186">discussion by Miller</a>, he describes this figure as “very interesting to the medical investigators. The plump middle of the points roughly corresponds to normal patients, the right arm to chemical diabetics and the left arm to overt diabetics.” Afterwards, they were also able to find this branching structure in 2D plots of these variables, however, “it is not clear that merely examining the three [2D] plots … would have revealed the
+[structure] whereas it leaped out of the display screen for the viewers with the PRIM-9 projections and rotations.” Finally, he also reflected on data exploration using computers: “While interesting shapes, clusters, and separations are now more discoverable in high-dimensional data, how do we evaluate whether these are real or merely random variation?”</p>
+<p><a class="reference external" href="https://diglib.eg.org/bitstream/handle/10.2312/SPBG.SPBG07.091-100/091-100.pdf?sequence=1">Singh et al.</a> used this data set as an example of a dataset with branches that can be detected using Mapper. They showed two Mapper networks with 3 and 4 50% overlapping cover segments over a density kernel estimation as lens respectively.</p>
+<p><img alt="image.png" src="data:image/png;base64,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" /></p>
+<p>Here the branches are clearly visible. They argue that Mapper can automate finding such branches even when they are not as clearly visible in 2D or 3D plots of the data.</p>
+</section>
+<section id="FLASC">
+<h2>FLASC<a class="headerlink" href="#FLASC" title="Permalink to this heading"></a></h2>
+<p>In the following section, we will show how FLASC can be used to analyze this data. We normalize the columns to have a mean of 0 and unit standard deviation. FLASC is configured to allow a single cluster with a minimum size of 10 points, with the min samples and min branch size set to 5.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>X = StandardScaler().fit_transform(df.iloc[:, 1:-1])
+b = FLASC(
+    min_samples=5,
+    min_branch_size=5,
+    min_cluster_size=10,
+    allow_single_cluster=True,
+).fit(X)
+g = b.cluster_approximation_graph_
+</pre></div>
+</div>
+</div>
+<p>The resulting branch hierarchy indicates one larger and one smaller branch:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sized_fig(1 / 2)
+n_clusters = len(b.cluster_persistence_)
+for i in range(n_clusters):
+    plt.subplot(1, n_clusters, i + 1)
+    b.cluster_condensed_trees_[i].plot()
+    if i == 0:
+        plt.ylabel(&quot;Eccentricity&quot;)
+    else:
+        plt.axis(&quot;off&quot;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Example_diabetes_12_0.png" src="_images/Example_diabetes_12_0.png" />
+</div>
+</div>
+<p>The cluster approximation graph also nicely reveals the branching structure. Like Mapper, FLASC can automate finding branches like this even when they are not clearly visible in 2D or 3D plots.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>g.plot(
+    node_size=10,
+    edge_alpha=0.2,
+)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Example_diabetes_14_0.png" src="_images/Example_diabetes_14_0.png" />
+</div>
+</div>
+<p>In this case, the branches nicely capture the branches in the 3D plot:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sized_fig(1 / 3, aspect=1.2)
+ax = plt.gcf().add_subplot(projection=&quot;3d&quot;)
+ax.scatter(
+    df[&quot; glucose area&quot;],
+    df[&quot; insulin area&quot;],
+    df[&quot; sspg&quot;],
+    s=1,
+    c=[(0.8, 0.8, 0.8) if v == -1 else palette[v % 10] for v in b.labels_],
+)
+ax.set_yticks(ax.get_yticks())
+ax.set_xticks(ax.get_xticks())
+ax.set_zticks(ax.get_zticks())
+ax.set_yticklabels([&quot;&quot; for t in ax.get_yticks()])
+ax.set_xticklabels([&quot;&quot; for t in ax.get_xticks()])
+ax.set_zticklabels([&quot;&quot; for t in ax.get_zticks()])
+ax.set_xlabel(&quot;$\leftarrow$ AUCG&quot;, labelpad=-17, rotation=25)
+ax.set_ylabel(&quot;AUIC $\\rightarrow$&quot;, labelpad=-17, rotation=-8)
+ax.zaxis.set_rotate_label(False)  # disable automatic rotation
+ax.set_zlabel(&quot;SSPG $\\rightarrow$&quot;, labelpad=-19, rotation=90)
+ax.view_init(elev=20, azim=30)
+# plt.title(&#39;FLASC&#39;, y=0.9)
+plt.savefig(&quot;./images/diabetes_flasc.png&quot;, dpi=300)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Example_diabetes_16_0.png" src="_images/Example_diabetes_16_0.png" />
+</div>
+</div>
+</section>
+<section id="HDBSCAN*">
+<h2>HDBSCAN*<a class="headerlink" href="#HDBSCAN*" title="Permalink to this heading"></a></h2>
+<p>HDBSCAN*, and density-based clustering in general, is not be able to detect the branching subgroups, as the branches do not have a local density maximum. <a class="reference external" href="https://link.springer.com/article/10.1007/BF00423145">Reaven, Miller &amp; Alto</a> were able to describe the branches using a <span class="math notranslate nohighlight">\(k\)</span>-means like procedure. However, they knew the correct number for <span class="math notranslate nohighlight">\(k\)</span> and had good initial locations available from a previous analysis.</p>
+<p>Using HDBSCAN* with <em>min samples = 5</em> and <em>min cluster size = 10&amp;</em> HDBSCAN* finds two clusters: one large cluster and one small cluster.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>c = HDBSCAN(min_samples=5, min_cluster_size=10).fit(df)
+c.condensed_tree_.plot()
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Example_diabetes_18_0.png" src="_images/Example_diabetes_18_0.png" />
+</div>
+</div>
+<p>Drawing the 3D plot with the HDBSCAN* labels reveals HDBSCAN found the centre and the beginning of the right-branch as one cluster. The beginning of the left-branch is detected as the second cluster. For both branches, the outsides are classified as noise.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sized_fig(1 / 3, aspect=1.2)
+ax = plt.gcf().add_subplot(projection=&quot;3d&quot;)
+ax.scatter(
+    df[&quot; glucose area&quot;],
+    df[&quot; insulin area&quot;],
+    df[&quot; sspg&quot;],
+    s=1,
+    c=[(0.8, 0.8, 0.8) if l == -1 else palette[l % 10] for l in c.labels_],
+)
+ax.set_yticks(ax.get_yticks())
+ax.set_xticks(ax.get_xticks())
+ax.set_zticks(ax.get_zticks())
+ax.set_yticklabels([&quot;&quot; for t in ax.get_yticks()])
+ax.set_xticklabels([&quot;&quot; for t in ax.get_xticks()])
+ax.set_zticklabels([&quot;&quot; for t in ax.get_zticks()])
+ax.set_xlabel(&quot;$\leftarrow$ AUCG&quot;, labelpad=-17, rotation=25)
+ax.set_ylabel(&quot;AUIC $\\rightarrow$&quot;, labelpad=-17, rotation=-8)
+ax.zaxis.set_rotate_label(False)  # disable automatic rotation
+ax.set_zlabel(&quot;SSPG $\\rightarrow$&quot;, labelpad=-19, rotation=90)
+ax.view_init(elev=20, azim=30)
+plt.savefig(&quot;./images/diabetes_hdbscan.png&quot;, dpi=300)
+# plt.title(&#39;HDBSCAN\*&#39;, y=0.9)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Example_diabetes_20_0.png" src="_images/Example_diabetes_20_0.png" />
+</div>
+</div>
+</section>
+<section id="Discussion">
+<h2>Discussion<a class="headerlink" href="#Discussion" title="Permalink to this heading"></a></h2>
+<p>For this dataset, it is possible to find the branches using both the density and the eccentricity. This raises some interesting possibilities for branch detection. Could density on its own be enough to find branches after all? Branches with a local density maximum are detectable using HDBSCAN*. And as shown by Mapper here, branches with a lower density compared to a core can also be found without using eccentricity. Analogously, the clusters and branches in this data can be described using a
+<a class="reference external" href="https://cdr.lib.unc.edu/concern/articles/6w924n25p">contour tree</a>. On this data set, a contour tree would find a single density maximum (the fat middle) and two lower density regions (the branches). In general, though, I am not sure how a contour tree would behave on a data set with multiple branching clusters. Would each lower density branch be found as a separate entity?</p>
+<p>Using eccentricity to find branches removes a dependency on density. Regardless of whether the density varies along a branch, with eccentricity they will be found.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="How_FLASC_works.html" class="btn btn-neutral float-left" title="How FLASC works" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Example_single_cell_trajectory.html" class="btn btn-neutral float-right" title="Example: Single Cell Gene Expression Trajectories" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, D.M. Bot and J. Aerts.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
