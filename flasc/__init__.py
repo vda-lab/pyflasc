@@ -14,7 +14,3 @@ from ._flasc import flasc
 from ._sklearn import FLASC
 from . import prediction
 from . import plots
-
-__all__ = [
-    flasc, FLASC, prediction, plots
-]
