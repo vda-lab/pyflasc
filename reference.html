@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <meta property="article:modified_time" content="2023-06-09T11:18:49+00:00" />
+    <meta property="article:modified_time" content="2023-06-22T12:51:11+00:00" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>API Reference &mdash;  version v0.1.1-1-g5552562</title>
+  <title>API Reference &mdash;  version v0.1.1-2-ge5c5f15</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,6 +18,8 @@
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "tags": "ams", "useLabelIds": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -86,7 +88,13 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#flasc.flasc"><code class="docutils literal notranslate"><span class="pre">flasc()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#predictions">Predictions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-flasc.prediction">Predictions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.prediction.approximate_predict"><code class="docutils literal notranslate"><span class="pre">approximate_predict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.prediction.branch_centrality_vectors"><code class="docutils literal notranslate"><span class="pre">branch_centrality_vectors()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.prediction.branch_membership_from_centrality"><code class="docutils literal notranslate"><span class="pre">branch_membership_from_centrality()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.prediction.update_labels_with_branch_centrality"><code class="docutils literal notranslate"><span class="pre">update_labels_with_branch_centrality()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -241,7 +249,7 @@ the filtration where they contain all their points.</p></li>
 this value will be merged. See <a href="#id27"><span class="problematic" id="id4">[3]_</span></a> for more information. Note that this
 should not be used if we want to predict the cluster labels for new
 points in future (e.g. using approximate_predict), as the
-<code class="xref py py-func docutils literal notranslate"><span class="pre">approximate_predict()</span></code> function
+<a class="reference internal" href="#flasc.prediction.approximate_predict" title="flasc.prediction.approximate_predict"><code class="xref py py-func docutils literal notranslate"><span class="pre">approximate_predict()</span></code></a> function
 is not aware of this argument.</p></li>
 <li><p><strong>branch_selection_method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em><em> (</em><em>default='eom'</em><em>)</em>) – <p>The method used to select branches from the cluster’s condensed tree.
 The standard approach for FLASC* is to use the <code class="docutils literal notranslate"><span class="pre">eom</span></code> approach.
@@ -273,7 +281,7 @@ Consequently, the manually specified clusters do not have to form
 neatly separable connected components in the minimum spanning tree
 over all the data points.</p>
 <p>Because the clustering step is skipped, some of the attributes
-and the <code class="xref py py-func docutils literal notranslate"><span class="pre">approximate_predict()</span></code> function will
+and the <a class="reference internal" href="#flasc.prediction.approximate_predict" title="flasc.prediction.approximate_predict"><code class="xref py py-func docutils literal notranslate"><span class="pre">approximate_predict()</span></code></a> function will
 be unavailable:
 - <a href="#id28"><span class="problematic" id="id29">cluster_persistence_</span></a>
 - <a href="#id30"><span class="problematic" id="id31">condensed_tree_</span></a>
@@ -919,13 +927,13 @@ Options are:</p>
 this value will be merged. See <a href="#id41"><span class="problematic" id="id20">[3]_</span></a> for more information. Note that this
 should not be used if we want to predict the cluster labels for new
 points in future (e.g. using approximate_predict), as the
-<code class="xref py py-func docutils literal notranslate"><span class="pre">approximate_predict()</span></code> function
+<a class="reference internal" href="#flasc.prediction.approximate_predict" title="flasc.prediction.approximate_predict"><code class="xref py py-func docutils literal notranslate"><span class="pre">approximate_predict()</span></code></a> function
 is not aware of this argument.</p></li>
 <li><p><strong>max_branch_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=0</em><em>)</em>) – A limit to the size of clusters returned by the <code class="docutils literal notranslate"><span class="pre">eom</span></code> algorithm.
 Has no effect when using <code class="docutils literal notranslate"><span class="pre">leaf</span></code> clustering (where clusters are
 usually small regardless). Note that this should not be used if we
 want to predict the cluster labels for new points in future (e.g. using
-<code class="xref py py-func docutils literal notranslate"><span class="pre">approximate_predict()</span></code>), as that function is
+<a class="reference internal" href="#flasc.prediction.approximate_predict" title="flasc.prediction.approximate_predict"><code class="xref py py-func docutils literal notranslate"><span class="pre">approximate_predict()</span></code></a>), as that function is
 not aware of this argument.</p></li>
 <li><p><strong>label_sides_as_branches</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em><em>,</em>) – When this flag is False, branches are only labelled for clusters with at
 least three branches (i.e., at least y-shapes). Clusters with only two
@@ -941,7 +949,7 @@ Consequently, the manually specified clusters do not have to form
 neatly separable connected components in the minimum spanning tree
 over all the data points.</p>
 <p>Because the clustering step is skipped, some of the output variables
-and the <code class="xref py py-func docutils literal notranslate"><span class="pre">approximate_predict()</span></code> function will
+and the <a class="reference internal" href="#flasc.prediction.approximate_predict" title="flasc.prediction.approximate_predict"><code class="xref py py-func docutils literal notranslate"><span class="pre">approximate_predict()</span></code></a> function will
 be unavailable:
 - cluster_persistence
 - condensed_tree
@@ -1050,8 +1058,128 @@ Density-based Cluster Selection. arxiv preprint 1911.02282.</p>
 </aside>
 </dd></dl>
 
-<section id="predictions">
-<h2>Predictions<a class="headerlink" href="#predictions" title="Permalink to this heading"></a></h2>
+<section id="module-flasc.prediction">
+<span id="predictions"></span><h2>Predictions<a class="headerlink" href="#module-flasc.prediction" title="Permalink to this heading"></a></h2>
+<p>Predictions functions for FLASC.</p>
+<p>See also <a class="reference external" href="https://hdbscan.readthedocs.io/en/latest/api.html#module-hdbscan.prediction" title="(in hdbscan v0.8.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hdbscan.prediction</span></code></a>.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="flasc.prediction.approximate_predict">
+<span class="sig-prename descclassname"><span class="pre">flasc.prediction.</span></span><span class="sig-name descname"><span class="pre">approximate_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clusterer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points_to_predict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flasc.prediction.approximate_predict" title="Permalink to this definition"></a></dt>
+<dd><p>Predict the cluster label of new points. The returned labels
+will be those of the original clustering found by <code class="docutils literal notranslate"><span class="pre">clusterer</span></code>,
+and therefore are not (necessarily) the cluster labels that would
+be found by clustering the original data combined with
+<code class="docutils literal notranslate"><span class="pre">points_to_predict</span></code>, hence the ‘approximate’ label.</p>
+<p>If you simply wish to assign new points to an existing clustering
+in the ‘best’ way possible, this is the function to use. If you
+want to predict how <code class="docutils literal notranslate"><span class="pre">points_to_predict</span></code> would cluster with
+the original data under FLASC the most efficient existing approach
+is to simply recluster with the new point(s) added to the original dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>clusterer</strong> (<a class="reference internal" href="#flasc.FLASC" title="flasc.FLASC"><code class="xref py py-class docutils literal notranslate"><span class="pre">FLASC</span></code></a>) – A clustering object that has been fit to vector inpt data.</p></li>
+<li><p><strong>points_to_predict</strong> (<em>array</em><em>, or </em><em>array-like</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The new data points to predict cluster labels for. They should
+have the same dimensionality as the original dataset over which
+clusterer was fit.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>labels</strong> (<em>array (n_samples,)</em>) – The predicted labels of the <code class="docutils literal notranslate"><span class="pre">points_to_predict</span></code></p></li>
+<li><p><strong>probabilities</strong> (<em>array (n_samples,)</em>) – The soft cluster scores for each of the <code class="docutils literal notranslate"><span class="pre">points_to_predict</span></code></p></li>
+<li><p><strong>cluster_labels</strong> (<em>array (n_samples,)</em>) – The predicted cluster labels of the <code class="docutils literal notranslate"><span class="pre">points_to_predict</span></code></p></li>
+<li><p><strong>cluster_probabilities</strong> (<em>array (n_samples,)</em>) – The soft cluster scores for each of the <code class="docutils literal notranslate"><span class="pre">points_to_predict</span></code></p></li>
+<li><p><strong>branch_labels</strong> (<em>array (n_samples,)</em>) – The predicted cluster labels of the <code class="docutils literal notranslate"><span class="pre">points_to_predict</span></code></p></li>
+<li><p><strong>branch_probabilities</strong> (<em>array (n_samples,)</em>) – The soft cluster scores for each of the <code class="docutils literal notranslate"><span class="pre">points_to_predict</span></code></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flasc.prediction.branch_centrality_vectors">
+<span class="sig-prename descclassname"><span class="pre">flasc.prediction.</span></span><span class="sig-name descname"><span class="pre">branch_centrality_vectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clusterer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flasc.prediction.branch_centrality_vectors" title="Permalink to this definition"></a></dt>
+<dd><p>Predict soft branch-membership vectors for all points in the clusters
+with more than two detected branches.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>clusterer</strong> (<a class="reference internal" href="#flasc.FLASC" title="flasc.FLASC"><code class="xref py py-class docutils literal notranslate"><span class="pre">FLASC</span></code></a>) – A clusterer object that has been fit to vector input data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>centrality_vectors</strong> – The centrality value of point <code class="docutils literal notranslate"><span class="pre">i</span></code> in cluster <code class="docutils literal notranslate"><span class="pre">c</span></code> of the original
+dataset from the root of branch <code class="docutils literal notranslate"><span class="pre">j</span></code> is in
+<code class="docutils literal notranslate"><span class="pre">membership_vectors[c][i,</span> <span class="pre">j]</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[array (n_samples, n_branches)]</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://hdbscan.readthedocs.io/en/latest/api.html#hdbscan.prediction.all_points_membership_vectors" title="(in hdbscan v0.8.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">hdbscan.prediction.all_points_membership_vectors()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flasc.prediction.branch_membership_from_centrality">
+<span class="sig-prename descclassname"><span class="pre">flasc.prediction.</span></span><span class="sig-name descname"><span class="pre">branch_membership_from_centrality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">branch_centrality_vectors</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flasc.prediction.branch_membership_from_centrality" title="Permalink to this definition"></a></dt>
+<dd><p>Scales the branch centrality vectors to act as probability using softmax.</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{m} = \frac{
+    e^{\mathbf{c}}
+}{
+    \sum_{i}{e^c_i}
+}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{m}\)</span> is the scaled membership vector and
+<span class="math notranslate nohighlight">\(\mathbf{c}\)</span> is the branch centrality vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>branch_centrality_vectors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><em>array</em><em> (</em><em>n_samples</em><em>, </em><em>n_branches</em><em>)</em><em>]</em>) – The centrality values from the centroids of a cluster’s branches.
+None if the cluster has two or fewer branches.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>scaled_branch_memberships</strong> – The probabilities of a point belonging to the cluster’s branches.
+None if the cluster has two or fewer branches.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[array (n_samples, n_branches)]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flasc.prediction.update_labels_with_branch_centrality">
+<span class="sig-prename descclassname"><span class="pre">flasc.prediction.</span></span><span class="sig-name descname"><span class="pre">update_labels_with_branch_centrality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clusterer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">branch_centrality_vectors</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flasc.prediction.update_labels_with_branch_centrality" title="Permalink to this definition"></a></dt>
+<dd><p>Updates the clusterer’s labels and branch labels by assigning
+the branch value which has the highest given centrality.</p>
+<p>This can change the label of data points in the center of a cluster.
+These data points are classified as noise by HDBSCAN* in the branch
+detection step, and given the 0-branch-label by default.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>clusterer</strong> (<a class="reference internal" href="#flasc.FLASC" title="flasc.FLASC"><code class="xref py py-class docutils literal notranslate"><span class="pre">FLASC</span></code></a>) – A clustering object that has been fit to data.</p></li>
+<li><p><strong>branch_centrality_vectors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><em>array</em><em> (</em><em>n_samples</em><em>, </em><em>n_branches</em><em>)</em><em>]</em>) – The centrality values from the centroids of a cluster’s branches.
+None if the cluster has two or fewer branches.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>labels</strong> – Updated cluster+branch labels for each point. Noisy samples are
+given the label -1.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, shape (n_samples, )</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>cluster_labels<span class="classifier">np.ndarray, shape (n_samples, )</span></dt><dd><p>Updated luster labels for each point. Noisy samples are given
+the label -1.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 </section>
 
@@ -1066,7 +1194,7 @@ Density-based Cluster Selection. arxiv preprint 1911.02282.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2023, D.M. Bot and J. Aerts.
-      <span class="lastupdated">Last updated on Jun 09, 2023.
+      <span class="lastupdated">Last updated on Jun 22, 2023.
       </span></p>
   </div>
 
