@@ -5,7 +5,7 @@
 
     <meta property="article:modified_time" content="2023-06-09T11:18:49+00:00" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>API Reference &mdash;  version v0.1.0-4-gd79ddb6</title>
+  <title>API Reference &mdash;  version v0.1.1-1-g5552562</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -46,6 +46,46 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#flasc.FLASC"><code class="docutils literal notranslate"><span class="pre">FLASC</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.labels_"><code class="docutils literal notranslate"><span class="pre">FLASC.labels_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.probabilities_"><code class="docutils literal notranslate"><span class="pre">FLASC.probabilities_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.cluster_labels_"><code class="docutils literal notranslate"><span class="pre">FLASC.cluster_labels_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.cluster_probabilities_"><code class="docutils literal notranslate"><span class="pre">FLASC.cluster_probabilities_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.cluster_persistences_"><code class="docutils literal notranslate"><span class="pre">FLASC.cluster_persistences_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.branch_labels_"><code class="docutils literal notranslate"><span class="pre">FLASC.branch_labels_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.branch_probabilities_"><code class="docutils literal notranslate"><span class="pre">FLASC.branch_probabilities_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.branch_persistences_"><code class="docutils literal notranslate"><span class="pre">FLASC.branch_persistences_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.condensed_tree_"><code class="docutils literal notranslate"><span class="pre">FLASC.condensed_tree_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.single_linkage_tree_"><code class="docutils literal notranslate"><span class="pre">FLASC.single_linkage_tree_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.min_spanning_tree_"><code class="docutils literal notranslate"><span class="pre">FLASC.min_spanning_tree_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.cluster_approximation_graph_"><code class="docutils literal notranslate"><span class="pre">FLASC.cluster_approximation_graph_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.cluster_condensed_trees"><code class="docutils literal notranslate"><span class="pre">FLASC.cluster_condensed_trees</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.cluster_linkage_trees_"><code class="docutils literal notranslate"><span class="pre">FLASC.cluster_linkage_trees_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.cluster_centralities_"><code class="docutils literal notranslate"><span class="pre">FLASC.cluster_centralities_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.cluster_points_"><code class="docutils literal notranslate"><span class="pre">FLASC.cluster_points_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.cluster_exemplars_"><code class="docutils literal notranslate"><span class="pre">FLASC.cluster_exemplars_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.branch_exemplars_"><code class="docutils literal notranslate"><span class="pre">FLASC.branch_exemplars_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.relative_validity_"><code class="docutils literal notranslate"><span class="pre">FLASC.relative_validity_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.hdbscan_"><code class="docutils literal notranslate"><span class="pre">FLASC.hdbscan_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">FLASC.branch_exemplars_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10"><code class="docutils literal notranslate"><span class="pre">FLASC.cluster_approximation_graph_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.cluster_condensed_trees_"><code class="docutils literal notranslate"><span class="pre">FLASC.cluster_condensed_trees_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id11"><code class="docutils literal notranslate"><span class="pre">FLASC.cluster_exemplars_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12"><code class="docutils literal notranslate"><span class="pre">FLASC.cluster_linkage_trees_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id13"><code class="docutils literal notranslate"><span class="pre">FLASC.condensed_tree_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.fit"><code class="docutils literal notranslate"><span class="pre">FLASC.fit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.fit_predict"><code class="docutils literal notranslate"><span class="pre">FLASC.fit_predict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id14"><code class="docutils literal notranslate"><span class="pre">FLASC.hdbscan_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.minimum_spanning_tree_"><code class="docutils literal notranslate"><span class="pre">FLASC.minimum_spanning_tree_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id15"><code class="docutils literal notranslate"><span class="pre">FLASC.relative_validity_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id16"><code class="docutils literal notranslate"><span class="pre">FLASC.single_linkage_tree_</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.weighted_centroid"><code class="docutils literal notranslate"><span class="pre">FLASC.weighted_centroid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.weighted_cluster_centroid"><code class="docutils literal notranslate"><span class="pre">FLASC.weighted_cluster_centroid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.weighted_cluster_medoid"><code class="docutils literal notranslate"><span class="pre">FLASC.weighted_cluster_medoid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flasc.FLASC.weighted_medoid"><code class="docutils literal notranslate"><span class="pre">FLASC.weighted_medoid()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#flasc.flasc"><code class="docutils literal notranslate"><span class="pre">flasc()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#predictions">Predictions</a></li>
 </ul>
 </li>
@@ -75,8 +115,941 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="api-reference">
-<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this heading"></a></h1>
+  <section id="module-flasc">
+<span id="api-reference"></span><h1>API Reference<a class="headerlink" href="#module-flasc" title="Permalink to this heading"></a></h1>
+<p>flasc - a Python implementation of FLASC.</p>
+<p>FLASC* is a branch-aware clustering algorithm, that builds upon
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">hdbscan</span></code> to detect branching structures within clusters. The
+algorithm returns a labelling that separates noise points from clusters and
+branches from each other. In addition, the
+<a class="reference external" href="https://hdbscan.readthedocs.io/en/latest/api.html#hdbscan.plots.SingleLinkageTree" title="(in hdbscan v0.8.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">single-linkage</span></code></a>
+and
+<a class="reference external" href="https://hdbscan.readthedocs.io/en/latest/api.html#hdbscan.plots.CondensedTree" title="(in hdbscan v0.8.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">condensed</span> <span class="pre">linkage</span></code></a>
+hierarchies are provided for both the clustering as the branch detection stages.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="flasc.FLASC">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flasc.</span></span><span class="sig-name descname"><span class="pre">FLASC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_cluster_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_branch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'minkowski'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leaf_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">approx_min_span_tree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_selection_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'eom'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_single_cluster</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_selection_epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_cluster_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_single_branch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">branch_detection_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'full'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">branch_selection_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'eom'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">branch_selection_persistence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_branch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_sides_as_branches</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">override_cluster_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">override_cluster_probabilities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Memory(location=None)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flasc.FLASC" title="Permalink to this definition"></a></dt>
+<dd><p>Performs hdbscan clustering with flare detection post-processing step.</p>
+<p>FLASC - Flare-Sensitive Clustering.
+Performs <code class="xref py py-mod docutils literal notranslate"><span class="pre">hdbscan</span></code> clustering <a href="#id24"><span class="problematic" id="id1">[1]_</span></a> with a post-processing step to
+detect branches within individual clusters. For each cluster, a graph is
+constructed connecting the data points based on their mutual reachability
+distances. Each edge is given a centrality value based on how many edges
+need to be traversed to reach the cluster’s root point from the edge. Then,
+the edges are clustered as if that centrality was a density, progressively
+removing the ‘centre’ of each cluster and seeing how many branches remain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>array</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em><em>, or         </em><em>array</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_samples</em><em>)</em>) – A feature array, or array of distances between samples if
+<code class="docutils literal notranslate"><span class="pre">metric='precomputed'</span></code>.</p></li>
+<li><p><strong>min_cluster_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=5</em><em>)</em>) – The minimum number of samples in a group for that group to be
+considered a cluster; groupings smaller than this size will be left
+as noise.</p></li>
+<li><p><strong>min_branch_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – The minimum number of samples in a group for that group to be
+considered a branch; groupings smaller than this size will seen as
+points falling out of a branch. Defaults to the min_cluster_size.</p></li>
+<li><p><strong>min_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – The number of samples in a neighborhood for a point
+to be considered as a core point. This includes the point itself.
+Defaults to the min_cluster_size.</p></li>
+<li><p><strong>metric</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><em>callable</em><em>, </em><em>optional</em><em> (</em><em>default='minkowski'</em><em>)</em>) – The metric to use when calculating distance between instances in a
+feature array. If metric is a string or callable, it must be one of
+the options allowed by metrics.pairwise.pairwise_distances for its
+metric parameter.
+If metric is “precomputed”, X is assumed to be a distance matrix and
+must be square.</p></li>
+<li><p><strong>p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=2</em><em>)</em>) – p value to use if using the minkowski metric.</p></li>
+<li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em><em> (</em><em>default=1.0</em><em>)</em>) – A distance scaling parameter as used in robust single linkage.
+See <a href="#id25"><span class="problematic" id="id2">[2]_</span></a> for more information.</p></li>
+<li><p><strong>algorithm</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em><em> (</em><em>default='best'</em><em>)</em>) – <p>Exactly which algorithm to use; hdbscan has variants specialised
+for different characteristics of the data. By default this is set
+to <code class="docutils literal notranslate"><span class="pre">best</span></code> which chooses the “best” algorithm given the nature of
+the data. You can force other options if you believe you know
+better. Options are:</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">best</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">generic</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">prims_kdtree</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">prims_balltree</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">boruvka_kdtree</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">boruvka_balltree</span></code></p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>leaf_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=40</em><em>)</em>) – Leaf size for trees responsible for fast nearest
+neighbour queries.</p></li>
+<li><p><strong>approx_min_span_tree</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em><em> (</em><em>default=True</em><em>)</em>) – Whether to accept an only approximate minimum spanning tree.
+For some algorithms this can provide a significant speedup, but
+the resulting clustering may be of marginally lower quality.
+If you are willing to sacrifice speed for correctness you may want
+to explore this; in general this should be left at the default True.</p></li>
+<li><p><strong>cluster_selection_method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em><em> (</em><em>default='eom'</em><em>)</em>) – <p>The method used to select clusters from the condensed tree. The
+standard approach for FLASC is to use an Excess of Mass algorithm
+to find the most persistent clusters. Alternatively you can instead
+select the clusters at the leaves of the tree – this provides the
+most fine grained and homogeneous clusters. Options are:</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">eom</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">leaf</span></code></p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>allow_single_cluster</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – By default HDBSCAN* will not produce a single cluster, setting this
+to t=True will override this and allow single cluster results in
+the case that you feel this is a valid result for your dataset.
+(default False)</p></li>
+<li><p><strong>cluster_selection_epsilon</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em><em> (</em><em>default=0.0</em><em>)</em>) – A distance threshold. Clusters below this value will be merged.
+See <a href="#id26"><span class="problematic" id="id3">[3]_</span></a> for more information. Note that this should not be used
+if we want to predict the cluster labels for new points in future
+(e.g. using <code class="xref py py-func docutils literal notranslate"><span class="pre">approximate_predict()</span></code>), as the
+that function is not aware of this argument.</p></li>
+<li><p><strong>max_cluster_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=0</em><em>)</em>) – A limit to the size of clusters returned by the eom algorithm.
+Has no effect when using leaf clustering (where clusters are
+usually small regardless) and can also be overridden in rare
+cases by a high value for cluster_selection_epsilon. Note that
+this should not be used if we want to predict the cluster labels
+for new points in future
+(e.g. using <code class="xref py py-func docutils literal notranslate"><span class="pre">approximate_predict()</span></code>), as
+the approximate_predict function is not aware of this argument.</p></li>
+<li><p><strong>allow_single_branch</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – Analogous to <code class="docutils literal notranslate"><span class="pre">allow_single_cluster</span></code>. Note that depending on
+<code class="docutils literal notranslate"><span class="pre">label_sides_as_branches</span></code> FLASC* requires at least 3 branches to
+exist in a cluster before they are incorporated in the final labelling.</p></li>
+<li><p><strong>branch_detection_method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em><em> (</em><em>default=``full``</em><em>)</em>) – <p>Deteremines which graph is conctructed to detect branches with. Valid
+values are, ordered by increasing computation cost and decreasing
+sensitivity to noise:</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">core</span></code>: Contains the edges that connect each point to all other</p></li>
+</ul>
+<blockquote>
+<div><p>points within a mutual reachability distance lower than or equal to
+the point’s core distance. This is the cluster’s subgraph of the
+k-NN graph over the entire data set (with k = <code class="docutils literal notranslate"><span class="pre">min_samples</span></code>).</p>
+</div></blockquote>
+</div></blockquote>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">full</span></code>: Contains all edges between points in each cluster with a
+mutual reachability distance lower than or equal to the distance of
+the most-distance point in each cluster. These graphs represent the
+0-dimensional simplicial complex of each cluster at the first point in
+the filtration where they contain all their points.</p></li>
+</ul>
+</p></li>
+<li><p><strong>branch_selection_persistence</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em><em> (</em><em>default=0.0</em><em>)</em>) – A centrality persistence threshold. Branches with a persistence below
+this value will be merged. See <a href="#id27"><span class="problematic" id="id4">[3]_</span></a> for more information. Note that this
+should not be used if we want to predict the cluster labels for new
+points in future (e.g. using approximate_predict), as the
+<code class="xref py py-func docutils literal notranslate"><span class="pre">approximate_predict()</span></code> function
+is not aware of this argument.</p></li>
+<li><p><strong>branch_selection_method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em><em> (</em><em>default='eom'</em><em>)</em>) – <p>The method used to select branches from the cluster’s condensed tree.
+The standard approach for FLASC* is to use the <code class="docutils literal notranslate"><span class="pre">eom</span></code> approach.
+Options are:</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">eom</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">leaf</span></code></p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>max_branch_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=0</em><em>)</em>) – A limit to the size of clusters returned by the <code class="docutils literal notranslate"><span class="pre">eom</span></code> algorithm.
+Has no effect when using <code class="docutils literal notranslate"><span class="pre">leaf</span></code> clustering (where clusters are
+usually small regardless). Note that this should not be used if we
+want to predict the cluster labels for new points in future (e.g. using
+<code class="xref py py-func docutils literal notranslate"><span class="pre">approximate_predict()</span></code>), as that function is
+not aware of this argument.</p></li>
+<li><p><strong>label_sides_as_branches</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em><em>,</em>) – When this flag is False, branches are only labelled for clusters with at
+least three branches (i.e., at least y-shapes). Clusters with only two
+branches represent l-shapes. The two branches describe the cluster’s
+outsides growing towards each other. Enableing this flag separates these
+branches from each other in the produced labelling.</p></li>
+<li><p><strong>override_cluster_labels</strong> (<em>np.ndarray</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – <p>Override the HDBSCAN* clustering to specify your own grouping with a
+numpy array containing a cluster label for each data point. Negative
+values will be interpreted as noise points. When the parameter is not set
+to None, core distances are computed over all data points,
+minimum spanning trees and the branches are computed per cluster.
+Consequently, the manually specified clusters do not have to form
+neatly separable connected components in the minimum spanning tree
+over all the data points.</p>
+<p>Because the clustering step is skipped, some of the attributes
+and the <code class="xref py py-func docutils literal notranslate"><span class="pre">approximate_predict()</span></code> function will
+be unavailable:
+- <a href="#id28"><span class="problematic" id="id29">cluster_persistence_</span></a>
+- <a href="#id30"><span class="problematic" id="id31">condensed_tree_</span></a>
+- <a href="#id32"><span class="problematic" id="id33">single_linkage_tree_</span></a>
+- <a href="#id34"><span class="problematic" id="id35">min_spanning_tree_</span></a>
+- <a href="#id36"><span class="problematic" id="id37">cluster_exemplars_</span></a></p>
+</p></li>
+<li><p><strong>override_cluster_probabilities</strong> (<em>np.ndarray</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Specifying a not None value for this parameter is only valid when
+<code class="docutils literal notranslate"><span class="pre">override_cluster_labels</span></code> is used. In that case, this parameter
+controls the data point cluster membership probabilities. When this
+parameter is None, a default 1.0 probability is used for all points.</p></li>
+<li><p><strong>memory</strong> (<em>instance</em><em> of </em><em>joblib.Memory</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Used to cache the output of the computation of the tree.
+By default, no caching is done. If a string is given, it is the
+path to the caching directory.</p></li>
+<li><p><strong>num_jobs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Number of parallel jobs to run in core distance computations and branch
+detection step. For <code class="docutils literal notranslate"><span class="pre">num_jobs</span></code> below -1, (n_cpus + 1 + num_jobs) are
+used. By default, the algorithm tries to estimate whether the given input
+is large enough for multi-processing to have a benefit. If so, 4 processes
+are started, otherwise only the main process is used. When a <code class="docutils literal notranslate"><span class="pre">num_jobs</span></code>
+value is given, that number of jobs is used regardless of the input size.</p></li>
+<li><p><strong>**kwargs</strong> (<em>optional</em>) – Additional arguments passed to <code class="xref py py-func docutils literal notranslate"><span class="pre">hdbscan()</span></code> or the
+distance metric.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flasc.FLASC.labels_">
+<span class="sig-name descname"><span class="pre">labels_</span></span><a class="headerlink" href="#flasc.FLASC.labels_" title="Permalink to this definition"></a></dt>
+<dd><p>Cluster+branch labels for each point. Noisy samples are given the
+label -1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, shape (n_samples, )</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flasc.FLASC.probabilities_">
+<span class="sig-name descname"><span class="pre">probabilities_</span></span><a class="headerlink" href="#flasc.FLASC.probabilities_" title="Permalink to this definition"></a></dt>
+<dd><p>Cluster+branch membership strengths for each point. Noisy samples are
+assigned 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, shape (n_samples, )</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flasc.FLASC.cluster_labels_">
+<span class="sig-name descname"><span class="pre">cluster_labels_</span></span><a class="headerlink" href="#flasc.FLASC.cluster_labels_" title="Permalink to this definition"></a></dt>
+<dd><p>Cluster labels for each point. Noisy samples are given the label -1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, shape (n_samples, )</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flasc.FLASC.cluster_probabilities_">
+<span class="sig-name descname"><span class="pre">cluster_probabilities_</span></span><a class="headerlink" href="#flasc.FLASC.cluster_probabilities_" title="Permalink to this definition"></a></dt>
+<dd><p>Cluster membership strengths for each point. Noisy samples are
+assigned 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, shape (n_samples, )</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flasc.FLASC.cluster_persistences_">
+<span class="sig-name descname"><span class="pre">cluster_persistences_</span></span><a class="headerlink" href="#flasc.FLASC.cluster_persistences_" title="Permalink to this definition"></a></dt>
+<dd><p>A score of how persistent each cluster is. A score of 1.0 represents
+a perfectly stable cluster that persists over all distance scales,
+while a score of 0.0 represents a perfectly ephemeral cluster. These
+scores gauge the relative coherence of the clusters output by the
+algorithm. Not available when <code class="docutils literal notranslate"><span class="pre">override_cluster_labels</span></code> is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array, shape  (n_clusters, )</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flasc.FLASC.branch_labels_">
+<span class="sig-name descname"><span class="pre">branch_labels_</span></span><a class="headerlink" href="#flasc.FLASC.branch_labels_" title="Permalink to this definition"></a></dt>
+<dd><p>Branch labels for each point. Noisy samples are given the label -1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, shape (n_samples, )</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flasc.FLASC.branch_probabilities_">
+<span class="sig-name descname"><span class="pre">branch_probabilities_</span></span><a class="headerlink" href="#flasc.FLASC.branch_probabilities_" title="Permalink to this definition"></a></dt>
+<dd><p>Branch membership strengths for each point. Noisy samples are
+assigned 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, shape (n_samples, )</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flasc.FLASC.branch_persistences_">
+<span class="sig-name descname"><span class="pre">branch_persistences_</span></span><a class="headerlink" href="#flasc.FLASC.branch_persistences_" title="Permalink to this definition"></a></dt>
+<dd><p>A branch persistence for each cluster produced during the branch
+detection step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a> (n_clusters)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flasc.FLASC.condensed_tree_">
+<span class="sig-name descname"><span class="pre">condensed_tree_</span></span><a class="headerlink" href="#flasc.FLASC.condensed_tree_" title="Permalink to this definition"></a></dt>
+<dd><p>The condensed tree hierarchy used to generate clusters.
+Not available when <code class="docutils literal notranslate"><span class="pre">override_cluster_labels</span></code> is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://hdbscan.readthedocs.io/en/latest/api.html#hdbscan.plots.CondensedTree" title="(in hdbscan v0.8.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">CondensedTree</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flasc.FLASC.single_linkage_tree_">
+<span class="sig-name descname"><span class="pre">single_linkage_tree_</span></span><a class="headerlink" href="#flasc.FLASC.single_linkage_tree_" title="Permalink to this definition"></a></dt>
+<dd><p>The single linkage tree produced during clustering in scipy
+hierarchical clustering format
+(see <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/cluster.hierarchy.html">http://docs.scipy.org/doc/scipy/reference/cluster.hierarchy.html</a>).
+Not available when <code class="docutils literal notranslate"><span class="pre">override_cluster_labels</span></code> is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://hdbscan.readthedocs.io/en/latest/api.html#hdbscan.plots.SingleLinkageTree" title="(in hdbscan v0.8.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SingleLinkageTree</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flasc.FLASC.min_spanning_tree_">
+<span class="sig-name descname"><span class="pre">min_spanning_tree_</span></span><a class="headerlink" href="#flasc.FLASC.min_spanning_tree_" title="Permalink to this definition"></a></dt>
+<dd><p>The minimum spanning as an edgelist. Not available when
+<code class="docutils literal notranslate"><span class="pre">override_cluster_labels</span></code> is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://hdbscan.readthedocs.io/en/latest/api.html#hdbscan.plots.MinimumSpanningTree" title="(in hdbscan v0.8.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MinimumSpanningTree</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flasc.FLASC.cluster_approximation_graph_">
+<span class="sig-name descname"><span class="pre">cluster_approximation_graph_</span></span><a class="headerlink" href="#flasc.FLASC.cluster_approximation_graph_" title="Permalink to this definition"></a></dt>
+<dd><p>The graphs used to detect branches in each cluster as an
+<code class="xref py py-class docutils literal notranslate"><span class="pre">ApproximationGraph</span></code>. Can be converted to
+a networkx graph, pandas data frame, or a list with numpy array-edgelists.
+Points are labelled by their row-index into the input data. The edges
+contained in the graph depend on the <code class="docutils literal notranslate"><span class="pre">branch_detection_method</span></code>:
+- <code class="docutils literal notranslate"><span class="pre">core</span></code>: Contains the edges that connect each point to all other</p>
+<blockquote>
+<div><p>points in a cluster within a mutual reachability distance lower than
+or equal to the point’s core distance. This is an extension of the
+minimum spanning tree introducing only edges with equal distances. The
+reachability distance introduces <code class="docutils literal notranslate"><span class="pre">num_points</span></code> * <code class="docutils literal notranslate"><span class="pre">min_samples</span></code> of
+such edges.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">full</span></code>: Contains all edges between points in each cluster with a
+mutual reachability distance lower than or equal to the distance of
+the most-distance point in each cluster. These graphs represent the
+0-dimensional simplicial complex of each cluster at the first point in
+the filtration where they contain all their points.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ApproximationGraph</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flasc.FLASC.cluster_condensed_trees">
+<span class="sig-name descname"><span class="pre">cluster_condensed_trees</span></span><a class="headerlink" href="#flasc.FLASC.cluster_condensed_trees" title="Permalink to this definition"></a></dt>
+<dd><p>Condensed hierarchies for each cluster produced during the branch
+detection step. Data points are numbered with in-cluster ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[<a class="reference external" href="https://hdbscan.readthedocs.io/en/latest/api.html#hdbscan.plots.CondensedTree" title="(in hdbscan v0.8.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">CondensedTree</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flasc.FLASC.cluster_linkage_trees_">
+<span class="sig-name descname"><span class="pre">cluster_linkage_trees_</span></span><a class="headerlink" href="#flasc.FLASC.cluster_linkage_trees_" title="Permalink to this definition"></a></dt>
+<dd><p>Single linkage trees for each cluster produced during the branch
+detection step, in the scipy hierarchical clustering format.
+(see <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/cluster.hierarchy.html">http://docs.scipy.org/doc/scipy/reference/cluster.hierarchy.html</a>).
+Data points are numbered with in-cluster ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[<a class="reference external" href="https://hdbscan.readthedocs.io/en/latest/api.html#hdbscan.plots.SingleLinkageTree" title="(in hdbscan v0.8.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SingleLinkageTree</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flasc.FLASC.cluster_centralities_">
+<span class="sig-name descname"><span class="pre">cluster_centralities_</span></span><a class="headerlink" href="#flasc.FLASC.cluster_centralities_" title="Permalink to this definition"></a></dt>
+<dd><p>Centrality values for each point in a cluster. Overemphasizes points’
+eccentricity within the cluster as the values are based on minimum
+spanning trees that do not contain the equally distanced edges resulting
+from the mutual reachability distance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, shape (n_samples, )</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flasc.FLASC.cluster_points_">
+<span class="sig-name descname"><span class="pre">cluster_points_</span></span><a class="headerlink" href="#flasc.FLASC.cluster_points_" title="Permalink to this definition"></a></dt>
+<dd><p>The data point row indices for each detected cluster:
+<code class="docutils literal notranslate"><span class="pre">cluster_points_[l]</span> <span class="pre">=</span> <span class="pre">np.where(cluster_labels</span> <span class="pre">==</span> <span class="pre">l)[0]</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a> (n_clusters)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flasc.FLASC.cluster_exemplars_">
+<span class="sig-name descname"><span class="pre">cluster_exemplars_</span></span><a class="headerlink" href="#flasc.FLASC.cluster_exemplars_" title="Permalink to this definition"></a></dt>
+<dd><p>A list of exemplar points for clusters. Since HDBSCAN supports
+arbitrary shapes for clusters we cannot provide a single cluster
+exemplar per cluster. Instead a list is returned with each element
+of the list being a numpy array of exemplar points for a cluster –
+these points are the “most representative” points of the cluster.
+Not available when <code class="docutils literal notranslate"><span class="pre">override_cluster_labels</span></code> is used or a precomputed
+distance matrix is given as input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flasc.FLASC.branch_exemplars_">
+<span class="sig-name descname"><span class="pre">branch_exemplars_</span></span><a class="headerlink" href="#flasc.FLASC.branch_exemplars_" title="Permalink to this definition"></a></dt>
+<dd><p>A list with exemplar points for the branches in the clusters. A cluster’s
+item is empty if it does not have selected branches. For clusters with
+selected branches, a list with a numpy array of exemplar points for each
+selected branch is given.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a> (n_clusters)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flasc.FLASC.relative_validity_">
+<span class="sig-name descname"><span class="pre">relative_validity_</span></span><a class="headerlink" href="#flasc.FLASC.relative_validity_" title="Permalink to this definition"></a></dt>
+<dd><p>HDBSCAN’s fast approximation of the Density Based Cluster Validity (
+DBCV) score <a class="footnote-reference brackets" href="#id9" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> on FLASC’s labelling. It may only be used to compare
+results across different choices of hyper-parameters, therefore
+is only a relative score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flasc.FLASC.hdbscan_">
+<span class="sig-name descname"><span class="pre">hdbscan_</span></span><a class="headerlink" href="#flasc.FLASC.hdbscan_" title="Permalink to this definition"></a></dt>
+<dd><p>An HDBSCAN clusterer object fitted to the data. Can be used to compute
+outlier scores and cluster exemplars. Not available when
+<code class="docutils literal notranslate"><span class="pre">override_cluster_labels</span></code> is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">HDBSCAN</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">References</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id6" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Campello, R. J., Moulavi, D., &amp; Sander, J. (2013, April).
+Density-based clustering based on hierarchical density estimates.
+In Pacific-Asia Conference on Knowledge Discovery and Data Mining
+(pp. 160-172). Springer Berlin Heidelberg.</p>
+</aside>
+<aside class="footnote brackets" id="id7" role="note">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>Chaudhuri, K., &amp; Dasgupta, S. (2010). Rates of convergence for the
+cluster tree. In Advances in Neural Information Processing Systems
+(pp. 343-351).</p>
+</aside>
+<aside class="footnote brackets" id="id8" role="note">
+<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
+<p>Malzer, C., &amp; Baum, M. (2019). A Hybrid Approach To Hierarchical
+Density-based Cluster Selection. arxiv preprint 1911.02282.</p>
+</aside>
+<aside class="footnote brackets" id="id9" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">4</a><span class="fn-bracket">]</span></span>
+<p>Moulavi, D., Jaskowiak, P.A., Campello, R.J., Zimek, A. and
+Sander, J., 2014. Density-Based Clustering Validation. In SDM
+(pp. 839-847).</p>
+</aside>
+</aside>
+<dl class="py property">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">branch_exemplars_</span></span><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="#flasc.FLASC" title="flasc._sklearn.FLASC"><code class="xref py py-class docutils literal notranslate"><span class="pre">FLASC</span></code></a> for documentation.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id10">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cluster_approximation_graph_</span></span><a class="headerlink" href="#id10" title="Permalink to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="#flasc.FLASC" title="flasc._sklearn.FLASC"><code class="xref py py-class docutils literal notranslate"><span class="pre">FLASC</span></code></a> for documentation.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="flasc.FLASC.cluster_condensed_trees_">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cluster_condensed_trees_</span></span><a class="headerlink" href="#flasc.FLASC.cluster_condensed_trees_" title="Permalink to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="#flasc.FLASC" title="flasc._sklearn.FLASC"><code class="xref py py-class docutils literal notranslate"><span class="pre">FLASC</span></code></a> for documentation.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id11">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cluster_exemplars_</span></span><a class="headerlink" href="#id11" title="Permalink to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="#flasc.FLASC" title="flasc._sklearn.FLASC"><code class="xref py py-class docutils literal notranslate"><span class="pre">FLASC</span></code></a> for documentation.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id12">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cluster_linkage_trees_</span></span><a class="headerlink" href="#id12" title="Permalink to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="#flasc.FLASC" title="flasc._sklearn.FLASC"><code class="xref py py-class docutils literal notranslate"><span class="pre">FLASC</span></code></a> for documentation.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id13">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">condensed_tree_</span></span><a class="headerlink" href="#id13" title="Permalink to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="#flasc.FLASC" title="flasc._sklearn.FLASC"><code class="xref py py-class docutils literal notranslate"><span class="pre">FLASC</span></code></a> for documentation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flasc.FLASC.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.25)"><span class="pre">ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flasc.FLASC.fit" title="Permalink to this definition"></a></dt>
+<dd><p>Performs the branch aware clustering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>array</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em><em>, or             </em><em>array</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_samples</em><em>)</em>) – A feature array, or array of distances between samples if
+<code class="docutils literal notranslate"><span class="pre">metric='precomputed'</span></code>.</p></li>
+<li><p><strong>y</strong> (<em>Not used</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong> – Returns self</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)">object</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flasc.FLASC.fit_predict">
+<span class="sig-name descname"><span class="pre">fit_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flasc.FLASC.fit_predict" title="Permalink to this definition"></a></dt>
+<dd><p>Performs clustering on X and returns cluster labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>array</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em><em>, or             </em><em>array</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_samples</em><em>)</em>) – A feature array, or array of distances between samples if
+<code class="docutils literal notranslate"><span class="pre">metric='precomputed'</span></code>.</p></li>
+<li><p><strong>y</strong> (<em>not used</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>y</strong> – cluster labels.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, shape (n_samples, )</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id14">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hdbscan_</span></span><a class="headerlink" href="#id14" title="Permalink to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="#flasc.FLASC" title="flasc._sklearn.FLASC"><code class="xref py py-class docutils literal notranslate"><span class="pre">FLASC</span></code></a> for documentation.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="flasc.FLASC.minimum_spanning_tree_">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">minimum_spanning_tree_</span></span><a class="headerlink" href="#flasc.FLASC.minimum_spanning_tree_" title="Permalink to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="#flasc.FLASC" title="flasc._sklearn.FLASC"><code class="xref py py-class docutils literal notranslate"><span class="pre">FLASC</span></code></a> for documentation.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id15">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">relative_validity_</span></span><a class="headerlink" href="#id15" title="Permalink to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="#flasc.FLASC" title="flasc._sklearn.FLASC"><code class="xref py py-class docutils literal notranslate"><span class="pre">FLASC</span></code></a> for documentation.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id16">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">single_linkage_tree_</span></span><a class="headerlink" href="#id16" title="Permalink to this definition"></a></dt>
+<dd><p>See <a class="reference internal" href="#flasc.FLASC" title="flasc._sklearn.FLASC"><code class="xref py py-class docutils literal notranslate"><span class="pre">FLASC</span></code></a> for documentation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flasc.FLASC.weighted_centroid">
+<span class="sig-name descname"><span class="pre">weighted_centroid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flasc.FLASC.weighted_centroid" title="Permalink to this definition"></a></dt>
+<dd><p>Provides an approximate representative point for a given branch.
+Note that this technique assumes a euclidean metric for speed of
+computation. For more general metrics use the
+<code class="xref py py-func docutils literal notranslate"><span class="pre">weighted_medoid()</span></code>
+method which is slower, but can work with the metric the model trained
+with.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The id of the cluster to compute a centroid for.</p></li>
+<li><p><strong>data</strong> (<em>np.ndarray</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – A dataset to use instead of the raw data that was clustered on.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>centroid</strong> – A representative centroid for cluster <code class="docutils literal notranslate"><span class="pre">label_id</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array of shape (n_features,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flasc.FLASC.weighted_cluster_centroid">
+<span class="sig-name descname"><span class="pre">weighted_cluster_centroid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cluster_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flasc.FLASC.weighted_cluster_centroid" title="Permalink to this definition"></a></dt>
+<dd><p>Wraps <code class="xref py py-func docutils literal notranslate"><span class="pre">hdbscan.HDBSCAN.weighted_cluster_centroid()</span></code>.</p>
+<p>Provides an approximate representative point for a given cluster. Note
+that this technique assumes a euclidean metric for speed of computation.
+For more general metrics use the
+<code class="xref py py-func docutils literal notranslate"><span class="pre">weighted_cluster_medoid()</span></code>
+method which is slower, but can work with the metric the model trained
+with.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cluster_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The id of the cluster to compute a centroid for.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>centroid</strong> – A representative centroid for cluster <code class="docutils literal notranslate"><span class="pre">cluster_id</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array of shape (n_features,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flasc.FLASC.weighted_cluster_medoid">
+<span class="sig-name descname"><span class="pre">weighted_cluster_medoid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cluster_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flasc.FLASC.weighted_cluster_medoid" title="Permalink to this definition"></a></dt>
+<dd><p>Wraps <code class="xref py py-func docutils literal notranslate"><span class="pre">hdbscan.HDBSCAN.weighted_cluster_mentroid()</span></code>.</p>
+<p>Provides an approximate representative point for a given cluster.
+Note that this technique can be very slow and memory intensive for
+large clusters. For faster results use the
+<code class="xref py py-func docutils literal notranslate"><span class="pre">weighted_cluster_centroid()</span></code>
+method which is faster, but assumes a euclidean metric.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cluster_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The id of the cluster to compute a medoid for.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>centroid</strong> – A representative medoid for cluster <code class="docutils literal notranslate"><span class="pre">cluster_id</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array of shape (n_features,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flasc.FLASC.weighted_medoid">
+<span class="sig-name descname"><span class="pre">weighted_medoid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flasc.FLASC.weighted_medoid" title="Permalink to this definition"></a></dt>
+<dd><p>Provides an approximate representative point for a given branch.</p>
+<p>Note that this technique can be very slow and memory intensive for
+large clusters. For faster results use the
+<code class="xref py py-func docutils literal notranslate"><span class="pre">weighted_centroid()</span></code>
+method which is faster, but assumes a euclidean metric.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The id of the cluster to compute a medoid for.</p></li>
+<li><p><strong>data</strong> (<em>np.ndarray</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – A dataset to use instead of the raw data that was clustered on.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>centroid</strong> – A representative medoid for cluster <code class="docutils literal notranslate"><span class="pre">label_id</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array of shape (n_features,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flasc.flasc">
+<span class="sig-prename descclassname"><span class="pre">flasc.</span></span><span class="sig-name descname"><span class="pre">flasc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_cluster_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_branch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'minkowski'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leaf_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">approx_min_span_tree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_selection_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'eom'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_single_cluster</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_selection_epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_cluster_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_single_branch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">branch_detection_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'full'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">branch_selection_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'eom'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">branch_selection_persistence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_branch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_sides_as_branches</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">override_cluster_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">override_cluster_probabilities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Memory(location=None)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flasc.flasc" title="Permalink to this definition"></a></dt>
+<dd><p>Performs FLASC clustering with flare detection post-processing step.</p>
+<p>FLASC - Flare-Sensitive Clustering.
+Performs <code class="xref py py-mod docutils literal notranslate"><span class="pre">hdbscan</span></code> clustering <a href="#id38"><span class="problematic" id="id17">[1]_</span></a> with a post-processing step to
+detect branches within individual clusters. For each cluster, a graph is
+constructed connecting the data points based on their mutual reachability
+distances. Each edge is given a centrality value based on how many edges
+need to be traversed to reach the cluster’s root point from the edge. Then,
+the edges are clustered as if that centrality was a density, progressively
+removing the ‘centre’ of each cluster and seeing how many branches remain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>array</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em><em>, or         </em><em>array</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_samples</em><em>)</em>) – A feature array, or array of distances between samples if
+<code class="docutils literal notranslate"><span class="pre">metric='precomputed'</span></code>.</p></li>
+<li><p><strong>min_cluster_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=5</em><em>)</em>) – The minimum number of samples in a group for that group to be
+considered a cluster; groupings smaller than this size will be left
+as noise.</p></li>
+<li><p><strong>min_branch_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – The minimum number of samples in a group for that group to be
+considered a branch; groupings smaller than this size will seen as
+points falling out of a branch. Defaults to the min_cluster_size.</p></li>
+<li><p><strong>min_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – The number of samples in a neighborhood for a point
+to be considered as a core point. This includes the point itself.
+Defaults to the min_cluster_size.</p></li>
+<li><p><strong>metric</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><em>callable</em><em>, </em><em>optional</em><em> (</em><em>default='minkowski'</em><em>)</em>) – The metric to use when calculating distance between instances in a
+feature array. If metric is a string or callable, it must be one of
+the options allowed by metrics.pairwise.pairwise_distances for its
+metric parameter.
+If metric is “precomputed”, X is assumed to be a distance matrix and
+must be square.</p></li>
+<li><p><strong>p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=2</em><em>)</em>) – p value to use if using the minkowski metric.</p></li>
+<li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em><em> (</em><em>default=1.0</em><em>)</em>) – A distance scaling parameter as used in robust single linkage.
+See <a href="#id39"><span class="problematic" id="id18">[2]_</span></a> for more information.</p></li>
+<li><p><strong>algorithm</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em><em> (</em><em>default='best'</em><em>)</em>) – <p>Exactly which algorithm to use; hdbscan has variants specialised
+for different characteristics of the data. By default this is set
+to <code class="docutils literal notranslate"><span class="pre">best</span></code> which chooses the “best” algorithm given the nature of
+the data. You can force other options if you believe you know
+better. Options are:</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">best</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">generic</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">prims_kdtree</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">prims_balltree</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">boruvka_kdtree</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">boruvka_balltree</span></code></p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>leaf_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=40</em><em>)</em>) – Leaf size for trees responsible for fast nearest
+neighbour queries.</p></li>
+<li><p><strong>approx_min_span_tree</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em><em> (</em><em>default=True</em><em>)</em>) – Whether to accept an only approximate minimum spanning tree.
+For some algorithms this can provide a significant speedup, but
+the resulting clustering may be of marginally lower quality.
+If you are willing to sacrifice speed for correctness you may want
+to explore this; in general this should be left at the default True.</p></li>
+<li><p><strong>cluster_selection_method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em><em> (</em><em>default='eom'</em><em>)</em>) – <p>The method used to select clusters from the condensed tree. The
+standard approach for FLASC is to use an Excess of Mass algorithm
+to find the most persistent clusters. Alternatively you can instead
+select the clusters at the leaves of the tree – this provides the
+most fine grained and homogeneous clusters. Options are:</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">eom</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">leaf</span></code></p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>allow_single_cluster</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – By default FLASC will not produce a single cluster, setting this
+to t=True will override this and allow single cluster results in
+the case that you feel this is a valid result for your dataset.
+(default False)</p></li>
+<li><p><strong>cluster_selection_epsilon</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em><em> (</em><em>default=0.0</em><em>)</em>) – A distance threshold. Clusters below this value will be merged.
+See <a href="#id40"><span class="problematic" id="id19">[3]_</span></a> for more information. Note that this should not be used
+if we want to predict the cluster labels for new points in future
+(e.g. using approximate_predict), as the approximate_predict function
+is not aware of this argument.</p></li>
+<li><p><strong>max_cluster_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=0</em><em>)</em>) – A limit to the size of clusters returned by the eom algorithm.
+Has no effect when using leaf clustering (where clusters are
+usually small regardless) and can also be overridden in rare
+cases by a high value for cluster_selection_epsilon. Note that
+this should not be used if we want to predict the cluster labels
+for new points in future (e.g. using approximate_predict), as
+the approximate_predict function is not aware of this argument.</p></li>
+<li><p><strong>allow_single_branch</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em>) – Analogous to <code class="docutils literal notranslate"><span class="pre">allow_single_cluster</span></code>. Note that depending on
+<code class="docutils literal notranslate"><span class="pre">label_sides_as_branches</span></code> FFLASC requires at least 3 branches to
+exist in a cluster before they are incorporated in the final labelling.</p></li>
+<li><p><strong>branch_detection_method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em><em> (</em><em>default=``full``</em><em>)</em>) – <p>Deteremines which graph is conctructed to detect branches with. Valid
+values are, ordered by increasing computation cost and decreasing
+sensitivity to noise:
+- <code class="docutils literal notranslate"><span class="pre">core</span></code>: Contains the edges that connect each point to all other</p>
+<blockquote>
+<div><p>points within a mutual reachability distance lower than or equal to
+the point’s core distance. This is the cluster’s subgraph of the
+k-NN graph over the entire data set (with k = <code class="docutils literal notranslate"><span class="pre">min_samples</span></code>).</p>
+</div></blockquote>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">full</span></code>: Contains all edges between points in each cluster with a
+mutual reachability distance lower than or equal to the distance of
+the most-distance point in each cluster. These graphs represent the
+0-dimensional simplicial complex of each cluster at the first point in
+the filtration where they contain all their points.</p></li>
+</ul>
+</p></li>
+<li><p><strong>branch_selection_method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em><em> (</em><em>default='eom'</em><em>)</em>) – <p>The method used to select branches from the cluster’s condensed tree.
+The standard approach for FFLASC is to use the <code class="docutils literal notranslate"><span class="pre">eom</span></code> approach.
+Options are:</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">eom</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">leaf</span></code></p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>branch_selection_persistence</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em><em> (</em><em>default=0.0</em><em>)</em>) – A centrality persistence threshold. Branches with a persistence below
+this value will be merged. See <a href="#id41"><span class="problematic" id="id20">[3]_</span></a> for more information. Note that this
+should not be used if we want to predict the cluster labels for new
+points in future (e.g. using approximate_predict), as the
+<code class="xref py py-func docutils literal notranslate"><span class="pre">approximate_predict()</span></code> function
+is not aware of this argument.</p></li>
+<li><p><strong>max_branch_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=0</em><em>)</em>) – A limit to the size of clusters returned by the <code class="docutils literal notranslate"><span class="pre">eom</span></code> algorithm.
+Has no effect when using <code class="docutils literal notranslate"><span class="pre">leaf</span></code> clustering (where clusters are
+usually small regardless). Note that this should not be used if we
+want to predict the cluster labels for new points in future (e.g. using
+<code class="xref py py-func docutils literal notranslate"><span class="pre">approximate_predict()</span></code>), as that function is
+not aware of this argument.</p></li>
+<li><p><strong>label_sides_as_branches</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em><em> (</em><em>default=False</em><em>)</em><em>,</em>) – When this flag is False, branches are only labelled for clusters with at
+least three branches (i.e., at least y-shapes). Clusters with only two
+branches represent l-shapes. The two branches describe the cluster’s
+outsides growing towards each other. Enableing this flag separates these
+branches from each other in the produced labelling.</p></li>
+<li><p><strong>override_cluster_labels</strong> (<em>np.ndarray</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – <p>Override the FLASC clustering to specify your own grouping with a
+numpy array containing a cluster label for each data point. Negative
+values will be interpreted as noise points. When the parameter is not set
+to None, core distances are computed over all data points,
+minimum spanning trees and the branches are computed per cluster.
+Consequently, the manually specified clusters do not have to form
+neatly separable connected components in the minimum spanning tree
+over all the data points.</p>
+<p>Because the clustering step is skipped, some of the output variables
+and the <code class="xref py py-func docutils literal notranslate"><span class="pre">approximate_predict()</span></code> function will
+be unavailable:
+- cluster_persistence
+- condensed_tree
+- single_linkage_tree
+- min_spanning_tree</p>
+</p></li>
+<li><p><strong>override_cluster_probabilities</strong> (<em>np.ndarray</em><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Specifying a not None value for this parameter is only valid when
+<code class="docutils literal notranslate"><span class="pre">override_cluster_labels</span></code> is used. In that case, this parameter
+controls the data point cluster membership probabilities. When this
+parameter is None, a default 1.0 probability is used for all points.</p></li>
+<li><p><strong>memory</strong> (<em>instance</em><em> of </em><em>joblib.Memory</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Used to cache the output of the computation of the tree.
+By default, no caching is done. If a string is given, it is the
+path to the caching directory.</p></li>
+<li><p><strong>num_jobs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em><em> (</em><em>default=None</em><em>)</em>) – Number of parallel jobs to run in core distance computations and branch
+detection step. For <code class="docutils literal notranslate"><span class="pre">num_jobs</span></code> below -1, (n_cpus + 1 + num_jobs) are
+used. By default, the algorithm tries to estimate whether the given input
+is large enough for multi-processing to have a benefit. If so, 4 processes
+are started, otherwise only the main process is used. When a <code class="docutils literal notranslate"><span class="pre">num_jobs</span></code>
+value is given, that number of jobs is used regardless of the input size.</p></li>
+<li><p><strong>**kwargs</strong> (<em>optional</em>) – Additional arguments passed to <code class="xref py py-func docutils literal notranslate"><span class="pre">hdbscan()</span></code> or the
+distance metric.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul>
+<li><p><strong>labels</strong> (<em>np.ndarray, shape (n_samples, )</em>) – Cluster+branch labels for each point. Noisy samples are given the
+label -1.</p></li>
+<li><p><strong>probabilities</strong> (<em>np.ndarray, shape (n_samples, )</em>) – Cluster+branch membership strengths for each point. Noisy samples are
+assigned 0.</p></li>
+<li><p><strong>cluster_labels</strong> (<em>np.ndarray, shape (n_samples, )</em>) – Cluster labels for each point. Noisy samples are given the label -1.</p></li>
+<li><p><strong>cluster_probabilities</strong> (<em>np.ndarray, shape (n_samples, )</em>) – Cluster membership strengths for each point. Noisy samples are
+assigned 0.</p></li>
+<li><p><strong>cluster_persistence</strong> (<em>array, shape  (n_clusters, )</em>) – A score of how persistent each cluster is. A score of 1.0 represents
+a perfectly stable cluster that persists over all distance scales,
+while a score of 0.0 represents a perfectly ephemeral cluster. These
+scores gauge the relative coherence of the clusters output by the
+algorithm. Not available when <code class="docutils literal notranslate"><span class="pre">override_cluster_labels</span></code> is used.</p></li>
+<li><p><strong>branch_labels</strong> (<em>np.ndarray, shape (n_samples, )</em>) – Branch labels for each point. Noisy samples are given the label -1.</p></li>
+<li><p><strong>branch_probabilities</strong> (<em>np.ndarray, shape (n_samples, )</em>) – Branch membership strengths for each point. Noisy samples are
+assigned 0.</p></li>
+<li><p><strong>branch_persistences</strong> (<em>tuple (n_clusters)</em>) – A branch persistence for each cluster produced during the branch
+detection step.</p></li>
+<li><p><strong>condensed_tree</strong> (<em>record array</em>) – The condensed cluster hierarchy used to generate clusters.
+Not available when <code class="docutils literal notranslate"><span class="pre">override_cluster_labels</span></code> is used.</p></li>
+<li><p><strong>single_linkage_tree</strong> (<em>np.ndarray, shape (n_samples - 1, 4)</em>) – The single linkage tree produced during clustering in scipy
+hierarchical clustering format
+(see <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/cluster.hierarchy.html">http://docs.scipy.org/doc/scipy/reference/cluster.hierarchy.html</a>).
+Not available when <code class="docutils literal notranslate"><span class="pre">override_cluster_labels</span></code> is used.</p></li>
+<li><p><strong>min_spanning_tree</strong> (<em>np.ndarray, shape (n_samples - 1, 3)</em>) – The minimum spanning as an edgelist. Not available when
+<code class="docutils literal notranslate"><span class="pre">override_cluster_labels</span></code> is used.</p></li>
+<li><p><strong>cluster_approximation_graphs</strong> (<em>tuple (n_clusters)</em>) – The graphs used to detect branches in each cluster stored as a numpy
+array with four columns: source, target, centrality, mutual reachability
+distance. Points are labelled by their row-index into the input data.
+The edges contained in the graphs depend on the <code class="docutils literal notranslate"><span class="pre">branch_detection_method</span></code>:
+- <code class="docutils literal notranslate"><span class="pre">core</span></code>: Contains the edges that connect each point to all other</p>
+<blockquote>
+<div><p>points in a cluster within a mutual reachability distance lower than
+or equal to the point’s core distance. This is an extension of the
+minimum spanning tree introducing only edges with equal distances. The
+reachability distance introduces <code class="docutils literal notranslate"><span class="pre">num_points</span></code> * <code class="docutils literal notranslate"><span class="pre">min_samples</span></code> of
+such edges.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">full</span></code>: Contains all edges between points in each cluster with a
+mutual reachability distance lower than or equal to the distance of
+the most-distance point in each cluster. These graphs represent the
+0-dimensional simplicial complex of each cluster at the first point in
+the filtration where they contain all their points.</p></li>
+</ul>
+</li>
+<li><p><strong>cluster_condensed_trees</strong> (<em>tuple (n_clusters)</em>) – A condensed branch hierarchy for each cluster produced during the
+branch detection step. Data points are numbered with in-cluster ids.</p></li>
+<li><p><strong>cluster_linkage_trees</strong> (<em>tuple (n_clusters)</em>) – A single linkage tree for each cluster produced during the branch
+detection step, in the scipy hierarchical clustering format.
+(see <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/cluster.hierarchy.html">http://docs.scipy.org/doc/scipy/reference/cluster.hierarchy.html</a>).
+Data points are numbered with in-cluster ids.</p></li>
+<li><p><strong>cluster_centralities</strong> (<em>np.ndarray, shape (n_samples, )</em>) – Centrality values for each point in a cluster. Overemphasizes points’
+eccentricity within the cluster as the values are based on minimum
+spanning trees that do not contain the equally distanced edges resulting
+from the mutual reachability distance.</p></li>
+<li><p><strong>cluster_points</strong> (<em>list (n_clusters)</em>) – The data point row indices for each cluster.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id21" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Campello, R. J., Moulavi, D., &amp; Sander, J. (2013, April).
+Density-based clustering based on hierarchical density estimates.
+In Pacific-Asia Conference on Knowledge Discovery and Data Mining
+(pp. 160-172). Springer Berlin Heidelberg.</p>
+</aside>
+<aside class="footnote brackets" id="id22" role="note">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>Chaudhuri, K., &amp; Dasgupta, S. (2010). Rates of convergence for the
+cluster tree. In Advances in Neural Information Processing Systems
+(pp. 343-351).</p>
+</aside>
+<aside class="footnote brackets" id="id23" role="note">
+<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
+<p>Malzer, C., &amp; Baum, M. (2019). A Hybrid Approach To Hierarchical
+Density-based Cluster Selection. arxiv preprint 1911.02282.</p>
+</aside>
+</aside>
+</dd></dl>
+
 <section id="predictions">
 <h2>Predictions<a class="headerlink" href="#predictions" title="Permalink to this heading"></a></h2>
 </section>
