@@ -32,7 +32,7 @@ jobs:
       - name: Download wheels and sdist
         uses: dawidd6/action-download-artifact@v2.27.0
         with:
-          github_token: ${{secrets.PUSH_TOKEN}}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           workflow: Wheels.yml
           workflow_conclusion: success
           branch: main
