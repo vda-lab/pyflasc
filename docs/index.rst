@@ -1,5 +1,5 @@
 FLASC 
-========
+=====
 
 Flare-Sensitive Clustering (FLASC) adds an efficient post-processing step to 
 the `HDBSCAN* <https://github.com/scikit-learn-contrib/hdbscan>`_

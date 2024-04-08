@@ -1,4 +1,6 @@
+v0.1.2
+    Update Github Actions
 v0.1.1
-    Fix type in readme
+    Fix typo in readme
 v0.1.0
     Initial version

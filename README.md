@@ -1,17 +1,20 @@
+[![PyPI version](https://badge.fury.io/py/pyflasc.svg)](https://badge.fury.io/py/pyflasc)
+[![Tests](https://github.com/vda-lab/pyflasc/actions/workflows/Wheels.yml/badge.svg?branch=main)](https://github.com/vda-lab/pyflasc/actions/workflows/Wheels.yml)
+
 # FLASC: Flare-Sensitive Clustering
 
-FLASC - Flare-Sensitive Clustering, adds an efficient post-processing step to the
-[HDBSCAN\*](https://github.com/scikit-learn-contrib/hdbscan)
-density-based clustering algorithm to detect branching structures within 
-clusters.
+FLASC - Flare-Sensitive Clustering, adds an efficient post-processing step to
+the [HDBSCAN\*](https://github.com/scikit-learn-contrib/hdbscan) density-based
+clustering algorithm to detect branching structures within clusters.
 
-The algorithm adds two parameters that may need tuning with respect to HDBSCAN\*,
-but both are intuitive to tune: minimum branch size and branch selection strategy.
+The algorithm adds two parameters that may need tuning with respect to
+HDBSCAN\*, but both are intuitive to tune: minimum branch size and branch
+selection strategy.
 
 ## How to use FLASC
 
-The FLASC package is closely based on the HDBSCAN* package and supports
-the same API, except sparse inputs, which are not supported yet.
+The FLASC package is closely based on the HDBSCAN* package and supports the same
+API, except sparse inputs, which are not supported yet.
 
 ```python
 from flasc import FLASC
@@ -36,14 +39,14 @@ plt.show()
 
 ## Example Notebooks
 
-A notebook demonstrating how the algorithm works is available at
-[How FLASC Works](https://nbviewer.org/github/vda-lab/pyflasc/blob/master/notebooks/How%20FLASC%20Works.ipynb). The other notebooks demonstrate the 
-algorithm on several data sets and contain the analyses presented in our paper.
+A notebook demonstrating how the algorithm works is available at [How FLASC
+Works](https://nbviewer.org/github/vda-lab/pyflasc/blob/master/notebooks/How%20FLASC%20Works.ipynb).
+The other notebooks demonstrate the algorithm on several data sets and contain
+the analyses presented in our paper.
 
 ## Installing
 
-Binary wheels are available on PyPI. Presuming you have an up-to-date
-pip:
+Binary wheels are available on PyPI. Presuming you have an up-to-date pip:
 
 ```bash
 pip install pyflasc
@@ -54,7 +57,8 @@ For a manual install of the latest code directly from GitHub:
 pip install --upgrade git+https://github.com/vda-lab/pyflasc.git#egg=pyflasc
 ```
 
-Alternatively download the package, install requirements, and manually run the installer:
+Alternatively download the package, install requirements, and manually run the
+installer:
 
 ```bash
 wget https://github.com/vda-lab/pyflasc/archive/main.zip
@@ -70,9 +74,10 @@ pip install -t .
 A scientific publication of this algorithm and codebase is in progress. Please
 refer back to this section to see how you can cite this work in the future. 
 
-This FLASC algorithm and software package is very closely related to McInnes et al.'s HDBSCAN\* software package. If you wish to cite the HDBSCAN\* package in a
-scientific publication, please use their
-[Journal of Open Source Software article](http://joss.theoj.org/papers/10.21105/joss.00205).
+This FLASC algorithm and software package is very closely related to McInnes et
+al.'s HDBSCAN\* software package. If you wish to cite the HDBSCAN\* package in a
+scientific publication, please use their [Journal of Open Source Software
+article](http://joss.theoj.org/papers/10.21105/joss.00205).
 
     L. McInnes, J. Healy, S. Astels, *hdbscan: Hierarchical density based clustering*
     In: Journal of Open Source Software, The Open Journal, volume 2, number 11.
@@ -90,8 +95,8 @@ scientific publication, please use their
 }
 ```
 
-To reference their high performance algorithm please cite their paper
-in ICDMW 2017 proceedings.
+To reference their high performance algorithm please cite their paper in ICDMW
+2017 proceedings.
 
     McInnes L, Healy J. *Accelerated Hierarchical Density Based Clustering*
     In: 2017 IEEE International Conference on Data Mining Workshops (ICDMW), IEEE, pp 33-42.

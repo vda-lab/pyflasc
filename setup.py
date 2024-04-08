@@ -13,11 +13,11 @@ def requirements():
 
 
 def extension_kwargs(f):
-    """Disables new Numpy Cython API for dist_metrics and boruvka module.
+    """Disables new Numpy Cython API for dist_metrics and Boruvka module.
     
-    The dist metrics module requires inheritence with inline functions.
+    The dist metrics module requires inheritance with inline functions.
     This is not supported by the new API. Removing the inline attribute from these
-    functions makes the code compile, but results in noticable slowdowns.
+    functions makes the code compile, but results in noticeable slowdowns.
     Disabling the new API is the better choice.
     """
     import numpy as np
