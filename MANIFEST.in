@@ -8,7 +8,4 @@ recursive-include flasc *.pyx *.pxd
 recursive-exclude flasc *.c *.cpp
 recursive-include docs *
 recursive-exclude docs/_build *
-recursive-include notebooks *.ipynb *.py
-recursive-include notebooks/data *
-recursive-exclude notebooks/data/generated *
-recursive-exclude notebooks/.ipynb_checkpoints *
+recursive-exclude notebooks *
