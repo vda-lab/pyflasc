@@ -49,12 +49,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
         run: |
-          set -x
-          assets=()
-          for asset in dist/*; do
-            assets+=("-a" "$asset")
-          done
-          hub release create "${assets[@]}" -m "Version ${{ steps.version.outputs.version }}\n\n**Full Changelog**: https://github.com/vda-lab/pyflasc/commits/${{ steps.version.outputs.tag }}" "${{ steps.version.outputs.tag }}"
+          gh release create -t "Version ${{ steps.version.outputs.version }}" -n "**Full Changelog**: https://github.com/vda-lab/pyflasc/commits/${{ steps.version.outputs.tag }}" "${{ steps.version.outputs.tag }}" "dist/*"
         
       - name: Publish package to (Test)PyPI
         uses: pypa/gh-action-pypi-publish@v1.8.5
