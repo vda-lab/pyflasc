@@ -73,6 +73,7 @@ pip install -t .
 
 A scientific publication of this algorithm is available on Arxiv:
 
+```bibtex
 @misc{bot2023flasc,
   title={FLASC: A Flare-Sensitive Clustering Algorithm: Extending HDBSCAN* for Detecting Branches in Clusters}, 
   author={D. M. Bot and J. Peeters and J. Liesenborgs and J. Aerts},
@@ -81,6 +82,7 @@ A scientific publication of this algorithm is available on Arxiv:
   archivePrefix={arXiv},
   primaryClass={cs.LG}
 }
+```
 
 This FLASC algorithm and software package is very closely related to McInnes et
 al.'s HDBSCAN\* software package. If you wish to cite the HDBSCAN\* package in a
