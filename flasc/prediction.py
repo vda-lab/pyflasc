@@ -2,6 +2,7 @@
 
 See also :py:mod:`hdbscan.prediction`.
 """
+
 # Original Author: Leland McInnes
 # Adapted for FLASC by Jelmer Bot
 # License: BSD 3 clause
@@ -144,7 +145,8 @@ def approximate_predict(clusterer, points_to_predict):
 
 def branch_centrality_vectors(clusterer):
     """Predict soft branch-membership vectors for all points in the clusters
-    with more than two detected branches.
+    with more than two detected branches. Computes geodesic traversal depth
+    from branch-roots to all points in the cluster.
 
     Parameters
     ----------
@@ -222,12 +224,10 @@ def branch_centrality_vectors(clusterer):
 
 
 def update_labels_with_branch_centrality(clusterer, branch_centrality_vectors):
-    """Updates the clusterer's labels and branch labels by assigning
-    the branch value which has the highest given centrality.
-
-    This can change the label of data points in the center of a cluster.
-    These data points are classified as noise by HDBSCAN* in the branch
-    detection step, and given the 0-branch-label by default.
+    """Updates the clusterer's labels and branch labels by assigning 
+    central points with a noise branch label to geodesically closest branch
+    root. Only changing points with a noise branch label makes sure than points
+    cannot move to a sibling branch in the branch hierarchy.
 
     Parameters
     ----------
@@ -250,18 +250,26 @@ def update_labels_with_branch_centrality(clusterer, branch_centrality_vectors):
     """
     if clusterer.labels_ is None:
         raise ValueError("Clusterer has not been fitted yet!")
+    offset = 0  # correct for branch noise label
     labels = clusterer.labels_.copy()
     branch_labels = clusterer.branch_labels_.copy()
-    for points, membership in zip(clusterer.cluster_points_, branch_centrality_vectors):
-        if membership is None:
-            continue
-        label_values = np.unique(clusterer.labels_[points])
-        branch_labels[points] = np.argmax(membership, axis=1)
-        labels[points] = label_values[branch_labels[points]]
+    for points, persistences, membership in zip(
+        clusterer.cluster_points_,
+        clusterer.branch_persistences_,
+        branch_centrality_vectors,
+    ):
+        labels[points] = labels[points] - offset
+        if membership is not None:
+        
+            label_values = np.unique(clusterer.labels_[points])
+            noise_points = clusterer.labels_[points] == label_values[-1]
+            branch_labels[points[noise_points]] = np.argmax(membership[noise_points], axis=1)
+            labels[points[noise_points]] = label_values[branch_labels[points[noise_points]]] - offset
+            offset += int(len(label_values) > len(persistences))
     return labels, branch_labels
 
 
-def branch_membership_from_centrality(branch_centrality_vectors):
+def branch_membership_from_centrality(branch_centrality_vectors, temperature=1.0):
     """Scales the branch centrality vectors to act as probability using softmax.
 
     .. math::
@@ -279,6 +287,10 @@ def branch_membership_from_centrality(branch_centrality_vectors):
      branch_centrality_vectors : list[array (n_samples, n_branches)]
         The centrality values from the centroids of a cluster's branches.
         None if the cluster has two or fewer branches.
+    temperature : float, default=1.0
+        A scaling factor for the softmax function. A higher temperature
+        makes the distribution more uniform, a lower temperature makes
+        the distribution more peaky.
 
     Returns
     -------
@@ -291,7 +303,7 @@ def branch_membership_from_centrality(branch_centrality_vectors):
         if branch_centrality is None:
             scaled_membership.append(None)
             continue
-        y = np.exp(branch_centrality)
+        y = np.exp(branch_centrality / temperature)
         scaled_membership.append(y / np.sum(y, axis=1)[None].T)
     return scaled_membership
 

@@ -2,6 +2,7 @@
 Tests for FLASC clustering algorithm
 Shamelessly based on (i.e. ripped off from) the HDBSCAN test code
 """
+
 import numbers
 from functools import wraps
 from tempfile import mkdtemp
@@ -420,13 +421,9 @@ def test_flasc_mst_algorithms():
                 ).fit(X)
             )
     assert_raises(ValueError, flasc, X, algorithm="prims_kdtree", metric="russelrao")
-    assert_raises(
-        ValueError, flasc, X, algorithm="boruvka_kdtree", metric="russelrao"
-    )
+    assert_raises(ValueError, flasc, X, algorithm="boruvka_kdtree", metric="russelrao")
     assert_raises(ValueError, flasc, X, algorithm="prims_balltree", metric="cosine")
-    assert_raises(
-        ValueError, flasc, X, algorithm="boruvka_balltree", metric="cosine"
-    )
+    assert_raises(ValueError, flasc, X, algorithm="boruvka_balltree", metric="cosine")
     assert_raises(
         ValueError,
         flasc,
@@ -545,14 +542,10 @@ def test_approximation_graph_plot():
 def test_condensed_tree_plot():
     clusterer = FLASC().fit(X)
     if_matplotlib(clusterer.condensed_tree_.plot)(
-        select_clusters=True,
         label_clusters=True,
         selection_palette=("r", "g", "b"),
-        cmap="Reds",
     )
-    if_matplotlib(clusterer.condensed_tree_.plot)(
-        log_size=True, colorbar=False, cmap="none"
-    )
+    if_matplotlib(clusterer.condensed_tree_.plot)(log_size=True)
 
 
 def test_single_linkage_tree_plot():
@@ -591,13 +584,8 @@ def test_min_span_tree_plot():
 def test_cluster_condensed_trees_plot():
     clusterer = FLASC().fit(X)
     for t in clusterer.cluster_condensed_trees_:
-        if_matplotlib(t.plot)(
-            select_clusters=True,
-            label_clusters=True,
-            selection_palette=("r", "g", "b"),
-            cmap="Reds",
-        )
-        if_matplotlib(t.plot)(log_size=True, colorbar=False, cmap="none")
+        if_matplotlib(t.plot)(label_clusters=True, selection_palette=("r", "g", "b"))
+        if_matplotlib(t.plot)(log_size=True)
 
 
 def test_cluster_single_linkage_tree_plot():
@@ -878,9 +866,7 @@ def test_flasc_badargs():
         metric="precomputed",
         algorithm="boruvka_balltree",
     )
-    assert_raises(
-        ValueError, flasc, X, metric="precomputed", algorithm="prims_kdtree"
-    )
+    assert_raises(ValueError, flasc, X, metric="precomputed", algorithm="prims_kdtree")
     assert_raises(
         ValueError,
         flasc,
@@ -1007,8 +993,8 @@ def test_flasc_allow_single_branch_with_persistence():
     c = FLASC(
         min_cluster_size=5,
         override_cluster_labels=no_structure_labels,
-        branch_detection_method='core',
-        branch_selection_method='leaf',
+        branch_detection_method="core",
+        branch_selection_method="leaf",
         allow_single_branch=True,
         branch_selection_persistence=0,
     ).fit(no_structure)
@@ -1020,8 +1006,8 @@ def test_flasc_allow_single_branch_with_persistence():
     c = FLASC(
         min_cluster_size=5,
         override_cluster_labels=no_structure_labels,
-        branch_detection_method='core',
-        branch_selection_method='leaf',
+        branch_detection_method="core",
+        branch_selection_method="leaf",
         allow_single_branch=True,
         branch_selection_persistence=1,
     ).fit(no_structure)

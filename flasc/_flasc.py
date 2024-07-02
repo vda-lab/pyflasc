@@ -192,12 +192,12 @@ def flasc(
           * ``leaf``
 
     branch_selection_persistence: float, optional (default=0.0)
-        A centrality persistence threshold. Branches with a persistence below 
+        An eccentricity persistence threshold. Branches with a persistence below
         this value will be merged. See [3]_ for more information. Note that this
-        should not be used if we want to predict the cluster labels for new 
-        points in future (e.g. using approximate_predict), as the 
-        :func:`~flasc.prediction.approximate_predict` function
-        is not aware of this argument.
+        should not be used if we want to predict the cluster labels for new
+        points in future (e.g. using approximate_predict), as the
+        :func:`~flasc.prediction.approximate_predict` function is not aware of
+        this argument.
 
     max_branch_size : int, optional (default=0)
         A limit to the size of clusters returned by the ``eom`` algorithm.
@@ -287,8 +287,7 @@ def flasc(
         assigned 0.
 
     branch_persistences : tuple (n_clusters)
-        A branch persistence for each cluster produced during the branch
-        detection step.
+        A branch persistence (eccentricity range) for each detected branch.
 
     condensed_tree : record array
         The condensed cluster hierarchy used to generate clusters.

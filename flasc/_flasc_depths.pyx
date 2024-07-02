@@ -38,8 +38,7 @@ cpdef np.ndarray[np.double_t, ndim=1] _compute_cluster_centralities(
 
     # Traversal variables
     cdef np.double_t grand_child = 0 
-    cdef np.double_t depth=0
-    cdef np.double_t max_depth = 0
+    cdef np.double_t depth = 0 
     cdef pair[np.double_t, np.double_t] edge
     cdef pair[pair[np.double_t, np.double_t], np.double_t] item
     cdef deque[pair[pair[np.double_t, np.double_t], np.double_t]] queue
@@ -49,12 +48,12 @@ cpdef np.ndarray[np.double_t, ndim=1] _compute_cluster_centralities(
     # with nogil:
     # Queue the root's children
     edge.first = <np.double_t> cluster_root
-    depths_view[cluster_root] = 0.0
+    depths_view[cluster_root] = 1.0
     flags[cluster_root] = True
     for child in network[cluster_root]:
         edge.second = child
         item.first = edge
-        item.second = 1.0
+        item.second = 2.0
         queue.push_back(item)
         flags[<np.intp_t> child] = True
     
@@ -69,7 +68,6 @@ cpdef np.ndarray[np.double_t, ndim=1] _compute_cluster_centralities(
 
         # Fill in the depth value, keep track of max
         depths_view[<np.intp_t> child] = depth
-        max_depth = max(depth, max_depth)
 
         # Enqueue grand-children
         item.second += 1.0
@@ -81,4 +79,4 @@ cpdef np.ndarray[np.double_t, ndim=1] _compute_cluster_centralities(
             item.first = edge
             queue.push_back(item)
             flags[<np.intp_t> grand_child] = True
-    return max_depth - depths
+    return 1 / depths

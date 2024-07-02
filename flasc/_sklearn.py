@@ -16,10 +16,10 @@ from hdbscan.hdbscan_ import (
     remap_condensed_tree,
     remap_single_linkage_tree,
 )
-from hdbscan.plots import CondensedTree, SingleLinkageTree, MinimumSpanningTree
+from hdbscan.plots import SingleLinkageTree, MinimumSpanningTree
 
 from ._flasc import flasc
-from .plots import ApproximationGraph
+from .plots import ApproximationGraph, ClusterCondensedTree, BranchCondensedTree
 from .prediction import _find_branch_exemplars
 
 
@@ -700,9 +700,11 @@ class FLASC(BaseEstimator, ClusterMixin):
                 "No condensed tree was generated; try running fit first."
             )
 
-        return CondensedTree(
+        return ClusterCondensedTree(
             self._condensed_tree,
+            self.cluster_labels_,
             self.cluster_selection_method,
+            self.cluster_selection_epsilon,
             self.allow_single_cluster,
         )
 
@@ -763,8 +765,16 @@ class FLASC(BaseEstimator, ClusterMixin):
                 "No cluster condensed trees were generated; try running fit first."
             )
         return [
-            CondensedTree(tree, self.branch_selection_method, self.allow_single_branch)
-            for tree in self._cluster_condensed_trees
+            BranchCondensedTree(
+                tree,
+                pts,
+                self.labels_,
+                self.branch_labels_,
+                self.cluster_labels_,
+                self.branch_selection_method,
+                self.allow_single_branch,
+            )
+            for tree, pts in zip(self._cluster_condensed_trees, self.cluster_points_)
         ]
 
     @property
@@ -774,10 +784,7 @@ class FLASC(BaseEstimator, ClusterMixin):
             raise AttributeError(
                 "No cluster linkage trees were generated; try running fit first."
             )
-        return [
-            SingleLinkageTree(tree)
-            for tree in self._cluster_linkage_trees
-        ]
+        return [SingleLinkageTree(tree) for tree in self._cluster_linkage_trees]
 
     @property
     def branch_exemplars_(self):
