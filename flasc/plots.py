@@ -196,7 +196,7 @@ class ApproximationGraph:
                     node_vmax = 9
                     node_vmin = 0
                     node_cmap = "tab10"
-                    node_color = self._points[node_color] % node_vmax
+                    node_color = self._points[node_color] % 10
                 else:
                     node_color = self._points[node_color]
             elif (
@@ -598,11 +598,11 @@ class BranchCondensedTree(_BaseCondensedTree):
         last_leaf = self._raw_tree["parent"].max()
         root = self._raw_tree["parent"].min()
         if label_for == "final":
-            labels = self.labels
+            labels = self.labels[self.cluster_points]
         elif label_for == "branch":
-            labels = self.branch_labels
+            labels = self.branch_labels[self.cluster_points]
         elif label_for == "cluster":
-            labels = self.cluster_labels
+            labels = self.cluster_labels[self.cluster_points]
         else:
             raise ValueError("label_for must be one of 'final', 'branch', 'cluster'")
 
@@ -660,7 +660,7 @@ class BranchCondensedTree(_BaseCondensedTree):
             if len(point_children) == 0:
                 label = 0
             else:
-                label = labels[self.cluster_points[point_children[0]]]
+                label = labels[point_children[0]]
             current_size = np.sum(c_children["child_size"])
             current_lambda = cluster_y_coords[c]
             cluster_max_size = current_size
@@ -741,7 +741,7 @@ class BranchCondensedTree(_BaseCondensedTree):
             "line_xs": line_xs,
             "line_ys": line_ys,
             "cluster_bounds": cluster_bounds,
-        }, max(labels.min(), 0), labels.max()
+        }, labels[labels >= 0].min(), labels.max()
 
     def _select_clusters(self):
         """Recovers selected branches respecting selection parameters."""
@@ -788,6 +788,7 @@ class BranchCondensedTree(_BaseCondensedTree):
         max_rectangles_per_icicle=20,
         label_offset_factor=0.7,
         label_for="final",
+        color_centre_as_noise=False,
     ):
         """Use matplotlib to plot an 'icicle plot' dendrogram of the condensed tree.
 
@@ -830,6 +831,10 @@ class BranchCondensedTree(_BaseCondensedTree):
         label_for : str
             Specify which labels to use: 'final', 'branch', 'cluster'.
 
+        color_centre_as_noise : boolean, optional (default False)
+            If True, central points are coloured as noise points in the
+            cluster condensed tree.
+
         Returns
         -------
         axis : matplotlib axis
@@ -856,15 +861,24 @@ class BranchCondensedTree(_BaseCondensedTree):
         if selection_palette is None:
             selection_palette = mc.colormaps["tab10"].colors
 
+        if color_centre_as_noise:
+            bar_colors = [
+                (selection_palette[l % len(selection_palette)] if l >= 0 and l < label_end else "silver")
+                for l in plot_data["bar_labels"]
+            ]
+        else:
+            bar_colors = [
+                (selection_palette[l % len(selection_palette)] if l >= 0 else "silver")
+                for l in plot_data["bar_labels"]
+            ]
+
+
         axis.bar(
             plot_data["bar_centers"],
             plot_data["bar_tops"],
             bottom=plot_data["bar_bottoms"],
             width=plot_data["bar_widths"],
-            color=[
-                (selection_palette[l % len(selection_palette)] if l >= 0 else "silver")
-                for l in plot_data["bar_labels"]
-            ],
+            color=bar_colors,
             align="center",
             linewidth=0,
         )
@@ -1176,7 +1190,7 @@ class ClusterCondensedTree(_BaseCondensedTree):
 
         if self.cluster_selection_epsilon != 0.0:
             selected = epsilon_search(
-                selected,
+                set(selected),
                 cluster_tree.copy(),
                 self.cluster_selection_epsilon,
                 self.allow_single_cluster,
