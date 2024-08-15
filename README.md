@@ -1,5 +1,6 @@
 [![PyPI version](https://badge.fury.io/py/pyflasc.svg)](https://badge.fury.io/py/pyflasc)
 [![Tests](https://github.com/vda-lab/pyflasc/actions/workflows/Wheels.yml/badge.svg?branch=main)](https://github.com/vda-lab/pyflasc/actions/workflows/Wheels.yml)
+[![DOI](https://zenodo.org/badge/650995702.svg)](https://zenodo.org/doi/10.5281/zenodo.13326222)
 
 # FLASC: Flare-Sensitive Clustering
 
