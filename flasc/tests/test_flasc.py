@@ -86,7 +86,7 @@ def if_networkx(func):
     return run_test
 
 
-def if_pygraphfiz(func):
+def if_pygraphviz(func):
     """Test decorator that skips test if networkx or pygraphviz is not installed."""
 
     @wraps(func)
@@ -531,10 +531,10 @@ def test_approximation_graph_plot():
     clusterer = FLASC().fit(X)
     g = clusterer.cluster_approximation_graph_
     if_matplotlib(g.plot)(positions=X)
-    if_pygraphfiz(if_matplotlib(g.plot))(node_color="x", feature_names=["x", "y"])
-    if_pygraphfiz(if_matplotlib(g.plot))(edge_color="centrality", node_alpha=0)
-    if_pygraphfiz(if_matplotlib(g.plot))(node_color=X[:, 0], node_alpha=0)
-    if_pygraphfiz(if_matplotlib(g.plot))(
+    if_pygraphviz(if_matplotlib(g.plot))(node_color="x", feature_names=["x", "y"])
+    if_pygraphviz(if_matplotlib(g.plot))(edge_color="centrality", node_alpha=0)
+    if_pygraphviz(if_matplotlib(g.plot))(node_color=X[:, 0], node_alpha=0)
+    if_pygraphviz(if_matplotlib(g.plot))(
         edge_color=g._edges["centrality"], node_alpha=0
     )
 

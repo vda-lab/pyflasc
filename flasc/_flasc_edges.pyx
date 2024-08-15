@@ -70,9 +70,6 @@ cpdef _extract_core_approximation_of_cluster(
     np.minimum(core_parent, core_children, edges[count:, 0])
     np.maximum(core_parent, core_children, edges[count:, 1])
     
-    # Extract unique edges that stay within the cluster
-    edges = np.unique(edges[edges[:, 0] > -1.0, :], axis=0)
-
     # Fill mutual reachabilities
     edges[:count, 3] = cluster_spanning_tree[:, 2]
     # (astype copy more effiecient than manual iteration)
@@ -81,6 +78,9 @@ cpdef _extract_core_approximation_of_cluster(
         core_distances[edges[count:, 1].astype(np.intp)],
         edges[count:, 3]
     )
+
+    # Extract unique edges that stay within the cluster
+    edges = np.unique(edges[edges[:, 0] > -1.0, :], axis=0)
     
     # Return output
     return edges

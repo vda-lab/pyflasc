@@ -170,7 +170,7 @@ def _update_labelling(
     
     # Compute the labels and probabilities
     cdef Py_ssize_t num_branches = 0
-    cdef np.intp_t running_id = 0, cid = 0
+    cdef np.intp_t running_id = 0
     cdef np.ndarray[np.intp_t, ndim=1] _points, _labels
     cdef np.ndarray[np.double_t, ndim=1] _probs, _pers, _depths
     for _points, _depths, _labels, _probs, _pers in zip(

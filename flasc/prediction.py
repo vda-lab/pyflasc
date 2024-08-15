@@ -274,9 +274,9 @@ def branch_membership_from_centrality(branch_centrality_vectors, temperature=1.0
 
     .. math::
         \\mathbf{m} = \\frac{
-            e^{\\mathbf{c}}
+            e^{\\mathbf{c} / t}
         }{
-            \\sum_{i}{e^c_i}
+            \\sum_{i}{e^{c_i / t}}
         }
 
     where :math:`\\mathbf{m}` is the scaled membership vector and

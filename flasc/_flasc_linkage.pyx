@@ -15,7 +15,7 @@ cpdef np.ndarray[np.double_t, ndim=2] label(
     np.intp_t num_points
 ):
     """Convert an edge list into single linkage hierarchy."""
-    # ALlocate output and working structure
+    # Allocate output and working structure
     cdef np.intp_t N = edges.shape[0]
     cdef np.ndarray[np.double_t, ndim=2] result = np.zeros((N, 4))
     cdef np.double_t[:, ::1] result_view = result
