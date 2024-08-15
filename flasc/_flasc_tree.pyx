@@ -25,7 +25,7 @@ cdef list bfs_from_cluster_tree(np.ndarray tree, np.intp_t bfs_root):
 
     while len(to_process) > 0:
         result.extend(to_process.tolist())
-        to_process = tree['child'][np.in1d(tree['parent'], to_process)]
+        to_process = tree['child'][np.isin(tree['parent'], to_process)]
 
     return result
 

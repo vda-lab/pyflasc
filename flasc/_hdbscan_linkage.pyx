@@ -26,7 +26,7 @@ cpdef np.ndarray[np.double_t, ndim=2] mst_linkage_core(
     cdef Py_ssize_t num_points = len(distance_matrix[:, 0])
     cdef np.ndarray[np.intp_t, ndim=1] current_labels = np.arange(num_points, dtype=np.intp)
     cdef np.ndarray[np.intp_t, ndim=1] current_sources = np.ones(num_points, dtype=np.intp)
-    cdef np.ndarray[np.double_t, ndim=1] current_distances = np.infty * np.ones(num_points)
+    cdef np.ndarray[np.double_t, ndim=1] current_distances = np.inf * np.ones(num_points)
     cdef np.ndarray[np.double_t, ndim=2] result = np.zeros((num_points - 1, 3))
     
     cdef np.intp_t i

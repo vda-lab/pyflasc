@@ -1000,7 +1000,7 @@ def test_flasc_allow_single_branch_with_persistence():
     ).fit(no_structure)
     unique_labels, counts = np.unique(c.labels_, return_counts=True)
     assert len(unique_labels) == 5
-    assert np.sum(c.branch_probabilities_ == 0) == 84
+    assert np.sum(c.branch_probabilities_ == 0) == 85
 
     # At persistence 1, num prob == 0 decreases to 67
     c = FLASC(

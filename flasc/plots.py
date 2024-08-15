@@ -61,36 +61,46 @@ class ApproximationGraph:
         branch_probabilities,
         raw_data=None,
     ):
-        self._edges = np.core.records.fromarrays(
-            np.hstack(
-                (
-                    np.concatenate(approximation_graphs),
-                    np.repeat(
-                        np.arange(len(approximation_graphs)),
-                        [g.shape[0] for g in approximation_graphs],
-                    )[None].T,
-                )
-            ).transpose(),
-            names="parent, child, centrality, mutual_reachability, cluster",
-            formats="intp, intp, double, double, intp",
+        self._edges = np.array(
+            [
+                (edge[0], edge[1], edge[2], edge[3], cluster)
+                for cluster, edges in enumerate(approximation_graphs)
+                for edge in edges
+            ],
+            dtype=[
+                ("parent", np.intp),
+                ("child", np.intp),
+                ("centrality", np.float64),
+                ("mutual_reachability", np.float64),
+                ("cluster", np.intp),
+            ],
         )
         self.point_mask = cluster_labels >= 0
         self._raw_data = raw_data[self.point_mask, :] if raw_data is not None else None
-        self._points = np.core.records.fromarrays(
-            np.vstack(
+        self._points = np.array(
+            [
                 (
-                    np.where(self.point_mask)[0],
-                    labels[self.point_mask],
-                    probabilities[self.point_mask],
-                    cluster_labels[self.point_mask],
-                    cluster_probabilities[self.point_mask],
-                    cluster_centralities[self.point_mask],
-                    branch_labels[self.point_mask],
-                    branch_probabilities[self.point_mask],
+                    i,
+                    labels[i],
+                    probabilities[i],
+                    cluster_labels[i],
+                    cluster_probabilities[i],
+                    cluster_centralities[i],
+                    branch_labels[i],
+                    branch_probabilities[i],
                 )
-            ),
-            names="id, label, probability, cluster_label, cluster_probability, cluster_centrality, branch_label, branch_probability",
-            formats="intp, intp, double, intp, double, double, intp, double",
+                for i in np.where(self.point_mask)[0]
+            ],
+            dtype=[
+                ("id", np.intp),
+                ("label", np.intp),
+                ("probability", np.float64),
+                ("cluster_label", np.intp),
+                ("cluster_probability", np.float64),
+                ("cluster_centrality", np.float64),
+                ("branch_label", np.intp),
+                ("branch_probability", np.float64),
+            ],
         )
         self._pos = None
 
@@ -274,11 +284,11 @@ class ApproximationGraph:
             self._xs[~self.point_mask],
             self._ys[~self.point_mask],
             node_size,
-            color='silver',
+            color="silver",
             marker=node_marker,
             alpha=node_alpha,
             linewidth=0,
-            edgecolor='none',
+            edgecolor="none",
         )
         plt.scatter(
             self._xs[self.point_mask],
@@ -289,7 +299,7 @@ class ApproximationGraph:
             marker=node_marker,
             alpha=node_alpha,
             linewidth=0,
-            edgecolor='none',
+            edgecolor="none",
             vmin=node_vmin,
             vmax=node_vmax,
         )
@@ -732,16 +742,20 @@ class BranchCondensedTree(_BaseCondensedTree):
             )
             line_ys.append([cluster_y_coords[child], cluster_y_coords[child]])
 
-        return {
-            "bar_centers": bar_centers,
-            "bar_tops": bar_tops,
-            "bar_bottoms": bar_bottoms,
-            "bar_widths": bar_widths,
-            "bar_labels": bar_labels,
-            "line_xs": line_xs,
-            "line_ys": line_ys,
-            "cluster_bounds": cluster_bounds,
-        }, labels[labels >= 0].min(), labels.max()
+        return (
+            {
+                "bar_centers": bar_centers,
+                "bar_tops": bar_tops,
+                "bar_bottoms": bar_bottoms,
+                "bar_widths": bar_widths,
+                "bar_labels": bar_labels,
+                "line_xs": line_xs,
+                "line_ys": line_ys,
+                "cluster_bounds": cluster_bounds,
+            },
+            labels[labels >= 0].min(),
+            labels.max(),
+        )
 
     def _select_clusters(self):
         """Recovers selected branches respecting selection parameters."""
@@ -863,7 +877,11 @@ class BranchCondensedTree(_BaseCondensedTree):
 
         if color_centre_as_noise:
             bar_colors = [
-                (selection_palette[l % len(selection_palette)] if l >= 0 and l < label_end else "silver")
+                (
+                    selection_palette[l % len(selection_palette)]
+                    if l >= 0 and l < label_end
+                    else "silver"
+                )
                 for l in plot_data["bar_labels"]
             ]
         else:
@@ -871,7 +889,6 @@ class BranchCondensedTree(_BaseCondensedTree):
                 (selection_palette[l % len(selection_palette)] if l >= 0 else "silver")
                 for l in plot_data["bar_labels"]
             ]
-
 
         axis.bar(
             plot_data["bar_centers"],
