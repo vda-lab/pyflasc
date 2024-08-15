@@ -31,7 +31,7 @@ def configure_matplotlib():
     mpl.rcParams['text.usetex'] = True
     mpl.rcParams['text.latex.preamble'] = "\\usepackage{libertine}"
     
-    return sns.color_palette('tab10', 20)
+    return sns.color_palette('tab10', 10)
 
 
 def sized_fig(width=0.5, aspect=0.618):

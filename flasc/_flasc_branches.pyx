@@ -13,7 +13,7 @@ from hdbscan._hdbscan_tree import compute_stability, condense_tree
 from ._hdbscan_dist_metrics import DistanceMetric
 from ._hdbscan_dist_metrics cimport DistanceMetric
 from ._flasc_linkage import label
-from ._flasc_tree import get_clusters
+from ._flasc_tree import get_clusters, simplify_hierarchy
 from ._flasc_edges import (
     _fill_edge_centrality,
     _relabel_edges_with_data_ids,
@@ -85,7 +85,7 @@ def _compute_branch_linkage_of_cluster(
         points = space_tree.data.base[cluster_points]
         centroid = np.average(points, weights=cluster_probabilities, axis=0)
         centralities = metric_fun.pairwise(centroid[None], points)[0, :]
-    centralities = centralities.max() - centralities
+    centralities = 1 / centralities
 
     # within cluster ids
     cdef np.ndarray[np.double_t, ndim=1] cluster_ids = np.full(num_points, -1, dtype=np.double)
@@ -136,15 +136,16 @@ def _compute_branch_segmentation_of_cluster(
     cdef np.ndarray condensed_tree = condense_tree(
         single_linkage_tree.base, min_branch_size
     )
+    if branch_selection_persistence > 0.0:
+        condensed_tree = simplify_hierarchy(condensed_tree, branch_selection_persistence)
     cdef dict stability = compute_stability(condensed_tree)
     (labels, probabilities, persistences) = get_clusters(
         condensed_tree, stability,
         allow_single_branch=allow_single_branch,
         branch_selection_method=branch_selection_method,
-        branch_selection_persistence=branch_selection_persistence,
         max_branch_size=max_branch_size
     )
-    # Reset noise labels to 0-cluster
+    # Reset noise labels to k-cluster
     labels[labels < 0] = len(persistences)
     return (labels, probabilities, persistences, condensed_tree)
 
@@ -169,7 +170,7 @@ def _update_labelling(
     
     # Compute the labels and probabilities
     cdef Py_ssize_t num_branches = 0
-    cdef np.intp_t running_id = 0, cid = 0
+    cdef np.intp_t running_id = 0
     cdef np.ndarray[np.intp_t, ndim=1] _points, _labels
     cdef np.ndarray[np.double_t, ndim=1] _probs, _pers, _depths
     for _points, _depths, _labels, _probs, _pers in zip(

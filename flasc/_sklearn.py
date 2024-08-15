@@ -16,22 +16,21 @@ from hdbscan.hdbscan_ import (
     remap_condensed_tree,
     remap_single_linkage_tree,
 )
-from hdbscan.plots import CondensedTree, SingleLinkageTree, MinimumSpanningTree
+from hdbscan.plots import SingleLinkageTree, MinimumSpanningTree
 
 from ._flasc import flasc
-from .plots import ApproximationGraph
+from .plots import ApproximationGraph, ClusterCondensedTree, BranchCondensedTree
 from .prediction import _find_branch_exemplars
 
 
 class FLASC(BaseEstimator, ClusterMixin):
     """Performs hdbscan clustering with flare detection post-processing step.
 
-    FLASC - Flare-Sensitive Clustering.
-    Performs :py:mod:`hdbscan` clustering [1]_ with a post-processing step to 
-    detect branches within individual clusters. For each cluster, a graph is
-    constructed connecting the data points based on their mutual reachability
-    distances. Each edge is given a centrality value based on how many edges
-    need to be traversed to reach the cluster's root point from the edge. Then,
+    FLASC - Flare-Sensitive Clustering. Performs :py:mod:`hdbscan` clustering
+    [1]_ with a post-processing step to detect branches within individual
+    clusters. For each cluster, a graph is constructed connecting the data
+    points based on their mutual reachability distances. Each edge is given a
+    centrality value based on how far it lies from the cluster's center. Then,
     the edges are clustered as if that centrality was a density, progressively
     removing the 'centre' of each cluster and seeing how many branches remain.
 
@@ -700,9 +699,11 @@ class FLASC(BaseEstimator, ClusterMixin):
                 "No condensed tree was generated; try running fit first."
             )
 
-        return CondensedTree(
+        return ClusterCondensedTree(
             self._condensed_tree,
+            self.cluster_labels_,
             self.cluster_selection_method,
+            self.cluster_selection_epsilon,
             self.allow_single_cluster,
         )
 
@@ -763,8 +764,16 @@ class FLASC(BaseEstimator, ClusterMixin):
                 "No cluster condensed trees were generated; try running fit first."
             )
         return [
-            CondensedTree(tree, self.branch_selection_method, self.allow_single_branch)
-            for tree in self._cluster_condensed_trees
+            BranchCondensedTree(
+                tree,
+                pts,
+                self.labels_,
+                self.branch_labels_,
+                self.cluster_labels_,
+                self.branch_selection_method,
+                self.allow_single_branch,
+            )
+            for tree, pts in zip(self._cluster_condensed_trees, self.cluster_points_)
         ]
 
     @property
@@ -774,10 +783,7 @@ class FLASC(BaseEstimator, ClusterMixin):
             raise AttributeError(
                 "No cluster linkage trees were generated; try running fit first."
             )
-        return [
-            SingleLinkageTree(tree)
-            for tree in self._cluster_linkage_trees
-        ]
+        return [SingleLinkageTree(tree) for tree in self._cluster_linkage_trees]
 
     @property
     def branch_exemplars_(self):
@@ -822,7 +828,7 @@ class FLASC(BaseEstimator, ClusterMixin):
             )
         if self.override_cluster_labels is not None:
             raise AttributeError(
-                "Relative validity isnot available with overridden clusters."
+                "Relative validity is not available with overridden clusters."
             )
         if self.labels_ is None:
             raise AttributeError("Cluster not detected yet; try running fit first.")

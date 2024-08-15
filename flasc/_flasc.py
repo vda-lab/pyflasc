@@ -65,13 +65,13 @@ def flasc(
     """Performs FLASC clustering with flare detection post-processing step.
 
     FLASC - Flare-Sensitive Clustering.
-    Performs :py:mod:`hdbscan` clustering [1]_ with a post-processing step to 
+    Performs :py:mod:`hdbscan` clustering [1]_ with a post-processing step to
     detect branches within individual clusters. For each cluster, a graph is
     constructed connecting the data points based on their mutual reachability
-    distances. Each edge is given a centrality value based on how many edges
-    need to be traversed to reach the cluster's root point from the edge. Then,
-    the edges are clustered as if that centrality was a density, progressively
-    removing the 'centre' of each cluster and seeing how many branches remain.
+    distances. Each edge is given a centrality value based on how far it lies
+    from the cluster's center. Then, the edges are clustered as if that
+    centrality was a distance, progressively removing the 'center' of each
+    cluster and seeing how many branches remain.
 
     Parameters
     ----------
@@ -167,7 +167,7 @@ def flasc(
 
     allow_single_branch : bool, optional (default=False)
         Analogous to ``allow_single_cluster``. Note that depending on
-        ``label_sides_as_branches`` FFLASC requires at least 3 branches to
+        ``label_sides_as_branches`` FLASC requires at least 3 branches to
         exist in a cluster before they are incorporated in the final labelling.
 
     branch_detection_method : str, optional (default=``full``)
@@ -186,18 +186,18 @@ def flasc(
         
     branch_selection_method : str, optional (default='eom')
         The method used to select branches from the cluster's condensed tree.
-        The standard approach for FFLASC is to use the ``eom`` approach.
+        The standard approach for FLASC is to use the ``eom`` approach.
         Options are:
           * ``eom``
           * ``leaf``
 
     branch_selection_persistence: float, optional (default=0.0)
-        A centrality persistence threshold. Branches with a persistence below 
+        An eccentricity persistence threshold. Branches with a persistence below
         this value will be merged. See [3]_ for more information. Note that this
-        should not be used if we want to predict the cluster labels for new 
-        points in future (e.g. using approximate_predict), as the 
-        :func:`~flasc.prediction.approximate_predict` function
-        is not aware of this argument.
+        should not be used if we want to predict the cluster labels for new
+        points in future (e.g. using approximate_predict), as the
+        :func:`~flasc.prediction.approximate_predict` function is not aware of
+        this argument.
 
     max_branch_size : int, optional (default=0)
         A limit to the size of clusters returned by the ``eom`` algorithm.
@@ -287,8 +287,7 @@ def flasc(
         assigned 0.
 
     branch_persistences : tuple (n_clusters)
-        A branch persistence for each cluster produced during the branch
-        detection step.
+        A branch persistence (eccentricity range) for each detected branch.
 
     condensed_tree : record array
         The condensed cluster hierarchy used to generate clusters.

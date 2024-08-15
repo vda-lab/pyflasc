@@ -1,6 +1,16 @@
+v0.1.3
+    This version matches the first major revision of our paper:
+    - Notable changes to eccentricity definition and branch hierarchy
+      simplification. Eccentricity is now directly defined by distance to 
+      cluster centroids. 
+    - Fixes to branch-membership centrality measure and the update labelling
+      function. It no longer changes labels of non-noise points. 
+    - New and updated figures included in the paper.
+    - Re-evaluated all benchmark notebooks.
+    - Removed Cython as install dependency.
 v0.1.2
-    Update Github Actions
+    Update Github Actions.
 v0.1.1
-    Fix typo in readme
+    Fix typo in readme.
 v0.1.0
-    Initial version
+    Initial version.

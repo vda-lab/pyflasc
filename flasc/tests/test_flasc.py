@@ -2,6 +2,7 @@
 Tests for FLASC clustering algorithm
 Shamelessly based on (i.e. ripped off from) the HDBSCAN test code
 """
+
 import numbers
 from functools import wraps
 from tempfile import mkdtemp
@@ -85,7 +86,7 @@ def if_networkx(func):
     return run_test
 
 
-def if_pygraphfiz(func):
+def if_pygraphviz(func):
     """Test decorator that skips test if networkx or pygraphviz is not installed."""
 
     @wraps(func)
@@ -420,13 +421,9 @@ def test_flasc_mst_algorithms():
                 ).fit(X)
             )
     assert_raises(ValueError, flasc, X, algorithm="prims_kdtree", metric="russelrao")
-    assert_raises(
-        ValueError, flasc, X, algorithm="boruvka_kdtree", metric="russelrao"
-    )
+    assert_raises(ValueError, flasc, X, algorithm="boruvka_kdtree", metric="russelrao")
     assert_raises(ValueError, flasc, X, algorithm="prims_balltree", metric="cosine")
-    assert_raises(
-        ValueError, flasc, X, algorithm="boruvka_balltree", metric="cosine"
-    )
+    assert_raises(ValueError, flasc, X, algorithm="boruvka_balltree", metric="cosine")
     assert_raises(
         ValueError,
         flasc,
@@ -534,10 +531,10 @@ def test_approximation_graph_plot():
     clusterer = FLASC().fit(X)
     g = clusterer.cluster_approximation_graph_
     if_matplotlib(g.plot)(positions=X)
-    if_pygraphfiz(if_matplotlib(g.plot))(node_color="x", feature_names=["x", "y"])
-    if_pygraphfiz(if_matplotlib(g.plot))(edge_color="centrality", node_alpha=0)
-    if_pygraphfiz(if_matplotlib(g.plot))(node_color=X[:, 0], node_alpha=0)
-    if_pygraphfiz(if_matplotlib(g.plot))(
+    if_pygraphviz(if_matplotlib(g.plot))(node_color="x", feature_names=["x", "y"])
+    if_pygraphviz(if_matplotlib(g.plot))(edge_color="centrality", node_alpha=0)
+    if_pygraphviz(if_matplotlib(g.plot))(node_color=X[:, 0], node_alpha=0)
+    if_pygraphviz(if_matplotlib(g.plot))(
         edge_color=g._edges["centrality"], node_alpha=0
     )
 
@@ -545,14 +542,10 @@ def test_approximation_graph_plot():
 def test_condensed_tree_plot():
     clusterer = FLASC().fit(X)
     if_matplotlib(clusterer.condensed_tree_.plot)(
-        select_clusters=True,
         label_clusters=True,
         selection_palette=("r", "g", "b"),
-        cmap="Reds",
     )
-    if_matplotlib(clusterer.condensed_tree_.plot)(
-        log_size=True, colorbar=False, cmap="none"
-    )
+    if_matplotlib(clusterer.condensed_tree_.plot)(log_size=True)
 
 
 def test_single_linkage_tree_plot():
@@ -591,13 +584,8 @@ def test_min_span_tree_plot():
 def test_cluster_condensed_trees_plot():
     clusterer = FLASC().fit(X)
     for t in clusterer.cluster_condensed_trees_:
-        if_matplotlib(t.plot)(
-            select_clusters=True,
-            label_clusters=True,
-            selection_palette=("r", "g", "b"),
-            cmap="Reds",
-        )
-        if_matplotlib(t.plot)(log_size=True, colorbar=False, cmap="none")
+        if_matplotlib(t.plot)(label_clusters=True, selection_palette=("r", "g", "b"))
+        if_matplotlib(t.plot)(log_size=True)
 
 
 def test_cluster_single_linkage_tree_plot():
@@ -878,9 +866,7 @@ def test_flasc_badargs():
         metric="precomputed",
         algorithm="boruvka_balltree",
     )
-    assert_raises(
-        ValueError, flasc, X, metric="precomputed", algorithm="prims_kdtree"
-    )
+    assert_raises(ValueError, flasc, X, metric="precomputed", algorithm="prims_kdtree")
     assert_raises(
         ValueError,
         flasc,
@@ -1007,21 +993,23 @@ def test_flasc_allow_single_branch_with_persistence():
     c = FLASC(
         min_cluster_size=5,
         override_cluster_labels=no_structure_labels,
-        branch_detection_method='core',
-        branch_selection_method='leaf',
+        branch_detection_method="core",
+        branch_selection_method="leaf",
         allow_single_branch=True,
         branch_selection_persistence=0,
     ).fit(no_structure)
     unique_labels, counts = np.unique(c.labels_, return_counts=True)
     assert len(unique_labels) == 5
-    assert np.sum(c.branch_probabilities_ == 0) == 84
+    # Mac OS gives 84, Linux and windows give 85.
+    num_noise = np.sum(c.branch_probabilities_ == 0)
+    assert  (num_noise == 84) or (num_noise == 85)
 
     # At persistence 1, num prob == 0 decreases to 67
     c = FLASC(
         min_cluster_size=5,
         override_cluster_labels=no_structure_labels,
-        branch_detection_method='core',
-        branch_selection_method='leaf',
+        branch_detection_method="core",
+        branch_selection_method="leaf",
         allow_single_branch=True,
         branch_selection_persistence=1,
     ).fit(no_structure)
