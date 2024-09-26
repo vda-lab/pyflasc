@@ -29,7 +29,10 @@ def configure_matplotlib():
     mpl.rcParams['savefig.dpi'] = 300
     mpl.rcParams['savefig.format'] = 'png'
     mpl.rcParams['text.usetex'] = True
-    mpl.rcParams['text.latex.preamble'] = "\\usepackage{libertine}"
+    mpl.rcParams['text.latex.preamble'] = """
+    \\usepackage{libertine}
+    \\renewcommand\\sfdefault{ppl}
+    """
     
     return sns.color_palette('tab10', 10)
 
@@ -41,6 +44,7 @@ def sized_fig(width=0.5, aspect=0.618):
     w = (width * page_width_cm)
     h = aspect * w
     return plt.figure(figsize=(w / inch, h / inch), dpi=150)
+
 
 def size_fig(width=0.5, aspect=0.618):
     page_width_cm = 13.9
