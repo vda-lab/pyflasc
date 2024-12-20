@@ -465,10 +465,12 @@ class FLASC(BaseEstimator, ClusterMixin):
                     x: y for x, y in zip(range(len(finite_index)), finite_index)
                 }
                 outliers = list(set(range(X.shape[0])) - set(finite_index))
+            else:
+                clean_data = X
         elif issparse(X):
             clean_data = check_array(X)
         else:
-            check_precomputed_distance_matrix(X)           
+            check_precomputed_distance_matrix(X)
 
         kwargs = self.get_params()
         kwargs.update(self._kwargs)
@@ -494,6 +496,7 @@ class FLASC(BaseEstimator, ClusterMixin):
             self._branch_linkage_trees,
             self.cluster_centralities_,
             self.cluster_points_,
+            self.cluster_msts_
         ) = flasc(
             clean_data,
             override_cluster_labels=clean_labels,
@@ -783,8 +786,12 @@ class FLASC(BaseEstimator, ClusterMixin):
                 "No cluster condensed trees were generated; try running fit first."
             )
         return [
-            BranchCondensedTree(
-                tree, pts, self.labels_, self.branch_labels_, self.cluster_labels_
+            (
+                BranchCondensedTree(
+                    tree, pts, self.labels_, self.branch_labels_, self.cluster_labels_
+                )
+                if tree is not None
+                else None
             )
             for tree, pts in zip(self._branch_condensed_trees, self.cluster_points_)
         ]
@@ -796,7 +803,10 @@ class FLASC(BaseEstimator, ClusterMixin):
             raise AttributeError(
                 "No cluster linkage trees were generated; try running fit first."
             )
-        return [SingleLinkageTree(tree) for tree in self._branch_linkage_trees]
+        return [
+            SingleLinkageTree(tree) if tree is not None else None
+            for tree in self._branch_linkage_trees
+        ]
 
     @property
     def branch_exemplars_(self):

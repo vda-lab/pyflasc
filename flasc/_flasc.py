@@ -617,6 +617,7 @@ def flasc(
             cluster_probabilities,
             cluster_persistence,
             condensed_tree,
+            single_linkage_tree
         ) = memory.cache(hdbscan_extract_clusters)(
             single_linkage_tree,
             min_cluster_size=min_cluster_size,
@@ -689,6 +690,7 @@ def flasc(
         branch_probabilities,
         branch_persistences,
         branch_condensed_trees,
+        branch_linkage_trees,
     ) = memory.cache(compute_branch_segmentation, ignore=["thread_pool"])(
         branch_linkage_trees,
         thread_pool,
@@ -739,6 +741,7 @@ def flasc(
         branch_linkage_trees,
         cluster_centralities,
         cluster_points,
+        cluster_spanning_trees,
     )
 
 

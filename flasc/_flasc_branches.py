@@ -4,7 +4,7 @@
 import numpy as np
 from joblib.parallel import delayed
 from hdbscan.dist_metrics import DistanceMetric
-from hdbscan._hdbscan_linkage import mst_linkage_core, mst_linkage_core_vector
+from hdbscan._hdbscan_linkage import mst_linkage_core_vector
 from hdbscan.branches import (
     extract_full_cluster_graph,
     extract_core_cluster_graph,
@@ -12,6 +12,8 @@ from hdbscan.branches import (
     compute_branch_segmentation,
     update_labelling,
 )
+
+from ._hdbscan import hdbscan_mst_generic
 
 
 def extract_cluster_points(cluster_labels, num_clusters):
@@ -89,7 +91,7 @@ def compute_branch_linkage_of_cluster(
     edge's centrality."""
     # Compute data-point centrality.
     if run_generic:
-        centralities = 1 / np.mean(reachability, axis=0)
+        centralities = 1 / np.max(reachability, axis=0)
     else:
         metric_fun = DistanceMetric.get_metric(metric, **kwargs)
         points = space_tree.data.base[cluster_points]
@@ -142,7 +144,7 @@ def compute_msts_in_cluster_generic(
 ):
     """Computes MSTs in predefined clusters using Prims."""
     return thread_pool(
-        delayed(mst_linkage_core)(reachability[:, cluster_pts][cluster_pts, :])
+        delayed(hdbscan_mst_generic)(reachability[:, cluster_pts][cluster_pts, :])
         for cluster_pts in cluster_points
     )
 

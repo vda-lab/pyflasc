@@ -19,6 +19,28 @@ from hdbscan._hdbscan_boruvka import KDTreeBoruvkaAlgorithm, BallTreeBoruvkaAlgo
 
 
 # ---- Generic
+def hdbscan_mst_generic(reachability):
+    _min_spanning_tree = mst_linkage_core(reachability)
+    if np.isinf(_min_spanning_tree.T[2]).any():
+        warn(
+            "The minimum spanning tree contains edge weights with value "
+            "infinity. Potentially, you are missing too many distances "
+            "in the initial distance matrix for the given neighborhood "
+            "size.",
+            UserWarning,
+        )
+    min_spanning_tree = _min_spanning_tree.copy()
+    for index, row in enumerate(min_spanning_tree[1:], 1):
+        candidates = np.where(np.isclose(reachability[int(row[1])], row[2]))[0]
+        candidates = np.intersect1d(
+            candidates, _min_spanning_tree[:index, :2].astype(int)
+        )
+        candidates = candidates[candidates != row[1]]
+        assert len(candidates) > 0
+        row[0] = candidates[0]
+    return min_spanning_tree
+
+
 def hdbscan_generic_linkage(X, min_samples=5, alpha=1.0, metric="minkowski", **kwargs):
     """Computes HDBSCAN single linkage from input."""
     # Compute mutual reachability
@@ -31,7 +53,7 @@ def hdbscan_generic_linkage(X, min_samples=5, alpha=1.0, metric="minkowski", **k
     )
 
     # Compute mst from reachability
-    min_spanning_tree = mst_linkage_core(reachability)
+    min_spanning_tree = hdbscan_mst_generic(reachability)
     if np.isinf(min_spanning_tree.T[2]).any():
         warn(
             "The minimum spanning tree contains edge weights with value "

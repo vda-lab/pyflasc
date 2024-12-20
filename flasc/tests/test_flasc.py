@@ -246,10 +246,8 @@ def test_missing_data():
     clean_model = FLASC().fit(X_missing_data[clean_indices])
     _asserts()
     clean_indices = list(range(1, 6)) + list(range(7, X.shape[0]))
-    model = FLASC(override_cluster_labels=y).fit(X_missing_data)
-    clean_model = FLASC(override_cluster_labels=y[clean_indices]).fit(
-        X_missing_data[clean_indices]
-    )
+    model = FLASC().fit(X_missing_data, labels=y)
+    clean_model = FLASC().fit(X_missing_data[clean_indices], labels=y[clean_indices])
     _asserts()
 
 
@@ -261,16 +259,20 @@ def test_flasc_distance_matrix():
         check_num_branches_and_clusters(
             flasc(
                 D,
+                min_branch_size=15,
                 metric="precomputed",
                 branch_detection_method=detection_method,
+                branch_selection_method="leaf",
             )
         )
         res = check_num_branches_and_clusters(
             flasc(
                 D,
+                min_branch_size=15,
                 metric="precomputed",
                 override_cluster_labels=y,
                 branch_detection_method=detection_method,
+                branch_selection_method="leaf",
             )
         )
         assert res[8] is None
@@ -278,16 +280,19 @@ def test_flasc_distance_matrix():
         assert res[10] is None
         check_num_branches_and_clusters(
             FLASC(
+                min_branch_size=15,
                 metric="precomputed",
                 branch_detection_method=detection_method,
+                branch_selection_method="leaf",
             ).fit(D)
         )
         check_num_branches_and_clusters(
             FLASC(
+                min_branch_size=15,
                 metric="precomputed",
-                override_cluster_labels=y,
                 branch_detection_method=detection_method,
-            ).fit(D)
+                branch_selection_method="leaf",
+            ).fit(D, labels=y)
         )
 
 
@@ -318,9 +323,8 @@ def test_flasc_feature_vector():
         )
         check_num_branches_and_clusters(
             FLASC(
-                override_cluster_labels=y,
                 branch_detection_method=detection_method,
-            ).fit(X)
+            ).fit(X, labels=y)
         )
 
 
@@ -356,9 +360,8 @@ def test_flasc_high_dimensional():
         )
         check_num_branches_and_clusters(
             FLASC(
-                override_cluster_labels=y,
                 branch_detection_method=detection_method,
-            ).fit(H),
+            ).fit(H, labels=y),
             n_branches=3,
         )
 
@@ -390,15 +393,17 @@ def test_flasc_mst_algorithms():
                 flasc(
                     X,
                     algorithm=algorithm,
-                    min_branch_size=10,
+                    min_branch_size=15,
                     branch_detection_method=detection_method,
+                    branch_selection_method="leaf" if algorithm == "generic" else "eom",
                 )
             )
             check_num_branches_and_clusters(
                 FLASC(
                     algorithm=algorithm,
-                    min_branch_size=10,
+                    min_branch_size=15,
                     branch_detection_method=detection_method,
+                    branch_selection_method="leaf" if algorithm == "generic" else "eom",
                 ).fit(X)
             )
     for algorithm in ["generic", "prims_kdtree", "prims_balltree"]:
@@ -407,18 +412,19 @@ def test_flasc_mst_algorithms():
                 flasc(
                     X,
                     algorithm=algorithm,
-                    min_branch_size=10,
+                    min_branch_size=15,
                     override_cluster_labels=y,
                     branch_detection_method=detection_method,
+                    branch_selection_method="leaf" if algorithm == "generic" else "eom",
                 )
             )
             check_num_branches_and_clusters(
                 FLASC(
                     algorithm=algorithm,
-                    min_branch_size=10,
-                    override_cluster_labels=y,
+                    min_branch_size=15,
                     branch_detection_method=detection_method,
-                ).fit(X)
+                    branch_selection_method="leaf" if algorithm == "generic" else "eom",
+                ).fit(X, y)
             )
     assert_raises(ValueError, flasc, X, algorithm="prims_kdtree", metric="russelrao")
     assert_raises(ValueError, flasc, X, algorithm="boruvka_kdtree", metric="russelrao")
@@ -520,8 +526,12 @@ def test_flasc_min_cluster_size():
 def test_flasc_callable_metric():
     # metric is the function reference, not the string key.
     metric = distance.euclidean
-    check_num_branches_and_clusters(flasc(X, metric=metric))
-    check_num_branches_and_clusters(FLASC(metric=metric).fit(X))
+    check_num_branches_and_clusters(
+        flasc(X, metric=metric, min_branch_size=15, branch_selection_method="leaf")
+    )
+    check_num_branches_and_clusters(
+        FLASC(metric=metric, min_branch_size=15, branch_selection_method="leaf").fit(X)
+    )
 
 
 # --- Plotting objects
@@ -666,7 +676,7 @@ def test_flasc_unavailable_attributes():
         lambda: approximate_predict(clusterer, np.array([[-0.8, 0.0]])),
     )
     # Not available with override clusters
-    clusterer = FLASC(override_cluster_labels=y).fit(X)
+    clusterer = FLASC().fit(X, labels=y)
     assert_raises(AttributeError, lambda: clusterer.condensed_tree_)
     assert_raises(AttributeError, lambda: clusterer.single_linkage_tree_)
     assert_raises(AttributeError, lambda: clusterer.minimum_spanning_tree_)
@@ -795,11 +805,11 @@ def test_flasc_weighted_membership():
         clusterer.branch_labels_[clusterer.cluster_labels_ != 2],
         branch_labels[clusterer.cluster_labels_ != 2],
     )
-    assert ~np.allclose(
+    assert not np.allclose(
         clusterer.labels_[clusterer.cluster_labels_ == 2],
         labels[clusterer.cluster_labels_ == 2],
     )
-    assert ~np.allclose(
+    assert not np.allclose(
         clusterer.branch_labels_[clusterer.cluster_labels_ == 2],
         branch_labels[clusterer.cluster_labels_ == 2],
     )
@@ -992,27 +1002,25 @@ def test_flasc_allow_single_branch_with_persistence():
     # Without persistence, find 4 branches
     c = FLASC(
         min_cluster_size=5,
-        override_cluster_labels=no_structure_labels,
         branch_detection_method="core",
         branch_selection_method="leaf",
         allow_single_branch=True,
         branch_selection_persistence=0,
-    ).fit(no_structure)
+    ).fit(no_structure, labels=no_structure_labels)
     unique_labels, counts = np.unique(c.labels_, return_counts=True)
     assert len(unique_labels) == 5
     # Mac OS gives 84, Linux and windows give 85.
     num_noise = np.sum(c.branch_probabilities_ == 0)
-    assert  (num_noise == 84) or (num_noise == 85)
+    assert (num_noise == 84) or (num_noise == 85)
 
     # At persistence 1, num prob == 0 decreases to 67
     c = FLASC(
         min_cluster_size=5,
-        override_cluster_labels=no_structure_labels,
         branch_detection_method="core",
         branch_selection_method="leaf",
         allow_single_branch=True,
         branch_selection_persistence=1,
-    ).fit(no_structure)
+    ).fit(no_structure, labels=no_structure_labels)
     unique_labels, counts = np.unique(c.labels_, return_counts=True)
     assert len(unique_labels) == 1
     assert np.sum(c.branch_probabilities_ == 0) == 0
@@ -1046,7 +1054,7 @@ def test_flasc_override_clusters_with_probability():
             X,
             min_branch_size=10,
             override_cluster_labels=y,
-            override_cluster_probabilities=np.ones(X.shape[0]) / 2,
+            override_cluster_probabilities=np.ones(X.shape[0]),
         )
     )
     assert res[8] is None
@@ -1054,10 +1062,7 @@ def test_flasc_override_clusters_with_probability():
     assert res[10] is None
 
     check_num_branches_and_clusters(
-        FLASC(
-            override_cluster_labels=y,
-            override_cluster_probabilities=np.ones(X.shape[0]),
-        ).fit(X)
+        FLASC().fit(X, labels=y, probabilities=np.ones(X.shape[0]))
     )
 
 
