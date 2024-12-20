@@ -106,7 +106,7 @@ class FLASC(BaseEstimator, ClusterMixin):
 
     allow_single_cluster : bool, optional (default=False)
         By default HDBSCAN* will not produce a single cluster, setting this
-        to t=True will override this and allow single cluster results in
+        to True will override this and allow single cluster results in
         the case that you feel this is a valid result for your dataset.
         (default False)
 
