@@ -1011,7 +1011,7 @@ def test_flasc_allow_single_branch_with_persistence():
         allow_single_branch=True,
         branch_selection_persistence=0,
     ).fit(no_structure, labels=no_structure_labels)
-    unique_labels, counts = np.unique(c.labels_, return_counts=True)
+    unique_labels = np.unique(c.labels_)
     assert len(unique_labels) == 5
     # Mac OS gives 84, Linux and windows give 85.
     num_noise = np.sum(c.branch_probabilities_ == 0)
@@ -1025,7 +1025,7 @@ def test_flasc_allow_single_branch_with_persistence():
         allow_single_branch=True,
         branch_selection_persistence=1,
     ).fit(no_structure, labels=no_structure_labels)
-    unique_labels, counts = np.unique(c.labels_, return_counts=True)
+    unique_labels = np.unique(c.labels_)
     assert len(unique_labels) == 1
     assert np.sum(c.branch_probabilities_ == 0) == 0
 
@@ -1035,7 +1035,7 @@ def test_flasc_allow_single_branch_with_persistence():
         branch_detection_method="core",
         branch_selection_epsilon=1/0.39,
     ).fit(no_structure, labels=no_structure_labels)
-    unique_labels, counts = np.unique(c.labels_, return_counts=True)
+    unique_labels = np.unique(c.labels_)
     assert len(unique_labels) == 1
     assert np.sum(c.branch_probabilities_ == 0) == 0
 
