@@ -581,16 +581,16 @@ def test_min_span_tree_plot():
     )
 
 
-def test_cluster_condensed_trees_plot():
+def test_branch_condensed_trees_plot():
     clusterer = FLASC().fit(X)
-    for t in clusterer.cluster_condensed_trees_:
+    for t in clusterer.branch_condensed_trees_:
         if_matplotlib(t.plot)(label_clusters=True, selection_palette=("r", "g", "b"))
         if_matplotlib(t.plot)(log_size=True)
 
 
 def test_cluster_single_linkage_tree_plot():
     clusterer = FLASC().fit(X)
-    for t in clusterer.cluster_linkage_trees_:
+    for t in clusterer.branch_linkage_trees_:
         if_matplotlib(t.plot)(cmap="Reds")
         if_matplotlib(t.plot)(
             vary_line_width=False,
@@ -607,9 +607,9 @@ def test_tree_numpy_output_formats():
     clusterer.condensed_tree_.to_numpy()
     clusterer.minimum_spanning_tree_.to_numpy()
     clusterer.cluster_approximation_graph_.to_numpy()
-    for t in clusterer.cluster_condensed_trees_:
+    for t in clusterer.branch_condensed_trees_:
         t.to_numpy()
-    for t in clusterer.cluster_linkage_trees_:
+    for t in clusterer.branch_linkage_trees_:
         t.to_numpy()
 
 
@@ -619,9 +619,9 @@ def test_tree_pandas_output_formats():
     if_pandas(clusterer.single_linkage_tree_.to_pandas)()
     if_pandas(clusterer.minimum_spanning_tree_.to_pandas)()
     if_pandas(clusterer.cluster_approximation_graph_.to_pandas)()
-    for t in clusterer.cluster_condensed_trees_:
+    for t in clusterer.branch_condensed_trees_:
         if_pandas(t.to_pandas)()
-    for t in clusterer.cluster_linkage_trees_:
+    for t in clusterer.branch_linkage_trees_:
         if_pandas(t.to_pandas)()
 
 
@@ -631,9 +631,9 @@ def test_tree_networkx_output_formats():
     if_networkx(clusterer.single_linkage_tree_.to_networkx)()
     if_networkx(clusterer.minimum_spanning_tree_.to_networkx)()
     if_networkx(clusterer.cluster_approximation_graph_.to_networkx)()
-    for t in clusterer.cluster_condensed_trees_:
+    for t in clusterer.branch_condensed_trees_:
         if_networkx(t.to_networkx)()
-    for t in clusterer.cluster_linkage_trees_:
+    for t in clusterer.branch_linkage_trees_:
         if_networkx(t.to_networkx)()
 
 
@@ -655,8 +655,8 @@ def test_flasc_unavailable_attributes():
     assert_raises(AttributeError, lambda: clusterer.single_linkage_tree_)
     assert_raises(AttributeError, lambda: clusterer.minimum_spanning_tree_)
     assert_raises(AttributeError, lambda: clusterer.cluster_approximation_graph_)
-    assert_raises(AttributeError, lambda: clusterer.cluster_condensed_trees_)
-    assert_raises(AttributeError, lambda: clusterer.cluster_linkage_trees_)
+    assert_raises(AttributeError, lambda: clusterer.branch_condensed_trees_)
+    assert_raises(AttributeError, lambda: clusterer.branch_linkage_trees_)
     assert_raises(AttributeError, lambda: clusterer.branch_exemplars_)
     assert_raises(AttributeError, lambda: clusterer.cluster_exemplars_)
     assert_raises(AttributeError, lambda: clusterer.relative_validity_)
@@ -671,8 +671,8 @@ def test_flasc_unavailable_attributes():
     assert_raises(AttributeError, lambda: clusterer.single_linkage_tree_)
     assert_raises(AttributeError, lambda: clusterer.minimum_spanning_tree_)
     clusterer.cluster_approximation_graph_
-    clusterer.cluster_condensed_trees_
-    clusterer.cluster_linkage_trees_
+    clusterer.branch_condensed_trees_
+    clusterer.branch_linkage_trees_
     clusterer.branch_exemplars_
     assert_raises(AttributeError, lambda: clusterer.cluster_exemplars_)
     assert_raises(AttributeError, lambda: clusterer.relative_validity_)
@@ -687,8 +687,8 @@ def test_flasc_unavailable_attributes():
     clusterer.condensed_tree_
     assert_raises(AttributeError, lambda: clusterer.minimum_spanning_tree_)
     clusterer.cluster_approximation_graph_
-    clusterer.cluster_condensed_trees_
-    clusterer.cluster_linkage_trees_
+    clusterer.branch_condensed_trees_
+    clusterer.branch_linkage_trees_
     assert_raises(AttributeError, lambda: clusterer.branch_exemplars_)
     assert_raises(AttributeError, lambda: clusterer.cluster_exemplars_)
     assert_raises(AttributeError, lambda: clusterer.relative_validity_)

@@ -9,13 +9,13 @@ See also :py:mod:`hdbscan.prediction`.
 import numpy as np
 from warnings import warn
 
+from hdbscan.dist_metrics import DistanceMetric
 from hdbscan._hdbscan_tree import recurse_leaf_dfs
 from hdbscan.prediction import (
     _find_neighbor_and_lambda,
     get_tree_row_with_child,
 )
-from ._hdbscan_dist_metrics import DistanceMetric
-from ._flasc_depths import _compute_cluster_centralities
+from ._flasc_depths import compute_cluster_centralities
 
 
 def approximate_predict(clusterer, points_to_predict):
@@ -29,12 +29,12 @@ def approximate_predict(clusterer, points_to_predict):
     in the 'best' way possible, this is the function to use. If you
     want to predict how ``points_to_predict`` would cluster with
     the original data under FLASC the most efficient existing approach
-    is to simply recluster with the new point(s) added to the original dataset.
+    is to simply re-cluster with the new point(s) added to the original dataset.
 
     Parameters
     ----------
     clusterer : :class:`~flasc.FLASC`
-        A clustering object that has been fit to vector inpt data.
+        A clustering object that has been fit with data.
 
     points_to_predict : array, or array-like (n_samples, n_features)
         The new data points to predict cluster labels for. They should
@@ -167,7 +167,7 @@ def branch_centrality_vectors(clusterer):
     if clusterer._raw_data is None:
         raise ValueError("Clusterer object has not been fitted with vector input data!")
 
-    if clusterer.override_cluster_labels is None:
+    if clusterer._override_cluster_labels is None:
         num_clusters = len(clusterer.cluster_persistence_)
     else:
         num_clusters = len(np.unique(clusterer.cluster_labels_)) - int(
@@ -213,7 +213,7 @@ def branch_centrality_vectors(clusterer):
         graph[:, 1] = cluster_ids[graph[:, 1].astype(np.intp)]
         centralities = np.vstack(
             [
-                _compute_cluster_centralities(
+                compute_cluster_centralities(
                     graph, np.intp(cluster_ids[cluster_root]), len(points)
                 )
                 for cluster_root in roots
@@ -391,7 +391,7 @@ def _find_cluster_and_probability(
     return cluster_label, prob, nearest_neighbor
 
 
-def _find_branch_exemplars(clusterer):
+def find_branch_exemplars(clusterer):
     """Computes branch exemplar points.
 
     Parameters
@@ -407,14 +407,14 @@ def _find_branch_exemplars(clusterer):
         selected branches, a list with a numpy array of exemplar points for each
         selected branch is given.
     """
-    num_clusters = len(clusterer.cluster_condensed_trees_)
+    num_clusters = len(clusterer.branch_condensed_trees_)
     branch_cluster_trees = [
         branch_tree._raw_tree[branch_tree._raw_tree["child_size"] > 1]
-        for branch_tree in clusterer.cluster_condensed_trees_
+        for branch_tree in clusterer.branch_condensed_trees_
     ]
     selected_branch_ids = [
         sorted(branch_tree._select_clusters())
-        for branch_tree in clusterer.cluster_condensed_trees_
+        for branch_tree in clusterer.branch_condensed_trees_
     ]
     branch_exemplars = [None] * num_clusters
 
@@ -424,7 +424,7 @@ def _find_branch_exemplars(clusterer):
             continue
 
         branch_exemplars[i] = []
-        raw_condensed_tree = clusterer._cluster_condensed_trees[i]
+        raw_condensed_tree = clusterer._branch_condensed_trees[i]
 
         for branch in selected_branches:
             _branch_exemplars = np.array([], dtype=np.intp)

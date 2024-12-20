@@ -14,7 +14,7 @@ from libcpp.deque cimport deque
 from libcpp.vector cimport vector
 
 
-cpdef np.ndarray[np.double_t, ndim=1] _compute_cluster_centralities(
+cpdef np.ndarray[np.double_t, ndim=1] compute_cluster_centralities(
     np.double_t[:, ::1] cluster_core_graph,
     np.intp_t cluster_root,
     np.intp_t num_points

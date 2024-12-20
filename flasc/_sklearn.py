@@ -11,16 +11,16 @@ from sklearn.base import BaseEstimator, ClusterMixin
 from hdbscan import HDBSCAN
 from hdbscan.hdbscan_ import (
     is_finite,
-    get_finite_row_indices,
-    check_precomputed_distance_matrix,
     remap_condensed_tree,
+    get_finite_row_indices,
     remap_single_linkage_tree,
+    check_precomputed_distance_matrix,
 )
 from hdbscan.plots import SingleLinkageTree, MinimumSpanningTree
 
 from ._flasc import flasc
 from .plots import ApproximationGraph, ClusterCondensedTree, BranchCondensedTree
-from .prediction import _find_branch_exemplars
+from .prediction import find_branch_exemplars
 
 
 class FLASC(BaseEstimator, ClusterMixin):
@@ -72,7 +72,7 @@ class FLASC(BaseEstimator, ClusterMixin):
         See [2]_ for more information.
 
     algorithm : str, optional (default='best')
-        Exactly which algorithm to use; hdbscan has variants specialised
+        Exactly which algorithm to use; hdbscan has variants specialized
         for different characteristics of the data. By default this is set
         to ``best`` which chooses the "best" algorithm given the nature of
         the data. You can force other options if you believe you know
@@ -86,7 +86,7 @@ class FLASC(BaseEstimator, ClusterMixin):
 
     leaf_size : int, optional (default=40)
         Leaf size for trees responsible for fast nearest
-        neighbour queries.
+        neighbor queries.
 
     approx_min_span_tree : bool, optional (default=True)
         Whether to accept an only approximate minimum spanning tree.
@@ -133,7 +133,7 @@ class FLASC(BaseEstimator, ClusterMixin):
         exist in a cluster before they are incorporated in the final labelling.
 
     branch_detection_method : str, optional (default=``full``)
-        Deteremines which graph is conctructed to detect branches with. Valid
+        Determines which graph is constructed to detect branches with. Valid
         values are, ordered by increasing computation cost and decreasing
         sensitivity to noise:
          - ``core``: Contains the edges that connect each point to all other 
@@ -173,33 +173,8 @@ class FLASC(BaseEstimator, ClusterMixin):
         When this flag is False, branches are only labelled for clusters with at
         least three branches (i.e., at least y-shapes). Clusters with only two 
         branches represent l-shapes. The two branches describe the cluster's
-        outsides growing towards each other. Enableing this flag separates these
+        outsides growing towards each other. Enabling this flag separates these
         branches from each other in the produced labelling.
-
-    override_cluster_labels : np.ndarray, optional (default=None)
-        Override the HDBSCAN* clustering to specify your own grouping with a
-        numpy array containing a cluster label for each data point. Negative
-        values will be interpreted as noise points. When the parameter is not set
-        to None, core distances are computed over all data points,
-        minimum spanning trees and the branches are computed per cluster. 
-        Consequently, the manually specified clusters do not have to form 
-        neatly separable connected components in the minimum spanning tree 
-        over all the data points. 
-        
-        Because the clustering step is skipped, some of the attributes
-        and the :func:`~flasc.prediction.approximate_predict` function will
-        be unavailable:
-        - cluster_persistence_
-        - condensed_tree_
-        - single_linkage_tree_
-        - min_spanning_tree_
-        - cluster_exemplars_
-    
-    override_cluster_probabilities : np.ndarray, optional (default=None)
-        Specifying a not None value for this parameter is only valid when
-        ``override_cluster_labels`` is used. In that case, this parameter 
-        controls the data point cluster membership probabilities. When this 
-        parameter is None, a default 1.0 probability is used for all points.
         
     memory : instance of joblib.Memory or str, optional
         Used to cache the output of the computation of the tree.
@@ -285,11 +260,11 @@ class FLASC(BaseEstimator, ClusterMixin):
           0-dimensional simplicial complex of each cluster at the first point in
           the filtration where they contain all their points.
 
-    cluster_condensed_trees : list[:class:`~hdbscan.plots.CondensedTree`]
+    branch_condensed_trees : list[:class:`~hdbscan.plots.CondensedTree`]
         Condensed hierarchies for each cluster produced during the branch
         detection step. Data points are numbered with in-cluster ids.
 
-    cluster_linkage_trees_ : list[:class:`~hdbscan.plots.SingleLinkageTree`]
+    branch_linkage_trees_ : list[:class:`~hdbscan.plots.SingleLinkageTree`]
         Single linkage trees for each cluster produced during the branch
         detection step, in the scipy hierarchical clustering format.
         (see http://docs.scipy.org/doc/scipy/reference/cluster.hierarchy.html).
@@ -362,18 +337,18 @@ class FLASC(BaseEstimator, ClusterMixin):
         algorithm="best",
         leaf_size=40,
         approx_min_span_tree=True,
+        max_cluster_size=0,
         cluster_selection_method="eom",
         allow_single_cluster=False,
         cluster_selection_epsilon=0.0,
-        max_cluster_size=0,
+        cluster_selection_persistence=0.0,
+        max_branch_size=0,
         allow_single_branch=False,
         branch_detection_method="full",
         branch_selection_method="eom",
+        branch_selection_epsilon=0.0,
         branch_selection_persistence=0.0,
-        max_branch_size=0,
         label_sides_as_branches=False,
-        override_cluster_labels=None,
-        override_cluster_probabilities=None,
         memory=Memory(None, verbose=0),
         num_jobs=None,
         **kwargs
@@ -389,18 +364,18 @@ class FLASC(BaseEstimator, ClusterMixin):
         self.algorithm = algorithm
         self.leaf_size = leaf_size
         self.approx_min_span_tree = approx_min_span_tree
-        self.cluster_selection_method = cluster_selection_method
-        self.allow_single_cluster = allow_single_cluster
-        self.cluster_selection_epsilon = cluster_selection_epsilon
         self.max_cluster_size = max_cluster_size
+        self.allow_single_cluster = allow_single_cluster
+        self.cluster_selection_method = cluster_selection_method
+        self.cluster_selection_epsilon = cluster_selection_epsilon
+        self.cluster_selection_persistence = cluster_selection_persistence
         self.allow_single_branch = allow_single_branch
+        self.max_branch_size = max_branch_size
         self.branch_detection_method = branch_detection_method
         self.branch_selection_method = branch_selection_method
+        self.branch_selection_epsilon = branch_selection_epsilon
         self.branch_selection_persistence = branch_selection_persistence
-        self.max_branch_size = max_branch_size
         self.label_sides_as_branches = label_sides_as_branches
-        self.override_cluster_labels = override_cluster_labels
-        self.override_cluster_probabilities = override_cluster_probabilities
         self.memory = memory
         self.num_jobs = num_jobs
         self._kwargs = kwargs
@@ -418,8 +393,8 @@ class FLASC(BaseEstimator, ClusterMixin):
         self._single_linkage_tree = None
         self._min_spanning_tree = None
         self._cluster_approximation_graphs = None
-        self._cluster_condensed_trees = None
-        self._cluster_linkage_trees = None
+        self._branch_condensed_trees = None
+        self._branch_linkage_trees = None
         self.cluster_centralities_ = None
         self.cluster_points_ = None
         self._all_finite = None
@@ -430,22 +405,50 @@ class FLASC(BaseEstimator, ClusterMixin):
         self._branch_exemplars = None
         self._hdbscan = None
 
-    def fit(self, X: np.ndarray, y=None):
+    def fit(
+        self,
+        X: np.ndarray,
+        labels: np.ndarray | None = None,
+        probabilities: np.ndarray | None = None,
+    ):
         """Performs the branch aware clustering.
 
         Parameters
         ----------
         X : array of shape (n_samples, n_features), or \
             array of shape (n_samples, n_samples)
-          A feature array, or array of distances between samples if
-          ``metric='precomputed'``.
-        y : Not used
+            A feature array, or array of distances between samples if
+            ``metric='precomputed'``.
+        
+        labels : array of shape (n_samples, 1), or None
+            Labels that override the FLASC clustering to specify your own grouping with a numpy
+            array containing a cluster label for each data point. Negative values
+            will be interpreted as noise points. When the parameter is not set to
+            None, core distances are computed over all data points, minimum spanning
+            trees and the branches are computed per cluster. Consequently, the
+            manually specified clusters do not have to form neatly separable
+            connected components in the minimum spanning tree over all the data
+            points. 
+            
+            Because the clustering step is skipped, some of the output variables and
+            the :func:`~flasc.prediction.approximate_predict` function will be
+            unavailable: - cluster_persistence - condensed_tree -
+            single_linkage_tree - min_spanning_tree
+        
+        probabilities : array of shape (n_samples, 1), or None
+            Specifying a not None value for this parameter is only valid when
+            ``override_cluster_labels`` is used. In that case, this parameter
+            controls the data point cluster membership probabilities. When this
+            parameter is None, a default 1.0 probability is used for all points.
 
         Returns
         -------
         self : object
           Returns self
         """
+        clean_data = X
+        clean_labels = labels
+        clean_probabilities = probabilities
         if self.metric != "precomputed":
             X = check_array(X, force_all_finite=False)
             self._raw_data = X.astype(np.double)
@@ -454,32 +457,21 @@ class FLASC(BaseEstimator, ClusterMixin):
             if not self._all_finite:
                 finite_index = get_finite_row_indices(X)
                 clean_data = X[finite_index]
+                if labels is not None:
+                    clean_labels = labels[finite_index]
+                if probabilities is not None:
+                    clean_probabilities = probabilities[finite_index]
                 internal_to_raw = {
                     x: y for x, y in zip(range(len(finite_index)), finite_index)
                 }
                 outliers = list(set(range(X.shape[0])) - set(finite_index))
-            else:
-                clean_data = X
         elif issparse(X):
-            X = check_array(X)
-            clean_data = X
+            clean_data = check_array(X)
         else:
-            check_precomputed_distance_matrix(X)
-            clean_data = X
+            check_precomputed_distance_matrix(X)           
 
         kwargs = self.get_params()
         kwargs.update(self._kwargs)
-        if self.metric != "precomputed" and not self._all_finite:
-            if self.override_cluster_labels is not None:
-                kwargs.update(
-                    override_cluster_labels=self.override_cluster_labels[finite_index]
-                )
-            if self.override_cluster_probabilities is not None:
-                kwargs.update(
-                    override_cluster_probabilities=self.override_cluster_probabilities[
-                        finite_index
-                    ]
-                )
         (
             # Combined result
             self.labels_,
@@ -498,14 +490,21 @@ class FLASC(BaseEstimator, ClusterMixin):
             self._min_spanning_tree,
             # Clusters to branches
             self._cluster_approximation_graphs,
-            self._cluster_condensed_trees,
-            self._cluster_linkage_trees,
+            self._branch_condensed_trees,
+            self._branch_linkage_trees,
             self.cluster_centralities_,
             self.cluster_points_,
-        ) = flasc(clean_data, **kwargs)
+        ) = flasc(
+            clean_data,
+            override_cluster_labels=clean_labels,
+            override_cluster_probabilities=clean_probabilities,
+            **kwargs
+        )
+        self._override_cluster_labels = labels
+        self._override_cluster_probabilities = probabilities
 
         if self.metric != "precomputed" and not self._all_finite:
-            if self.override_cluster_labels is None:
+            if self._override_cluster_labels is None:
                 self._condensed_tree = remap_condensed_tree(
                     self._condensed_tree, internal_to_raw, outliers
                 )
@@ -546,22 +545,48 @@ class FLASC(BaseEstimator, ClusterMixin):
 
         return self
 
-    def fit_predict(self, X, y=None):
+    def fit_predict(
+        self,
+        X: np.ndarray,
+        labels: np.ndarray | None = None,
+        probabilities: np.ndarray | None = None,
+    ):
         """Performs clustering on X and returns cluster labels.
 
         Parameters
         ----------
         X : array of shape (n_samples, n_features), or \
             array of shape (n_samples, n_samples)
-          A feature array, or array of distances between samples if
-          ``metric='precomputed'``.
-        y : not used
+            A feature array, or array of distances between samples if
+            ``metric='precomputed'``.
+        
+        labels : array of shape (n_samples, 1), or None
+            Labels that override the FLASC clustering to specify your own grouping with a numpy
+            array containing a cluster label for each data point. Negative values
+            will be interpreted as noise points. When the parameter is not set to
+            None, core distances are computed over all data points, minimum spanning
+            trees and the branches are computed per cluster. Consequently, the
+            manually specified clusters do not have to form neatly separable
+            connected components in the minimum spanning tree over all the data
+            points. 
+            
+            Because the clustering step is skipped, some of the output variables and
+            the :func:`~flasc.prediction.approximate_predict` function will be
+            unavailable: - cluster_persistence - condensed_tree -
+            single_linkage_tree - min_spanning_tree
+        
+        probabilities : array of shape (n_samples, 1), or None
+            Specifying a not None value for this parameter is only valid when
+            ``override_cluster_labels`` is used. In that case, this parameter
+            controls the data point cluster membership probabilities. When this
+            parameter is None, a default 1.0 probability is used for all points.
+            
         Returns
         -------
         y : np.ndarray, shape (n_samples, )
             cluster labels.
         """
-        self.fit(X, y)
+        self.fit(X, labels, probabilities)
         return self.labels_
 
     def weighted_centroid(self, label_id, data=None):
@@ -667,7 +692,7 @@ class FLASC(BaseEstimator, ClusterMixin):
         return cluster_data[medoid_index]
 
     def weighted_cluster_medoid(self, cluster_id):
-        """Wraps :func:`hdbscan.HDBSCAN.weighted_cluster_mentroid`.
+        """Wraps :func:`hdbscan.HDBSCAN.weighted_cluster_medoid`.
 
         Provides an approximate representative point for a given cluster.
         Note that this technique can be very slow and memory intensive for
@@ -690,7 +715,7 @@ class FLASC(BaseEstimator, ClusterMixin):
     @property
     def condensed_tree_(self):
         """See :class:`~flasc._sklearn.FLASC` for documentation."""
-        if self.override_cluster_labels is not None:
+        if self._override_cluster_labels is not None:
             raise AttributeError(
                 "HDBSCAN object not available with overridden clusters."
             )
@@ -699,18 +724,12 @@ class FLASC(BaseEstimator, ClusterMixin):
                 "No condensed tree was generated; try running fit first."
             )
 
-        return ClusterCondensedTree(
-            self._condensed_tree,
-            self.cluster_labels_,
-            self.cluster_selection_method,
-            self.cluster_selection_epsilon,
-            self.allow_single_cluster,
-        )
+        return ClusterCondensedTree(self._condensed_tree, self.cluster_labels_)
 
     @property
     def single_linkage_tree_(self):
         """See :class:`~flasc._sklearn.FLASC` for documentation."""
-        if self.override_cluster_labels is not None:
+        if self._override_cluster_labels is not None:
             raise AttributeError(
                 "Single linkage tree not available with overridden clusters."
             )
@@ -723,7 +742,7 @@ class FLASC(BaseEstimator, ClusterMixin):
     @property
     def minimum_spanning_tree_(self):
         """See :class:`~flasc._sklearn.FLASC` for documentation."""
-        if self.override_cluster_labels is not None:
+        if self._override_cluster_labels is not None:
             raise AttributeError(
                 "Minimum spanning tree not available with overridden clusters."
             )
@@ -757,33 +776,27 @@ class FLASC(BaseEstimator, ClusterMixin):
         )
 
     @property
-    def cluster_condensed_trees_(self):
+    def branch_condensed_trees_(self):
         """See :class:`~flasc._sklearn.FLASC` for documentation."""
-        if self._cluster_condensed_trees is None:
+        if self._branch_condensed_trees is None:
             raise AttributeError(
                 "No cluster condensed trees were generated; try running fit first."
             )
         return [
             BranchCondensedTree(
-                tree,
-                pts,
-                self.labels_,
-                self.branch_labels_,
-                self.cluster_labels_,
-                self.branch_selection_method,
-                self.allow_single_branch,
+                tree, pts, self.labels_, self.branch_labels_, self.cluster_labels_
             )
-            for tree, pts in zip(self._cluster_condensed_trees, self.cluster_points_)
+            for tree, pts in zip(self._branch_condensed_trees, self.cluster_points_)
         ]
 
     @property
-    def cluster_linkage_trees_(self):
+    def branch_linkage_trees_(self):
         """See :class:`~flasc._sklearn.FLASC` for documentation."""
-        if self._cluster_linkage_trees is None:
+        if self._branch_linkage_trees is None:
             raise AttributeError(
                 "No cluster linkage trees were generated; try running fit first."
             )
-        return [SingleLinkageTree(tree) for tree in self._cluster_linkage_trees]
+        return [SingleLinkageTree(tree) for tree in self._branch_linkage_trees]
 
     @property
     def branch_exemplars_(self):
@@ -794,9 +807,9 @@ class FLASC(BaseEstimator, ClusterMixin):
             raise AttributeError(
                 "Branch exemplars not available with precomputed " "distances."
             )
-        if self._cluster_condensed_trees is None:
+        if self._branch_condensed_trees is None:
             raise AttributeError("No branches detected; try running fit first.")
-        self._branch_exemplars = _find_branch_exemplars(self)
+        self._branch_exemplars = find_branch_exemplars(self)
         return self._branch_exemplars
 
     @property
@@ -806,7 +819,7 @@ class FLASC(BaseEstimator, ClusterMixin):
             raise AttributeError(
                 "Cluster exemplars not available with precomputed " "distances."
             )
-        if self.override_cluster_labels is not None:
+        if self._override_cluster_labels is not None:
             raise AttributeError(
                 "Cluster exemplars not available with overridden clusters."
             )
@@ -826,7 +839,7 @@ class FLASC(BaseEstimator, ClusterMixin):
             raise AttributeError(
                 "Relative validity is not available with precomputed " "distances."
             )
-        if self.override_cluster_labels is not None:
+        if self._override_cluster_labels is not None:
             raise AttributeError(
                 "Relative validity is not available with overridden clusters."
             )
@@ -843,7 +856,7 @@ class FLASC(BaseEstimator, ClusterMixin):
         min_outlier_sep = np.inf  # only required if num_clusters = 1
         correction_const = 2  # only required if num_clusters = 1
 
-        # Unltimately, for each Ci, we only require the
+        # ultimately, for each Ci, we only require the
         # minimum of DSPC(Ci, Cj) over all Cj != Ci.
         # So let's call this value DSPC_wrt(Ci), i.e.
         # density separation 'with respect to' Ci.
@@ -884,7 +897,7 @@ class FLASC(BaseEstimator, ClusterMixin):
 
         # DSPC_wrt[Ci] might be infinite if the connected component for Ci is
         # an "island" in the MR-MST. Whereas for other clusters Cj and Ck, the
-        # MR-MST might contain an edge with one point in Cj and ther other one
+        # MR-MST might contain an edge with one point in Cj and the other one
         # in Ck. Here, we replace the infinite density separation of Ci by
         # another large enough value.
         #
@@ -910,7 +923,7 @@ class FLASC(BaseEstimator, ClusterMixin):
         if self._hdbscan is not None:
             return self._hdbscan
 
-        if self.override_cluster_labels is not None:
+        if self._override_cluster_labels is not None:
             raise AttributeError(
                 "HDBSCAN object not available with overridden clusters."
             )
@@ -927,10 +940,11 @@ class FLASC(BaseEstimator, ClusterMixin):
             algorithm=self.algorithm,
             leaf_size=self.leaf_size,
             approx_min_span_tree=self.approx_min_span_tree,
-            cluster_selection_method=self.cluster_selection_method,
-            allow_single_cluster=self.allow_single_cluster,
-            cluster_selection_epsilon=self.cluster_selection_epsilon,
             max_cluster_size=self.max_cluster_size,
+            allow_single_cluster=self.allow_single_cluster,
+            cluster_selection_method=self.cluster_selection_method,
+            cluster_selection_epsilon=self.cluster_selection_epsilon,
+            cluster_selection_persistence=self.cluster_selection_persistence,
             memory=self.memory,
             core_dist_n_jobs=4 if self.num_jobs is None else self.num_jobs,
             gen_min_span_tree=True,

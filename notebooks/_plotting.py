@@ -26,7 +26,7 @@ def configure_matplotlib():
     mpl.rcParams['axes.spines.right'] = False
     mpl.rcParams['axes.spines.top'] = False
     mpl.rcParams['axes.spines.bottom'] = False
-    mpl.rcParams['savefig.dpi'] = 300
+    mpl.rcParams['savefig.dpi'] = 600
     mpl.rcParams['savefig.format'] = 'png'
     mpl.rcParams['text.usetex'] = True
     mpl.rcParams['text.latex.preamble'] = """

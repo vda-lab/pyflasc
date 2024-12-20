@@ -3,6 +3,7 @@
 #                   Steve Astels <sastels@gmail.com>
 #                   John Healy <jchealy@gmail.com>
 # Adapted for FLASC by Jelmer Bot
+# - expose neighbors and core distances to callers
 # License: BSD 3 clause
 
 import numpy as np
@@ -12,19 +13,16 @@ from sklearn.metrics import pairwise_distances
 from sklearn.neighbors import KDTree, BallTree
 
 from hdbscan.dist_metrics import DistanceMetric
-from hdbscan._hdbscan_linkage import mst_linkage_core_vector, label
-from hdbscan._hdbscan_tree import compute_stability, condense_tree
-from ._hdbscan_linkage import mst_linkage_core
-from ._hdbscan_boruvka import KDTreeBoruvkaAlgorithm, BallTreeBoruvkaAlgorithm
-from ._hdbscan_tree import get_clusters
+from hdbscan.branches import _segment_branch_linkage_hierarchy
+from hdbscan._hdbscan_linkage import mst_linkage_core, mst_linkage_core_vector, label
+from hdbscan._hdbscan_boruvka import KDTreeBoruvkaAlgorithm, BallTreeBoruvkaAlgorithm
+
 
 # ---- Generic
-def _hdbscan_generic_linkage(
-    X, min_samples=5, alpha=1.0, metric="minkowski", **kwargs
-):
+def hdbscan_generic_linkage(X, min_samples=5, alpha=1.0, metric="minkowski", **kwargs):
     """Computes HDBSCAN single linkage from input."""
     # Compute mutual reachability
-    reachability, core_distances, neighbours = _hdbscan_generic_reachability(
+    reachability, core_distances, neighbors = hdbscan_generic_reachability(
         X,
         min_samples=min_samples,
         alpha=alpha,
@@ -38,7 +36,7 @@ def _hdbscan_generic_linkage(
         warn(
             "The minimum spanning tree contains edge weights with value "
             "infinity. Potentially, you are missing too many distances "
-            "in the initial distance matrix for the given neighbourhood "
+            "in the initial distance matrix for the given neighborhood "
             "size.",
             UserWarning,
         )
@@ -51,11 +49,11 @@ def _hdbscan_generic_linkage(
         min_spanning_tree,
         reachability,
         core_distances,
-        neighbours,
+        neighbors,
     )
 
 
-def _hdbscan_generic_reachability(
+def hdbscan_generic_reachability(
     X, min_samples=5, alpha=1.0, metric="minkowski", p=2, **kwargs
 ):
     """Computes full reachability matrix."""
@@ -83,15 +81,13 @@ def _hdbscan_generic_mutual_reachability(
     """Compute the weighted adjacency matrix of the mutual reachability
     graph of a distance matrix.
     """
-    # Find all min_points closest neighbours
+    # Find all min_points closest neighbors
     np.fill_diagonal(distance_matrix, np.nan)
-    neighbours = np.argpartition(distance_matrix, min_points - 1)[
-        :, :min_points
-    ]
+    neighbors = np.argpartition(distance_matrix, min_points - 1)[:, :min_points]
 
     # Extract the core distance
     core_distances = np.take_along_axis(
-        distance_matrix, neighbours[:, -1][None], axis=0
+        distance_matrix, neighbors[:, -1][None], axis=0
     )[0]
 
     # Update with alpha if applied
@@ -99,17 +95,15 @@ def _hdbscan_generic_mutual_reachability(
         distance_matrix = distance_matrix / alpha
 
     # Apply the core distance to compute the mutual reachability
-    stage1 = np.where(
-        core_distances > distance_matrix, core_distances, distance_matrix
-    )
+    stage1 = np.where(core_distances > distance_matrix, core_distances, distance_matrix)
     result = np.where(core_distances > stage1.T, core_distances.T, stage1.T).T
     np.fill_diagonal(result, core_distances)
 
-    return result, core_distances, neighbours
+    return result, core_distances, neighbors
 
 
 # --- Space tree
-def _hdbscan_space_tree_linkage(
+def hdbscan_space_tree_linkage(
     space_tree,
     min_samples=5,
     metric="minkowski",
@@ -121,7 +115,7 @@ def _hdbscan_space_tree_linkage(
     **kwargs
 ):
     """Computes HDBSCAN single linkage from space tree."""
-    (min_spanning_tree, core_distances, neighbours) = _hdbscan_space_tree_mst(
+    (min_spanning_tree, core_distances, neighbors) = _hdbscan_space_tree_mst(
         space_tree,
         min_samples=min_samples,
         alpha=alpha,
@@ -134,7 +128,7 @@ def _hdbscan_space_tree_linkage(
     )
     min_spanning_tree = min_spanning_tree[np.argsort(min_spanning_tree.T[2]), :]
     single_linkage_tree = label(min_spanning_tree)
-    return (single_linkage_tree, min_spanning_tree, core_distances, neighbours)
+    return (single_linkage_tree, min_spanning_tree, core_distances, neighbors)
 
 
 def _hdbscan_space_tree_mst(
@@ -181,7 +175,7 @@ def _hdbscan_space_tree_mst_prims(
     **kwargs
 ):
     """Computes MST from space tree using prims algorithm."""
-    core_distances, neighbours = _hdbscan_space_tree_core_dists_prims(
+    core_distances, neighbors = hdbscan_space_tree_core_dists_prims(
         space_tree,
         min_samples=min_samples,
         thread_pool=thread_pool,
@@ -190,15 +184,13 @@ def _hdbscan_space_tree_mst_prims(
     mst = mst_linkage_core_vector(
         space_tree.data.base, core_distances, dist_metric, alpha
     )
-    return mst, core_distances, neighbours
+    return mst, core_distances, neighbors
 
 
-def _hdbscan_space_tree_core_dists_prims(
-    space_tree, min_samples=5, thread_pool=None
-):
+def hdbscan_space_tree_core_dists_prims(space_tree, min_samples=5, thread_pool=None):
     """Finds the min_samples closest points and the core distance."""
     if thread_pool.n_jobs == 1:
-        core_distances, neighbours = space_tree.query(
+        core_distances, neighbors = space_tree.query(
             space_tree.data.base,
             k=min_samples + 1,
             dualtree=True,
@@ -224,11 +216,11 @@ def _hdbscan_space_tree_core_dists_prims(
         )
 
         core_distances = np.vstack([x[0] for x in knn_data])
-        neighbours = np.vstack([x[1] for x in knn_data])
+        neighbors = np.vstack([x[1] for x in knn_data])
 
     core_distances = core_distances[:, -1].copy(order="C")
-    neighbours = neighbours[:, 1:]
-    return core_distances, neighbours
+    neighbors = neighbors[:, 1:]
+    return core_distances, neighbors
 
 
 def _hdbscan_space_tree_mst_boruvka(
@@ -253,21 +245,19 @@ def _hdbscan_space_tree_mst_boruvka(
         alpha=alpha,
         leaf_size=max(leaf_size, 3) // 3,
         approx_min_span_tree=approx_min_span_tree,
-        thread_pool=thread_pool,
+        n_jobs=thread_pool.n_jobs,
         **kwargs,
     )
     min_spanning_tree = alg.spanning_tree()
     if isinstance(space_tree, KDTree):
         core_distances = np.sqrt(alg.core_distance_arr)
     else:
-        core_distances = alg.core_distance_arr  # copy()
-    neighbours = alg.neighbour_arr  # copy()
-    return min_spanning_tree, core_distances, neighbours
+        core_distances = alg.core_distance_arr
+    neighbors = alg.neighbor_arr
+    return min_spanning_tree, core_distances, neighbors
 
 
-def _hdbscan_space_tree(
-    X, metric="minkowski", algorithm="best", leaf_size=40, **kwargs
-):
+def hdbscan_space_tree(X, metric="minkowski", algorithm="best", leaf_size=40, **kwargs):
     """Computes a space tree from the input."""
     # Select which tree type to build
     if algorithm.endswith("kdtree"):
@@ -285,23 +275,26 @@ def _hdbscan_space_tree(
 # --- Shared
 
 
-def _hdbscan_extract_clusters(
+def hdbscan_extract_clusters(
     single_linkage_tree,
     min_cluster_size=5,
-    cluster_selection_method="eom",
-    allow_single_cluster=False,
-    cluster_selection_epsilon=0.0,
     max_cluster_size=0,
+    allow_single_cluster=False,
+    cluster_selection_method="eom",
+    cluster_selection_epsilon=0.0,
+    cluster_selection_persistence=0.0,
 ):
-    """Extracts clusters from single linkage hierarchy."""
-    condensed_tree = condense_tree(single_linkage_tree, min_cluster_size)
-    stability_dict = compute_stability(condensed_tree)
-    (labels, probabilities, stabilities) = get_clusters(
-        condensed_tree,
-        stability_dict,
-        cluster_selection_method=cluster_selection_method,
-        allow_single_cluster=allow_single_cluster,
-        cluster_selection_epsilon=cluster_selection_epsilon,
-        max_cluster_size=max_cluster_size,
+    """Extracts clusters from single linkage hierarchy.
+
+    Lets selection_epsilon control which points are noise when a single cluster
+    is detected and allow.
+    """
+    return _segment_branch_linkage_hierarchy(
+        single_linkage_tree,
+        min_branch_size=min_cluster_size,
+        max_branch_size=max_cluster_size,
+        allow_single_branch=allow_single_cluster,
+        branch_selection_method=cluster_selection_method,
+        branch_selection_epsilon=cluster_selection_epsilon,
+        branch_selection_persistence=cluster_selection_persistence,
     )
-    return labels, probabilities, stabilities, condensed_tree
