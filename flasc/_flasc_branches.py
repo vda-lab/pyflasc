@@ -124,7 +124,9 @@ def compute_branch_linkage_of_cluster(
             )
 
     # Add centrality to approximation graph
-    return compute_branch_linkage_from_graph(cluster_points, centralities, edges)[1:]
+    return compute_branch_linkage_from_graph(
+        cluster_points, centralities, edges, run_override
+    )[1:]
 
 
 def _extract_full_cluster_graph_generic(reachability, max_dist):
