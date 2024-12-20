@@ -594,7 +594,7 @@ def test_min_span_tree_plot():
 def test_branch_condensed_trees_plot():
     clusterer = FLASC().fit(X)
     for t in clusterer.branch_condensed_trees_:
-        if_matplotlib(t.plot)(label_clusters=True, selection_palette=("r", "g", "b"))
+        if_matplotlib(t.plot)(color_for='branch', label_clusters=True, selection_palette=("r", "g", "b"))
         if_matplotlib(t.plot)(log_size=True)
 
 
@@ -860,6 +860,10 @@ def test_flasc_badargs():
     assert_raises(ValueError, flasc, X, leaf_size="fail")
     assert_raises(ValueError, flasc, X, cluster_selection_epsilon=-1)
     assert_raises(ValueError, flasc, X, cluster_selection_epsilon=-0.1)
+    assert_raises(ValueError, flasc, X, cluster_selection_persistence=-1)
+    assert_raises(ValueError, flasc, X, cluster_selection_persistence=-0.1)
+    assert_raises(ValueError, flasc, X, branch_selection_epsilon=-1)
+    assert_raises(ValueError, flasc, X, branch_selection_epsilon=-0.1)
     assert_raises(ValueError, flasc, X, branch_selection_persistence=-1)
     assert_raises(ValueError, flasc, X, branch_selection_persistence=-0.1)
     assert_raises(
@@ -1020,6 +1024,16 @@ def test_flasc_allow_single_branch_with_persistence():
         branch_selection_method="leaf",
         allow_single_branch=True,
         branch_selection_persistence=1,
+    ).fit(no_structure, labels=no_structure_labels)
+    unique_labels, counts = np.unique(c.labels_, return_counts=True)
+    assert len(unique_labels) == 1
+    assert np.sum(c.branch_probabilities_ == 0) == 0
+
+    # At epsilon 0.39, a single branch is detected
+    c = FLASC(
+        min_cluster_size=5,
+        branch_detection_method="core",
+        branch_selection_epsilon=1/0.39,
     ).fit(no_structure, labels=no_structure_labels)
     unique_labels, counts = np.unique(c.labels_, return_counts=True)
     assert len(unique_labels) == 1

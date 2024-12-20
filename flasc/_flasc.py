@@ -397,8 +397,10 @@ def flasc(
         leaf_size=leaf_size,
     )
     __check_greater_equal_float(
+        branch_selection_epsilon=branch_selection_epsilon,
         cluster_selection_epsilon=cluster_selection_epsilon,
         branch_selection_persistence=branch_selection_persistence,
+        cluster_selection_persistence=cluster_selection_persistence,
         alpha=alpha,
     )
 
