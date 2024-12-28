@@ -16,10 +16,10 @@ from hdbscan.hdbscan_ import (
     remap_single_linkage_tree,
     check_precomputed_distance_matrix,
 )
-from hdbscan.plots import SingleLinkageTree, MinimumSpanningTree
+from hdbscan.plots import SingleLinkageTree, MinimumSpanningTree, ApproximationGraph
 
 from ._flasc import flasc
-from .plots import ApproximationGraph, ClusterCondensedTree, BranchCondensedTree
+from .plots import ClusterCondensedTree, BranchCondensedTree
 from .prediction import find_branch_exemplars
 
 
@@ -770,12 +770,14 @@ class FLASC(BaseEstimator, ClusterMixin):
             self._cluster_approximation_graphs,
             self.labels_,
             self.probabilities_,
+            self.cluster_centralities_,
             self.cluster_labels_,
             self.cluster_probabilities_,
-            self.cluster_centralities_,
             self.branch_labels_,
             self.branch_probabilities_,
-            self._raw_data,
+            lens_name='centrality',
+            sub_cluster_name='branch',
+            raw_data=self._raw_data,
         )
 
     @property
