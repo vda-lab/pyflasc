@@ -1,6 +1,5 @@
-# sklearn FLASC clusterer
+# sklearn FLASC clusterer is closely based on HDBSCAN clusterer
 # Author: Jelmer Bot
-# Closely based on HDBSCAN clusterer
 # License: BSD 3 clause
 import numpy as np
 from joblib import Memory

@@ -1,4 +1,5 @@
-# Main flasc function Author: Jelmer Bot Closely based on the hdbscan function.
+# Main flasc function is closely based on the hdbscan function. 
+# Author: Jelmer Bot
 # License: BSD 3 clause
 import numpy as np
 from joblib import Memory
@@ -696,12 +697,12 @@ def flasc(
     ) = memory.cache(compute_branch_segmentation, ignore=["thread_pool"])(
         branch_linkage_trees,
         thread_pool,
-        min_branch_size=min_branch_size,
-        max_branch_size=max_branch_size,
-        allow_single_branch=allow_single_branch,
-        branch_selection_method=branch_selection_method,
-        branch_selection_epsilon=branch_selection_epsilon,
-        branch_selection_persistence=branch_selection_persistence,
+        min_cluster_size=min_branch_size,
+        max_cluster_size=max_branch_size,
+        allow_single_cluster=allow_single_branch,
+        cluster_selection_method=branch_selection_method,
+        cluster_selection_epsilon=branch_selection_epsilon,
+        cluster_selection_persistence=branch_selection_persistence,
     )
 
     # - Assign labels and probabilities

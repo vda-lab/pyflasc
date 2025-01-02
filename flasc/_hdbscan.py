@@ -13,7 +13,7 @@ from sklearn.metrics import pairwise_distances
 from sklearn.neighbors import KDTree, BallTree
 
 from hdbscan.dist_metrics import DistanceMetric
-from hdbscan.branches import _segment_branch_linkage_hierarchy
+from hdbscan.branches import segment_branch_linkage_hierarchy
 from hdbscan._hdbscan_linkage import mst_linkage_core, mst_linkage_core_vector, label
 from hdbscan._hdbscan_boruvka import KDTreeBoruvkaAlgorithm, BallTreeBoruvkaAlgorithm
 
@@ -297,26 +297,10 @@ def hdbscan_space_tree(X, metric="minkowski", algorithm="best", leaf_size=40, **
 # --- Shared
 
 
-def hdbscan_extract_clusters(
-    single_linkage_tree,
-    min_cluster_size=5,
-    max_cluster_size=0,
-    allow_single_cluster=False,
-    cluster_selection_method="eom",
-    cluster_selection_epsilon=0.0,
-    cluster_selection_persistence=0.0,
-):
+def hdbscan_extract_clusters(single_linkage_tree, **kwargs):
     """Extracts clusters from single linkage hierarchy.
 
     Lets selection_epsilon control which points are noise when a single cluster
     is detected and allow.
     """
-    return _segment_branch_linkage_hierarchy(
-        single_linkage_tree,
-        min_branch_size=min_cluster_size,
-        max_branch_size=max_cluster_size,
-        allow_single_branch=allow_single_cluster,
-        branch_selection_method=cluster_selection_method,
-        branch_selection_epsilon=cluster_selection_epsilon,
-        branch_selection_persistence=cluster_selection_persistence,
-    )
+    return segment_branch_linkage_hierarchy(single_linkage_tree, **kwargs)
