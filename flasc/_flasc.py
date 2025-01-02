@@ -714,6 +714,7 @@ def flasc(
         cluster_centralities,
     ) = update_labelling(
         cluster_probabilities,
+        branch_linkage_trees,
         cluster_points,
         cluster_centralities,
         branch_labels,
