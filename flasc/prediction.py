@@ -258,14 +258,15 @@ def update_labels_with_branch_centrality(clusterer, branch_centrality_vectors):
         clusterer.branch_persistences_,
         branch_centrality_vectors,
     ):
-        labels[points] = labels[points] - offset
         if membership is not None:
-        
             label_values = np.unique(clusterer.labels_[points])
-            noise_points = clusterer.labels_[points] == label_values[-1]
-            branch_labels[points[noise_points]] = np.argmax(membership[noise_points], axis=1)
-            labels[points[noise_points]] = label_values[branch_labels[points[noise_points]]] - offset
-            offset += int(len(label_values) > len(persistences))
+            idx = int(len(label_values) > len(persistences))
+            noise_points = clusterer.branch_labels_[points] == -1
+            new_labels = np.argmax(membership[noise_points], axis=1)
+            branch_labels[points[noise_points]] = new_labels
+            labels[points[noise_points]] = label_values[idx:][branch_labels[points[noise_points]]]
+            offset += idx
+            labels[points] -= offset
     return labels, branch_labels
 
 
