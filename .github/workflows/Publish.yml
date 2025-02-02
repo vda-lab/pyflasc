@@ -30,7 +30,7 @@ jobs:
           echo "tag=v$VERSION" >> $GITHUB_OUTPUT
 
       - name: Download wheels and sdist
-        uses: dawidd6/action-download-artifact@v2.27.0
+        uses: dawidd6/action-download-artifact@v8
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           workflow: Wheels.yml
