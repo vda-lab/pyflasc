@@ -12,7 +12,6 @@ and contain the comparisons presented in our paper.
    Example_single_cell_trajectory.ipynb
    Example_Parkinson_data_challenge.ipynb
    Example_horse.ipynb
-   Comparison_branch_stability.ipynb
+   Comparison_algorithms.ipynb
    Comparison_computational_cost.ipynb
-   Comparison_multi_processing.ipynb
    

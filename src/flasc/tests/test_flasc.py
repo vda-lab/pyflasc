@@ -15,9 +15,6 @@ from scipy.stats import mode
 from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
 from sklearn.utils import check_random_state, shuffle as util_shuffle
-from sklearn.utils._testing import (
-    assert_raises,
-)
 
 from flasc import FLASC, flasc
 from flasc.prediction import (
@@ -213,7 +210,8 @@ def test_flasc_sparse_distance_matrix():
     D[D >= threshold] = 0.0
     D = sparse.csr_matrix(D)
     D.eliminate_zeros()
-    assert_raises(ValueError, flasc, D, metric="precomputed")
+    with pytest.raises(ValueError):
+        flasc(D, metric="precomputed")
 
 
 def test_missing_data():
@@ -373,7 +371,8 @@ def test_flasc_input_lists():
 
 def test_flasc_sparse():
     sparse_X = sparse.csr_matrix(X)
-    assert_raises(TypeError, FLASC().fit, sparse_X)
+    with pytest.raises(TypeError):
+        FLASC().fit(sparse_X)
 
 
 # --- MST construction algorithms
@@ -426,24 +425,27 @@ def test_flasc_mst_algorithms():
                     branch_selection_method="leaf" if algorithm == "generic" else "eom",
                 ).fit(X, y)
             )
-    assert_raises(ValueError, flasc, X, algorithm="prims_kdtree", metric="russelrao")
-    assert_raises(ValueError, flasc, X, algorithm="boruvka_kdtree", metric="russelrao")
-    assert_raises(ValueError, flasc, X, algorithm="prims_balltree", metric="cosine")
-    assert_raises(ValueError, flasc, X, algorithm="boruvka_balltree", metric="cosine")
-    assert_raises(
-        ValueError,
-        flasc,
-        X,
-        algorithm="boruvka_kdtree",
-        override_cluster_labels=y,
-    )
-    assert_raises(
-        ValueError,
-        flasc,
-        X,
-        algorithm="boruvka_balltree",
-        override_cluster_labels=y,
-    )
+
+    with pytest.raises(ValueError):
+        flasc(X, algorithm="prims_kdtree", metric="russelrao")
+    with pytest.raises(ValueError):
+        flasc(X, algorithm="boruvka_kdtree", metric="russelrao")
+    with pytest.raises(ValueError):
+        flasc(X, algorithm="prims_balltree", metric="cosine")
+    with pytest.raises(ValueError):
+        flasc(X, algorithm="boruvka_balltree", metric="cosine")
+    with pytest.raises(ValueError):
+        flasc(
+            X,
+            algorithm="boruvka_kdtree",
+            override_cluster_labels=y,
+        )
+    with pytest.raises(ValueError):
+        flasc(
+            X,
+            algorithm="boruvka_balltree",
+            override_cluster_labels=y,
+        )
 
 
 def test_flasc_best_balltree_metric():
@@ -594,7 +596,9 @@ def test_min_span_tree_plot():
 def test_branch_condensed_trees_plot():
     clusterer = FLASC().fit(X)
     for t in clusterer.branch_condensed_trees_:
-        if_matplotlib(t.plot)(color_for='branch', label_clusters=True, selection_palette=("r", "g", "b"))
+        if_matplotlib(t.plot)(
+            color_for="branch", label_clusters=True, selection_palette=("r", "g", "b")
+        )
         if_matplotlib(t.plot)(log_size=True)
 
 
@@ -661,52 +665,67 @@ def test_hdbscan_object():
 
 def test_flasc_unavailable_attributes():
     clusterer = FLASC()
-    assert_raises(AttributeError, lambda: clusterer.condensed_tree_)
-    assert_raises(AttributeError, lambda: clusterer.single_linkage_tree_)
-    assert_raises(AttributeError, lambda: clusterer.minimum_spanning_tree_)
-    assert_raises(AttributeError, lambda: clusterer.cluster_approximation_graph_)
-    assert_raises(AttributeError, lambda: clusterer.branch_condensed_trees_)
-    assert_raises(AttributeError, lambda: clusterer.branch_linkage_trees_)
-    assert_raises(AttributeError, lambda: clusterer.branch_exemplars_)
-    assert_raises(AttributeError, lambda: clusterer.cluster_exemplars_)
-    assert_raises(AttributeError, lambda: clusterer.relative_validity_)
-    assert_raises(AttributeError, lambda: clusterer.hdbscan_)
-    assert_raises(
-        AttributeError,
-        lambda: approximate_predict(clusterer, np.array([[-0.8, 0.0]])),
-    )
+    with pytest.raises(AttributeError):
+        clusterer.condensed_tree_
+    with pytest.raises(AttributeError):
+        clusterer.single_linkage_tree_
+    with pytest.raises(AttributeError):
+        clusterer.minimum_spanning_tree_
+    with pytest.raises(AttributeError):
+        clusterer.cluster_approximation_graph_
+    with pytest.raises(AttributeError):
+        clusterer.branch_condensed_trees_
+    with pytest.raises(AttributeError):
+        clusterer.branch_linkage_trees_
+    with pytest.raises(AttributeError):
+        clusterer.branch_exemplars_
+    with pytest.raises(AttributeError):
+        clusterer.cluster_exemplars_
+    with pytest.raises(AttributeError):
+        clusterer.relative_validity_
+    with pytest.raises(AttributeError):
+        clusterer.hdbscan_
+    with pytest.raises(AttributeError):
+        approximate_predict(clusterer, np.array([[-0.8, 0.0]]))
+
     # Not available with override clusters
     clusterer = FLASC().fit(X, labels=y)
-    assert_raises(AttributeError, lambda: clusterer.condensed_tree_)
-    assert_raises(AttributeError, lambda: clusterer.single_linkage_tree_)
-    assert_raises(AttributeError, lambda: clusterer.minimum_spanning_tree_)
+    with pytest.raises(AttributeError):
+        clusterer.condensed_tree_
+    with pytest.raises(AttributeError):
+        clusterer.single_linkage_tree_
+    with pytest.raises(AttributeError):
+        clusterer.minimum_spanning_tree_
     clusterer.cluster_approximation_graph_
     clusterer.branch_condensed_trees_
     clusterer.branch_linkage_trees_
     clusterer.branch_exemplars_
-    assert_raises(AttributeError, lambda: clusterer.cluster_exemplars_)
-    assert_raises(AttributeError, lambda: clusterer.relative_validity_)
-    assert_raises(AttributeError, lambda: clusterer.hdbscan_)
-    assert_raises(
-        AttributeError,
-        lambda: approximate_predict(clusterer, np.array([[-0.8, 0.0]])),
-    )
+    with pytest.raises(AttributeError):
+        clusterer.cluster_exemplars_
+    with pytest.raises(AttributeError):
+        clusterer.relative_validity_
+    with pytest.raises(AttributeError):
+        clusterer.hdbscan_
+    with pytest.raises(AttributeError):
+        approximate_predict(clusterer, np.array([[-0.8, 0.0]]))
     # Not available with precomputed distances
     D = distance.squareform(distance.pdist(X))
     clusterer = FLASC(metric="precomputed").fit(D)
     clusterer.condensed_tree_
-    assert_raises(AttributeError, lambda: clusterer.minimum_spanning_tree_)
+    with pytest.raises(AttributeError):
+        clusterer.minimum_spanning_tree_
     clusterer.cluster_approximation_graph_
     clusterer.branch_condensed_trees_
     clusterer.branch_linkage_trees_
-    assert_raises(AttributeError, lambda: clusterer.branch_exemplars_)
-    assert_raises(AttributeError, lambda: clusterer.cluster_exemplars_)
-    assert_raises(AttributeError, lambda: clusterer.relative_validity_)
+    with pytest.raises(AttributeError):
+        clusterer.branch_exemplars_
+    with pytest.raises(AttributeError):
+        clusterer.cluster_exemplars_
+    with pytest.raises(AttributeError):
+        clusterer.relative_validity_
     clusterer.hdbscan_
-    assert_raises(
-        AttributeError,
-        lambda: approximate_predict(clusterer, np.array([[-0.8, 0.0]])),
-    )
+    with pytest.raises(AttributeError):
+        approximate_predict(clusterer, np.array([[-0.8, 0.0]]))
 
 
 def test_flasc_exemplars():
@@ -749,10 +768,14 @@ def test_flasc_centroids_medoids():
 
 def test_flasc_no_centroid_medoid_for_noise():
     clusterer = FLASC().fit(X)
-    assert_raises(ValueError, clusterer.weighted_centroid, -1)
-    assert_raises(ValueError, clusterer.weighted_medoid, -1)
-    assert_raises(ValueError, clusterer.weighted_cluster_centroid, -1)
-    assert_raises(ValueError, clusterer.weighted_cluster_medoid, -1)
+    with pytest.raises(ValueError):
+        clusterer.weighted_centroid(-1)
+    with pytest.raises(ValueError):
+        clusterer.weighted_medoid(-1)
+    with pytest.raises(ValueError):
+        clusterer.weighted_cluster_centroid(-1)
+    with pytest.raises(ValueError):
+        clusterer.weighted_cluster_medoid(-1)
 
 
 # --- Prediction
@@ -828,131 +851,169 @@ def test_flasc_weighted_membership():
 
 def test_flasc_badargs():
     D = distance.squareform(distance.pdist(X))
-    assert_raises(AttributeError, flasc, X="fail")
-    assert_raises(AttributeError, flasc, X=None)
-    assert_raises(ValueError, flasc, X, min_cluster_size=-1)
-    assert_raises(ValueError, flasc, X, min_cluster_size=0)
-    assert_raises(ValueError, flasc, X, min_cluster_size=1)
-    assert_raises(ValueError, flasc, X, min_cluster_size=2.0)
-    assert_raises(ValueError, flasc, X, min_cluster_size="fail")
-    assert_raises(ValueError, flasc, X, min_branch_size=-1)
-    assert_raises(ValueError, flasc, X, min_branch_size=0)
-    assert_raises(ValueError, flasc, X, min_branch_size=1)
-    assert_raises(ValueError, flasc, X, min_branch_size=2.0)
-    assert_raises(ValueError, flasc, X, min_branch_size="fail")
-    assert_raises(ValueError, flasc, X, min_samples=-1)
-    assert_raises(ValueError, flasc, X, min_samples=0)
-    assert_raises(ValueError, flasc, X, min_samples=1.0)
-    assert_raises(ValueError, flasc, X, min_samples="fail")
-    assert_raises(ValueError, flasc, X, num_jobs="fail")
-    assert_raises(ValueError, flasc, X, num_jobs=1.5)
-    assert_raises(ValueError, flasc, X, metric=None)
-    assert_raises(ValueError, flasc, X, metric="imperial")
-    assert_raises(ValueError, flasc, X, metric="minkowski", p=-1)
-    assert_raises(ValueError, flasc, X, metric="minkowski", p=-0.1)
-    assert_raises(TypeError, flasc, X, metric="minkowski", p="fail")
-    assert_raises(TypeError, flasc, X, metric="minkowski", p=None)
-    assert_raises(ValueError, flasc, X, alpha=-1)
-    assert_raises(ValueError, flasc, X, alpha=-0.1)
-    assert_raises(ValueError, flasc, X, alpha="fail")
-    assert_raises(ValueError, flasc, X, leaf_size=0)
-    assert_raises(ValueError, flasc, X, leaf_size=1.0)
-    assert_raises(ValueError, flasc, X, leaf_size="fail")
-    assert_raises(ValueError, flasc, X, cluster_selection_epsilon=-1)
-    assert_raises(ValueError, flasc, X, cluster_selection_epsilon=-0.1)
-    assert_raises(ValueError, flasc, X, cluster_selection_persistence=-1)
-    assert_raises(ValueError, flasc, X, cluster_selection_persistence=-0.1)
-    assert_raises(ValueError, flasc, X, branch_selection_epsilon=-1)
-    assert_raises(ValueError, flasc, X, branch_selection_epsilon=-0.1)
-    assert_raises(ValueError, flasc, X, branch_selection_persistence=-1)
-    assert_raises(ValueError, flasc, X, branch_selection_persistence=-0.1)
-    assert_raises(
-        ValueError,
-        flasc,
-        X,
-        metric="precomputed",
-        algorithm="boruvka_kdtree",
-    )
-    assert_raises(
-        ValueError,
-        flasc,
-        X,
-        metric="precomputed",
-        algorithm="boruvka_balltree",
-    )
-    assert_raises(ValueError, flasc, X, metric="precomputed", algorithm="prims_kdtree")
-    assert_raises(
-        ValueError,
-        flasc,
-        X,
-        metric="precomputed",
-        algorithm="prims_balltree",
-    )
-    assert_raises(ValueError, flasc, X, branch_selection_strategy="leaf")
-    assert_raises(
-        ValueError,
-        flasc,
-        D,
-        metric="precomputed",
-        branch_selection_strategy="leaf",
-    )
-    assert_raises(ValueError, flasc, X, cluster_selection_strategy="leaf")
-    assert_raises(
-        ValueError,
-        flasc,
-        D,
-        metric="precomputed",
-        cluster_selection_strategy="leaf",
-    )
-    assert_raises(ValueError, flasc, X, branch_detection_strategy="full")
-    assert_raises(
-        ValueError,
-        flasc,
-        D,
-        metric="precomputed",
-        branch_detection_strategy="full",
-    )
-    assert_raises(Exception, flasc, X, algorithm="something_else")
-    assert_raises(ValueError, flasc, X, cluster_selection_method="something_else")
-    assert_raises(ValueError, flasc, X, branch_selection_method="something_else")
-    assert_raises(ValueError, flasc, X, branch_detection_method="something_else")
-    assert_raises(ValueError, flasc, X, override_cluster_labels=0.0)
-    assert_raises(ValueError, flasc, X, override_cluster_labels=[])
-    assert_raises(ValueError, flasc, X, override_cluster_labels=np.asarray([0.0]))
-    assert_raises(
-        ValueError,
-        flasc,
-        X,
-        override_cluster_labels=y,
-        override_cluster_probabilities=[],
-    )
-    assert_raises(
-        ValueError,
-        flasc,
-        X,
-        override_cluster_labels=y,
-        override_cluster_probabilities=np.asarray([]),
-    )
-    assert_raises(
-        ValueError,
-        flasc,
-        X,
-        override_cluster_probabilities=np.ones(X.shape[0]),
-    )
-    assert_raises(
-        ValueError,
-        flasc,
-        X,
-        override_cluster_labels=y,
-        algorithm="boruvka_kdtree",
-    )
-    assert_raises(
-        ValueError,
-        flasc,
-        X,
-        override_cluster_labels=y,
-        algorithm="boruvka_balltree",
-    )
+    with pytest.raises(AttributeError):
+        flasc(X="fail")
+    with pytest.raises(AttributeError):
+        flasc(X=None)
+    with pytest.raises(ValueError):
+        flasc(X, min_cluster_size=-1)
+    with pytest.raises(ValueError):
+        flasc(X, min_cluster_size=0)
+    with pytest.raises(ValueError):
+        flasc(X, min_cluster_size=1)
+    with pytest.raises(ValueError):
+        flasc(X, min_cluster_size=2.0)
+    with pytest.raises(ValueError):
+        flasc(X, min_cluster_size="fail")
+    with pytest.raises(ValueError):
+        flasc(X, min_branch_size=-1)
+    with pytest.raises(ValueError):
+        flasc(X, min_branch_size=0)
+    with pytest.raises(ValueError):
+        flasc(X, min_branch_size=1)
+    with pytest.raises(ValueError):
+        flasc(X, min_branch_size=2.0)
+    with pytest.raises(ValueError):
+        flasc(X, min_branch_size="fail")
+    with pytest.raises(ValueError):
+        flasc(X, min_samples=-1)
+    with pytest.raises(ValueError):
+        flasc(X, min_samples=0)
+    with pytest.raises(ValueError):
+        flasc(X, min_samples=1.0)
+    with pytest.raises(ValueError):
+        flasc(X, min_samples="fail")
+    with pytest.raises(ValueError):
+        flasc(X, num_jobs="fail")
+    with pytest.raises(ValueError):
+        flasc(X, num_jobs=1.5)
+    with pytest.raises(ValueError):
+        flasc(X, metric=None)
+    with pytest.raises(ValueError):
+        flasc(X, metric="imperial")
+    with pytest.raises(ValueError):
+        flasc(X, metric="minkowski", p=-1)
+    with pytest.raises(ValueError):
+        flasc(X, metric="minkowski", p=-0.1)
+    with pytest.raises(TypeError):
+        flasc(X, metric="minkowski", p="fail")
+    with pytest.raises(TypeError):
+        flasc(X, metric="minkowski", p=None)
+    with pytest.raises(ValueError):
+        flasc(X, alpha=-1)
+    with pytest.raises(ValueError):
+        flasc(X, alpha=-0.1)
+    with pytest.raises(ValueError):
+        flasc(X, alpha="fail")
+    with pytest.raises(ValueError):
+        flasc(X, leaf_size=0)
+    with pytest.raises(ValueError):
+        flasc(X, leaf_size=1.0)
+    with pytest.raises(ValueError):
+        flasc(X, leaf_size="fail")
+    with pytest.raises(ValueError):
+        flasc(X, cluster_selection_epsilon=-1)
+    with pytest.raises(ValueError):
+        flasc(X, cluster_selection_epsilon=-0.1)
+    with pytest.raises(ValueError):
+        flasc(X, cluster_selection_persistence=-1)
+    with pytest.raises(ValueError):
+        flasc(X, cluster_selection_persistence=-0.1)
+    with pytest.raises(ValueError):
+        flasc(X, branch_selection_epsilon=-1)
+    with pytest.raises(ValueError):
+        flasc(X, branch_selection_epsilon=-0.1)
+    with pytest.raises(ValueError):
+        flasc(X, branch_selection_persistence=-1)
+    with pytest.raises(ValueError):
+        flasc(X, branch_selection_persistence=-0.1)
+    with pytest.raises(ValueError):
+        flasc(
+            X,
+            metric="precomputed",
+            algorithm="boruvka_kdtree",
+        )
+    with pytest.raises(ValueError):
+        flasc(
+            X,
+            metric="precomputed",
+            algorithm="boruvka_balltree",
+        )
+    with pytest.raises(ValueError):
+        flasc(X, metric="precomputed", algorithm="prims_kdtree")
+    with pytest.raises(ValueError):
+        flasc(
+            X,
+            metric="precomputed",
+            algorithm="prims_balltree",
+        )
+    with pytest.raises(ValueError):
+        flasc(X, branch_selection_strategy="leaf")
+    with pytest.raises(ValueError):
+        flasc(
+            D,
+            metric="precomputed",
+            branch_selection_strategy="leaf",
+        )
+    with pytest.raises(ValueError):
+        flasc(X, cluster_selection_strategy="leaf")
+    with pytest.raises(ValueError):
+        flasc(
+            D,
+            metric="precomputed",
+            cluster_selection_strategy="leaf",
+        )
+    with pytest.raises(ValueError):
+        flasc(X, branch_detection_strategy="full")
+    with pytest.raises(ValueError):
+        flasc(
+            D,
+            metric="precomputed",
+            branch_detection_strategy="full",
+        )
+    with pytest.raises(Exception):
+        flasc(X, algorithm="something_else")
+    with pytest.raises(ValueError):
+        flasc(X, cluster_selection_method="something_else")
+    with pytest.raises(ValueError):
+        flasc(X, branch_selection_method="something_else")
+    with pytest.raises(ValueError):
+        flasc(X, branch_detection_method="something_else")
+    with pytest.raises(ValueError):
+        flasc(X, override_cluster_labels=0.0)
+    with pytest.raises(ValueError):
+        flasc(X, override_cluster_labels=[])
+    with pytest.raises(ValueError):
+        flasc(X, override_cluster_labels=np.asarray([0.0]))
+    with pytest.raises(ValueError):
+        flasc(
+            X,
+            override_cluster_labels=y,
+            override_cluster_probabilities=[],
+        )
+    with pytest.raises(ValueError):
+        flasc(
+            X,
+            override_cluster_labels=y,
+            override_cluster_probabilities=np.asarray([]),
+        )
+    with pytest.raises(ValueError):
+        flasc(
+            X,
+            override_cluster_probabilities=np.ones(X.shape[0]),
+        )
+    with pytest.raises(ValueError):
+        flasc(
+            X,
+            override_cluster_labels=y,
+            algorithm="boruvka_kdtree",
+        )
+    with pytest.raises(ValueError):
+        flasc(
+            X,
+            override_cluster_labels=y,
+            algorithm="boruvka_balltree",
+        )
 
 
 # --- Caching
@@ -1033,7 +1094,7 @@ def test_flasc_allow_single_branch_with_persistence():
     c = FLASC(
         min_cluster_size=5,
         branch_detection_method="core",
-        branch_selection_epsilon=1/0.39,
+        branch_selection_epsilon=1 / 0.39,
     ).fit(no_structure, labels=no_structure_labels)
     unique_labels = np.unique(c.labels_)
     assert len(unique_labels) == 1

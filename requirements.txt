@@ -1,5 +1,0 @@
-numpy>=1.20,<3
-scipy>=1.9,<2
-scikit-learn>=1.1,<2
-joblib>=1.1,<2
-hdbscan @ git+https://github.com/scikit-learn-contrib/hdbscan.git@master#egg=hdbscan

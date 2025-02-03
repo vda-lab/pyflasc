@@ -1,3 +1,10 @@
+.. toctree::
+   :maxdepth: 2
+   :hidden:
+
+   examples
+   reference
+
 FLASC 
 =====
 
@@ -15,7 +22,7 @@ and supports the same API, except sparse inputs, which are not supported yet.
    import seaborn as sns
    import matplotlib.pyplot as plt
 
-   data = np.load('./notebooks/data/flared_clusterable_data.npy')
+   data = np.load('./notebooks/data/flared/flared_clusterable_data.npy')
    clusterer = FLASC(min_cluster_size=15)
    clusterer.fit(data)
    colors = sns.color_palette('tab10', 23)
@@ -29,9 +36,3 @@ and supports the same API, except sparse inputs, which are not supported yet.
 
 .. image:: _static/example.png
    :alt: Example point cloud
-
-.. toctree::
-   :maxdepth: 2
-
-   examples
-   reference

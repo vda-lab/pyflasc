@@ -1,4 +1,4 @@
-name: Build Weels
+name: Build Wheels
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number }}-${{ github.event.ref }}
   cancel-in-progress: true
@@ -29,11 +29,11 @@ on:
 jobs:
   build_sdist:
     name: Build sdist
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     outputs:
       SDIST_NAME: ${{ steps.sdist.outputs.SDIST_NAME }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -46,8 +46,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install twine flake8 Cython
+          pip install twine flake8 build
 
       - name: Lint with flake8
         run: |
@@ -57,7 +56,7 @@ jobs:
       - name: Build sdist
         id: sdist
         run: |
-          python setup.py sdist
+          python -m build --sdist
           python ci/export_sdist_name.py
 
       - name: Check README rendering for PyPI
@@ -125,12 +124,13 @@ jobs:
           package-dir: dist/${{ needs.build_sdist.outputs.SDIST_NAME }}
           output-dir: wheelhouse
         env:
-          CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform_id }}
           CIBW_ARCHS: all
+          CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform_id }}
+          CIBW_BUILD_FRONTEND: build
           CIBW_MANYLINUX_X86_64_IMAGE: ${{ matrix.manylinux_image }}
           CIBW_MANYLINUX_I686_IMAGE: ${{ matrix.manylinux_image }}
           CIBW_TEST_REQUIRES: pytest matplotlib pandas networkx
-          CIBW_TEST_COMMAND: pytest {package}/flasc/tests
+          CIBW_TEST_COMMAND: python -c "from flasc.tests import run_tests; run_tests()"
           CIBW_BUILD_VERBOSITY: 1
 
       - name: Store artifacts

@@ -1,3 +1,68 @@
 [build-system]
-requires = ["setuptools", "wheel", "numpy", "Cython"]
+requires = ["setuptools", "numpy < 3", "Cython < 4"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyflasc"
+version = "0.1.3"
+description = "Flare-Sensitive Clustering based on HDBSCAN*."
+keywords = ["clustering", "machine learning"]
+authors = [
+  { name = "Jelmer Bot", email = "jelmer.bot@uhasselt.be" },
+]
+readme = "README.md"
+license = { text = "BSD-3-Clause" } 
+classifiers = [
+	"Development Status :: 5 - Production/Stable",
+	"License :: OSI Approved :: BSD License",
+	"Intended Audience :: Science/Research",
+	"Topic :: Scientific/Engineering",
+  "Topic :: Scientific/Engineering :: Visualization",
+	"Natural Language :: English",
+	"Operating System :: OS Independent",
+	"Programming Language :: Cython",
+	"Programming Language :: Python :: 3 :: Only"
+]
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.20,<3",
+  "scipy>=1.9,<2",
+  "scikit-learn>=1.1,<2",
+  "joblib>=1.1,<2",
+  "hdbscan @ git+https://github.com/scikit-learn-contrib/hdbscan.git@master#egg=hdbscan"
+]
+
+[project.urls]
+Homepage = "https://github.com/vda-lab/pyflasc"
+Issues = "https://github.com/vda-lab/pyflasc/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["flasc*"]
+namespaces = false
+
+[project.optional-dependencies]
+tests = [
+  "pytest",
+  "networkx >= 3",
+  "matplotlib >= 3.8",
+  "pygraphviz >= 1",
+  "pandas >= 2.2",
+]
+docs = [
+	"sphinx >= 8",
+	"nbsphinx >= 0.9",
+	"sphinx_rtd_theme >= 2.0",
+	"matplotlib >= 3.8"
+]
+notebooks = [
+  "pandas >= 2.2",
+  "jupyterlab >= 4",
+  "seaborn >= 0.12",
+  "matplotlib >= 3.4",
+  "pygraphviz >= 1",
+  "networkx >= 3",
+  "lensed_umap >= 0.1",
+  "umap-learn >= 0.5",
+  "tqdm >= 4.62.3"
+]

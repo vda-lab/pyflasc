@@ -5,11 +5,11 @@ build/
 pyflasc.egg-info/
 
 # Build Cython sources
-flasc/**/*.pyd
-flasc/**/*.so
-flasc/**/*.cpp
-flasc/**/*.c
-flasc/**/*.html
+src/flasc/**/*.pyd
+src/flasc/**/*.so
+src/flasc/**/*.cpp
+src/flasc/**/*.c
+src/flasc/**/*.html
 
 # Editor configurations
 .idea/

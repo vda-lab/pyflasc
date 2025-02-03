@@ -6,12 +6,6 @@ from setuptools.extension import Extension
 from Cython.Build import cythonize
 
 
-def requirements():
-    """Returns the content of requirements.txt"""
-    with open("requirements.txt") as f:
-        return [line.strip() for line in f if line.strip()]
-
-
 def extension_kwargs(f):
     """Disables new Numpy Cython API for dist_metrics and Boruvka module.
     
@@ -25,7 +19,7 @@ def extension_kwargs(f):
     if sys.platform == "win32":
         cpp_flags = ["/O2"]
     else:
-        cpp_flags = ["-O2", "-DNDEBUG"]
+        cpp_flags = ["-O2"]
 
     kwargs = {
         'include_dirs': [np.get_include()],
@@ -40,17 +34,14 @@ def extension_kwargs(f):
 extensions = cythonize(
     [
         Extension(
-            f.replace(".pyx", "").replace(op.sep, "."),
+            f.replace("src/", "").replace(".pyx", "").replace(op.sep, "."),
             [f],
             **extension_kwargs(f)
         )
-        for f in glob.glob(op.join("flasc", "*.pyx"))
+        for f in glob.glob(op.join("src/flasc", "*.pyx"))
         if op.isfile(f)
     ],
     language_level=3,
 )
 
-setup(
-    ext_modules=extensions, 
-    install_requires=requirements()
-)
+setup(ext_modules=extensions)

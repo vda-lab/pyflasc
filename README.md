@@ -23,7 +23,7 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-data = np.load('./notebooks/data/flared_clusterable_data.npy')
+data = np.load('./notebooks/data/flared/flared_clusterable_data.npy')
 clusterer = FLASC(min_cluster_size=15)
 clusterer.fit(data)
 colors = sns.color_palette('tab10', 10)

@@ -3,7 +3,7 @@ import matplotlib.pyplot
 
 project = "FLASC"
 author = "D.M. Bot and J. Aerts"
-copyright = "2023, " + author
+copyright = "2025, " + author
 html_show_copyright = True
 nitpicky = True
 master_doc = "index"
@@ -17,7 +17,6 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.intersphinx",  # links to other Sphinx projects (e.g. NumPy)
     "sphinx.ext.napoleon",
-    "sphinx_last_updated_by_git",  # get "last updated" from Git
 ]
 
 # These projects are also used for the sphinx_codeautolink extension:
@@ -40,7 +39,7 @@ nbsphinx_execute_arguments = [
 
 # This is processed by Jinja2 and inserted before each notebook
 nbsphinx_prolog = r"""
-{% set docname = 'doc/' + env.doc2path(env.docname, base=None) %}
+{% set docname = 'doc/' ~ env.doc2path(env.docname, base=None) %}
 .. raw:: html
     <div class="admonition note">
       This page was generated from
@@ -68,7 +67,7 @@ nbsphinx_prolog = r"""
 
 # This is processed by Jinja2 and inserted after each notebook
 nbsphinx_epilog = r"""
-{% set docname = 'doc/' + env.doc2path(env.docname, base=None) %}
+{% set docname = 'doc/' ~ env.doc2path(env.docname, base=None) %}
 .. raw:: latex
     \nbsphinxstopnotebook{\scriptsize\noindent\strut
     \textcolor{gray}{\dotfill\ \sphinxcode{\sphinxupquote{\strut
@@ -139,3 +138,4 @@ latex_documents = [
 ]
 # latex_show_urls = 'footnote'
 latex_show_pagerefs = True
+templates_path = ["_templates"]
