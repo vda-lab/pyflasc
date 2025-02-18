@@ -4,7 +4,7 @@ include LICENSE
 include MANIFEST.in
 include requirements.txt
 include CHANGELOG.txt
-recursive-include flasc *.pyx *.pxd
-recursive-exclude flasc *.c *.cpp
+recursive-include src *.pyx *.pxd
+recursive-exclude src *.c *.cpp
 recursive-exclude docs *
 recursive-exclude notebooks *
