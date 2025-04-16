@@ -42,7 +42,7 @@ jobs:
         run: |
           mkdir dist
           mv sdist/* dist/
-          mv wheels/* dist/
+          mv wheels*/* dist/
           if [[ ! -f dist/pyflasc-${{ steps.version.outputs.version }}.tar.gz ]] ; then exit 1; fi
       
       - name: Create Github Release

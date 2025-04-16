@@ -511,7 +511,7 @@ def flasc(
 
     # -- Input data
     if metric != "precomputed":
-        X = check_array(X, force_all_finite=False)
+        X = check_array(X, ensure_all_finite=False)
     else:
         if issparse(X):
             raise ValueError("Sparse distance matrices not supported yet.")

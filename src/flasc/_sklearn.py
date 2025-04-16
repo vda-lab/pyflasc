@@ -449,7 +449,7 @@ class FLASC(BaseEstimator, ClusterMixin):
         clean_labels = labels
         clean_probabilities = probabilities
         if self.metric != "precomputed":
-            X = check_array(X, force_all_finite=False)
+            X = check_array(X, ensure_all_finite=False)
             self._raw_data = X.astype(np.double)
 
             self._all_finite = is_finite(X)
