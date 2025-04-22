@@ -36,3 +36,39 @@ and supports the same API, except sparse inputs, which are not supported yet.
 
 .. image:: _static/example.png
    :alt: Example point cloud
+
+
+Citing
+------
+
+Please cite `our publication <https://doi.org/10.7717/peerj-cs.2792>`_ when using the algorithm:
+
+::
+
+    Bot DM, Peeters J, Liesenborgs J, Aerts J. 2025. FLASC: a flare-sensitive
+    clustering algorithm. PeerJ Computer Science 11:e2792
+    https://doi.org/10.7717/peerj-cs.2792 
+
+in bibtex:
+
+.. code:: bibtex
+
+   @article{bot2025flasc,
+      title   = {{FLASC: a flare-sensitive clustering algorithm}},
+      author  = {Bot, Dani{\"{e}}l M. and Peeters, Jannes and Liesenborgs, Jori and Aerts, Jan},
+      year    = {2025},
+      month   = {apr},
+      journal = {PeerJ Comput. Sci.},
+      volume  = {11},
+      pages   = {e2792},
+      issn    = {2376-5992},
+      doi     = {10.7717/peerj-cs.2792},
+      url     = {https://peerj.com/articles/cs-2792},
+   }
+
+The FLASC algorithm and software package is closely related to McInnes et al.'s
+HDBSCAN\* software package. We refer to their `Journal of Open Source Software
+article <http://joss.theoj.org/papers/10.21105/joss.00205>`_ and `paper in the
+ICDMW 2017 proceedings
+<https://ieeexplore.ieee.org/abstract/document/8215642/>`_ for information on
+how to cite their software package and high-performance algorithm.

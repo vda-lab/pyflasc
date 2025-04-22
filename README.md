@@ -72,57 +72,35 @@ pip install -t .
 
 ## Citing
 
-A scientific publication of this algorithm is available on Arxiv:
+Please cite [our publication](https://doi.org/10.7717/peerj-cs.2792) when using the algorithm:
+
+    Bot DM, Peeters J, Liesenborgs J, Aerts J. 2025. FLASC: a flare-sensitive
+    clustering algorithm. PeerJ Computer Science 11:e2792
+    https://doi.org/10.7717/peerj-cs.2792 
+
+in bibtex:
 
 ```bibtex
-@misc{bot2023flasc,
-  title={FLASC: A Flare-Sensitive Clustering Algorithm: Extending HDBSCAN* for Detecting Branches in Clusters}, 
-  author={D. M. Bot and J. Peeters and J. Liesenborgs and J. Aerts},
-  year={2023},
-  eprint={2311.15887},
-  archivePrefix={arXiv},
-  primaryClass={cs.LG}
+@article{bot2025flasc,
+  title   = {{FLASC: a flare-sensitive clustering algorithm}},
+  author  = {Bot, Dani{\"{e}}l M. and Peeters, Jannes and Liesenborgs, Jori and Aerts, Jan},
+  year    = {2025},
+  month   = {apr},
+  journal = {PeerJ Comput. Sci.},
+  volume  = {11},
+  pages   = {e2792},
+  issn    = {2376-5992},
+  doi     = {10.7717/peerj-cs.2792},
+  url     = {https://peerj.com/articles/cs-2792},
 }
 ```
 
-This FLASC algorithm and software package is very closely related to McInnes et
-al.'s HDBSCAN\* software package. If you wish to cite the HDBSCAN\* package in a
-scientific publication, please use their [Journal of Open Source Software
-article](http://joss.theoj.org/papers/10.21105/joss.00205).
-
-    L. McInnes, J. Healy, S. Astels, *hdbscan: Hierarchical density based clustering*
-    In: Journal of Open Source Software, The Open Journal, volume 2, number 11.
-    2017
-
-```bibtex
-@article{mcinnes2017hdbscan,
-  title={hdbscan: Hierarchical density based clustering},
-  author={McInnes, Leland and Healy, John and Astels, Steve},
-  journal={The Journal of Open Source Software},
-  volume={2},
-  number={11},
-  pages={205},
-  year={2017}
-}
-```
-
-To reference their high performance algorithm please cite their paper in ICDMW
-2017 proceedings.
-
-    McInnes L, Healy J. *Accelerated Hierarchical Density Based Clustering*
-    In: 2017 IEEE International Conference on Data Mining Workshops (ICDMW), IEEE, pp 33-42.
-    2017
-
-```bibtex
-@inproceedings{mcinnes2017accelerated,
-  title={Accelerated Hierarchical Density Based Clustering},
-  author={McInnes, Leland and Healy, John},
-  booktitle={Data Mining Workshops (ICDMW), 2017 IEEE International Conference on},
-  pages={33--42},
-  year={2017},
-  organization={IEEE}
-}
-```
+The FLASC algorithm and software package is closely related to McInnes et al.'s
+HDBSCAN\* software package. We refer to their [Journal of Open Source Software
+article](http://joss.theoj.org/papers/10.21105/joss.00205) and [paper in the
+ICDMW 2017 proceedings](https://ieeexplore.ieee.org/abstract/document/8215642/)
+for information on how to cite their software package and high-performance
+algorithm.
 
 ## Licensing
 
