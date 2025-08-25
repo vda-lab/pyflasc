@@ -7,21 +7,19 @@ name = "pyflasc"
 version = "0.1.3"
 description = "Flare-Sensitive Clustering based on HDBSCAN*."
 keywords = ["clustering", "machine learning"]
-authors = [
-  { name = "Jelmer Bot", email = "jelmer.bot@uhasselt.be" },
-]
+authors = [{ name = "Jelmer Bot", email = "jelmer.bot@uhasselt.be" }]
 readme = "README.md"
-license = { text = "BSD-3-Clause" } 
+license = "BSD-3-Clause"
+license-files = ["LICENSE"]
 classifiers = [
-	"Development Status :: 5 - Production/Stable",
-	"License :: OSI Approved :: BSD License",
-	"Intended Audience :: Science/Research",
-	"Topic :: Scientific/Engineering",
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering",
   "Topic :: Scientific/Engineering :: Visualization",
-	"Natural Language :: English",
-	"Operating System :: OS Independent",
-	"Programming Language :: Cython",
-	"Programming Language :: Python :: 3 :: Only"
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  "Programming Language :: Cython",
+  "Programming Language :: Python :: 3 :: Only",
 ]
 requires-python = ">=3.10"
 dependencies = [
@@ -29,7 +27,7 @@ dependencies = [
   "scipy>=1.9,<2",
   "scikit-learn>=1.6,<2",
   "joblib>=1.1,<2",
-  "hdbscan @ git+https://github.com/scikit-learn-contrib/hdbscan.git@master#egg=hdbscan"
+  "hdbscan @ git+https://github.com/scikit-learn-contrib/hdbscan.git@master#egg=hdbscan",
 ]
 
 [project.urls]
@@ -50,10 +48,10 @@ tests = [
   "pandas >= 2.2",
 ]
 docs = [
-	"sphinx >= 8",
-	"nbsphinx >= 0.9",
-	"sphinx_rtd_theme >= 2.0",
-	"matplotlib >= 3.8"
+  "sphinx >= 8",
+  "nbsphinx >= 0.9",
+  "sphinx_rtd_theme >= 2.0",
+  "matplotlib >= 3.8",
 ]
 notebooks = [
   "pandas >= 2.2",
@@ -64,5 +62,5 @@ notebooks = [
   "networkx >= 3",
   "lensed_umap >= 0.1",
   "umap-learn >= 0.5",
-  "tqdm >= 4.62.3"
+  "tqdm >= 4.62.3",
 ]

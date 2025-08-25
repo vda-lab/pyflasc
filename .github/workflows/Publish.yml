@@ -52,7 +52,7 @@ jobs:
           gh release create -R vda-lab/pyflasc -t "Version ${{ steps.version.outputs.version }}" -n "**Full Changelog**: https://github.com/vda-lab/pyflasc/commits/${{ steps.version.outputs.tag }}" "${{ steps.version.outputs.tag }}" dist/*.whl dist/*.tar.gz
         
       - name: Publish package to (Test)PyPI
-        uses: pypa/gh-action-pypi-publish@v1.8.5
+        uses: pypa/gh-action-pypi-publish@release/v1
         # Comment lines below to publish to PyPi instead of test PyPi
         # with:
         #   repository-url: https://test.pypi.org/legacy/

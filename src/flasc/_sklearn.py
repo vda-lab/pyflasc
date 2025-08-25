@@ -259,7 +259,7 @@ class FLASC(BaseEstimator, ClusterMixin):
           0-dimensional simplicial complex of each cluster at the first point in
           the filtration where they contain all their points.
 
-    branch_condensed_trees : list[:class:`~hdbscan.plots.CondensedTree`]
+    branch_condensed_trees_ : list[:class:`~hdbscan.plots.CondensedTree`]
         Condensed hierarchies for each cluster produced during the branch
         detection step. Data points are numbered with in-cluster ids.
 
