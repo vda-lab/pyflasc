@@ -249,6 +249,7 @@ class _BaseCondensedTree:
         selection_palette=None,
         color_centre_as_noise=False,
         label_clusters=False,
+        label_kws=None,
         label_offset_factor=0.7,
         axis=None,
     ):
@@ -343,6 +344,7 @@ class _BaseCondensedTree:
                     ),
                     horizontalalignment="center",
                     verticalalignment="top",
+                    **(label_kws or {}),
                 )
 
         axis.set_xticks([])
@@ -444,8 +446,6 @@ class BranchCondensedTree(_BaseCondensedTree):
         cluster_labels,
     ):
         tree_labels = labels[points]
-        tree_branch_labels = branch_labels[points]
-        tree_labels[tree_branch_labels == tree_branch_labels.max()] = -1
         super().__init__(tree, tree_labels)
         self.num_points = labels.shape[0]
         self.labels = labels
@@ -462,6 +462,7 @@ class BranchCondensedTree(_BaseCondensedTree):
         selection_palette=None,
         color_centre_as_noise=False,
         label_clusters=False,
+        label_kws=None,
         label_offset_factor=0.7,
         axis=None,
     ):
@@ -503,6 +504,9 @@ class BranchCondensedTree(_BaseCondensedTree):
             If select_clusters is True then this determines whether to draw text
             labels on the clusters.
 
+        label_kws : dict, optional (default None)
+            Additional keyword arguments passed to `matplotlib.axes.Axes.annotate`
+
         label_offset_factor : float, optional (default 0.7)
             Controls height-wise offset of cluster labels.
 
@@ -534,6 +538,7 @@ class BranchCondensedTree(_BaseCondensedTree):
             selection_palette=selection_palette,
             color_centre_as_noise=color_centre_as_noise,
             label_clusters=label_clusters,
+            label_kws=label_kws,
             label_offset_factor=label_offset_factor,
             axis=axis,
         )
@@ -574,6 +579,7 @@ class ClusterCondensedTree(_BaseCondensedTree):
         max_rectangles_per_icicle=20,
         selection_palette=None,
         label_clusters=False,
+        label_kws=None,
         label_offset_factor=0.7,
         axis=None,
     ):
@@ -608,6 +614,9 @@ class ClusterCondensedTree(_BaseCondensedTree):
             If select_clusters is True then this determines whether to draw text
             labels on the clusters.
 
+        label_kws : dict, optional (default None)
+            Additional keyword arguments passed to `matplotlib.axes.Axes.annotate`
+
         label_offset_factor : float, optional (default 0.7)
             Controls height-wise offset of cluster labels.
 
@@ -631,8 +640,9 @@ class ClusterCondensedTree(_BaseCondensedTree):
             label_end,
             selection_palette=selection_palette,
             label_clusters=label_clusters,
+            label_kws=label_kws,
             label_offset_factor=label_offset_factor,
             axis=axis,
         )
-        axis.set_ylabel("$\lambda$ value")
+        axis.set_ylabel("$\\lambda$ value")
         return axis
