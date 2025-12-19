@@ -27,7 +27,7 @@ dependencies = [
   "scipy>=1.9,<2",
   "scikit-learn>=1.6,<2",
   "joblib>=1.1,<2",
-  "hdbscan @ git+https://github.com/scikit-learn-contrib/hdbscan.git@master#egg=hdbscan",
+  "hdbscan>=0.8.41,<1",
 ]
 
 [project.urls]
