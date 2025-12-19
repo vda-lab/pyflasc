@@ -76,41 +76,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        python: [310, 311, 312, 313, 314]
+        os: [windows-latest, ubuntu-latest, macos-latest]
         include:
           - os: windows-latest
-            python: 310
             platform_id: win_amd64
-          - os: windows-latest
-            python: 311
-            platform_id: win_amd64
-          - os: windows-latest
-            python: 312
-            platform_id: win_amd64
+          - os: ubuntu-latest
+            platform_id: manylinux_x86_64
+            manylinux_image: manylinux2014
+          - os: macos-latest
+            platform_id: macosx_arm64
 
-          # Linux 64 bit manylinux2014
-          - os: ubuntu-latest
-            python: 310
-            platform_id: manylinux_x86_64
-            manylinux_image: manylinux2014
-          - os: ubuntu-latest
-            python: 311
-            platform_id: manylinux_x86_64
-            manylinux_image: manylinux2014
-          - os: ubuntu-latest
-            python: 312
-            platform_id: manylinux_x86_64
-            manylinux_image: manylinux2014
-
-          # MacOS x86_64
-          - os: macos-latest
-            python: 310
-            platform_id: macosx_x86_64
-          - os: macos-latest
-            python: 311
-            platform_id: macosx_x86_64
-          - os: macos-latest
-            python: 312
-            platform_id: macosx_x86_64
     steps:
       - name: Download sdist
         uses: actions/download-artifact@v4
